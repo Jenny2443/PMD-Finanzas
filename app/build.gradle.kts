@@ -4,7 +4,7 @@ plugins {
 
 android {
     namespace = "es.upm.etsiinf.pmd_financeapp"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "es.upm.etsiinf.pmd_financeapp"
