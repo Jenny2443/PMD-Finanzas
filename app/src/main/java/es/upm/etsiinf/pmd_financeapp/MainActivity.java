@@ -3,6 +3,7 @@ package es.upm.etsiinf.pmd_financeapp;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,7 +21,7 @@ public class MainActivity extends AppCompatActivity{
 //    Button btnHistorial;
 
     //private NavigationBarView bottomNavigationView;
-    private BottomNavigationView bottomNavigationView;
+    public BottomNavigationView bottomNavigationView;
     private TextView textoPrueba;
 
     @Override
@@ -41,7 +42,7 @@ public class MainActivity extends AppCompatActivity{
 //        btnStocks.setOnClickListener(this);
 //        btnHome.setOnClickListener(this);
 //        btnHistorial.setOnClickListener(this);
-
+        bottomNavigationView.setSelectedItemId(R.id.action_home);
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -50,13 +51,24 @@ public class MainActivity extends AppCompatActivity{
                     Toast.makeText(MainActivity.this, "Home", Toast.LENGTH_SHORT).show();
                 }else if(id == R.id.action_stocks) {
                     Toast.makeText(MainActivity.this, "Stocks", Toast.LENGTH_SHORT).show();
+                    openActivityStocks();
                 }else if(id == R.id.action_history) {
                     Toast.makeText(MainActivity.this, "Historial", Toast.LENGTH_SHORT).show();
+                    openActivityHistorial();
                 }
                 return true;
             }
         });
 
+    }
+
+    public void openActivityStocks(){
+        Intent intent = new Intent(this, StocksActivity.class);
+        startActivity(intent);
+    }
+    public void openActivityHistorial(){
+        Intent intent = new Intent(this, HistorialActivity.class);
+        startActivity(intent);
     }
 
 
