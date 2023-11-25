@@ -6,6 +6,10 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    <include
+        android:id="@+id/include"
+        layout="@layout/toolbar" />
+
     <FrameLayout
         android:id="@+id/main_frameLayout"
         android:layout_width="0dp"
@@ -13,15 +17,15 @@
         app:layout_constraintBottom_toTopOf="@+id/main_btn_nav"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/include">
 
         <TextView
             android:id="@+id/main_texto_prueba"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:textSize="60dp"
-            android:text="Historial" />
+            android:text="Historial"
+            android:textSize="60dp" />
     </FrameLayout>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView

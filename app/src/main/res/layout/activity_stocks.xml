@@ -5,6 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <include layout="@layout/toolbar" />
+
     <FrameLayout
         android:id="@+id/main_frameLayout"
         android:layout_width="0dp"
@@ -19,8 +21,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:textSize="60dp"
-            android:text="Stocks" />
+            android:text="Stocks"
+            android:textSize="60dp" />
     </FrameLayout>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView

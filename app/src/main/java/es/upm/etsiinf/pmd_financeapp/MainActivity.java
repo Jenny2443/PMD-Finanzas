@@ -2,6 +2,7 @@ package es.upm.etsiinf.pmd_financeapp;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -23,6 +24,7 @@ public class MainActivity extends AppCompatActivity{
     //private NavigationBarView bottomNavigationView;
     public BottomNavigationView bottomNavigationView;
     private TextView textoPrueba;
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +39,10 @@ public class MainActivity extends AppCompatActivity{
         //Inicializacion de bottom navigation view
         bottomNavigationView = findViewById(R.id.main_btn_nav);
         textoPrueba = findViewById(R.id.main_texto_prueba);
+
+        //Inicializacion de toolbar
+        toolbar = findViewById(R.id.main_toolbar);
+        setSupportActionBar(toolbar);
         //bottomNavigationView.setSelectedItemId(R.id.action_home);
         //Asignacion de listener
 //        btnStocks.setOnClickListener(this);
@@ -59,6 +65,8 @@ public class MainActivity extends AppCompatActivity{
                 return true;
             }
         });
+
+
 
     }
 
