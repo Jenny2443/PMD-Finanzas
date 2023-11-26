@@ -55,8 +55,8 @@
             android:layout_height="58dp"
             android:layout_marginLeft="30dp"
             android:layout_marginTop="80dp"
-            android:src="@tools:sample/avatars"
             app:srcCompat="@drawable/filter" />
+
 
         <ImageView
             android:id="@+id/btnCalendar"
@@ -65,7 +65,6 @@
             android:layout_gravity="right"
             android:layout_marginRight="30dp"
             android:layout_marginTop="80dp"
-            android:src="@tools:sample/avatars"
             app:srcCompat="@drawable/calendar" />
 
         <TextView
