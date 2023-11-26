@@ -34,12 +34,6 @@ public class MainActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //Call JavaUsageSample main method
-        try {
-            JavaUsageSample.main(null);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
 
         //Inicializacion de botones
 //        btnStocks = findViewById(R.id.main_btn_stocks);
