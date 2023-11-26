@@ -55,7 +55,6 @@
             android:layout_height="58dp"
             android:layout_marginLeft="30dp"
             android:layout_marginTop="80dp"
-            android:src="@tools:sample/avatars"
             app:srcCompat="@drawable/filter" />
 
         <ImageView
@@ -65,7 +64,6 @@
             android:layout_gravity="right"
             android:layout_marginRight="30dp"
             android:layout_marginTop="80dp"
-            android:src="@tools:sample/avatars"
             app:srcCompat="@drawable/calendar" />
 
         <TextView
@@ -83,8 +81,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center|top"
+            android:layout_marginTop="80dp"
             android:text="Home"
-            android:textColor="#FFFFFF"
+            android:textColor="#000000"
             android:textSize="50dp" />
 
     </FrameLayout>
