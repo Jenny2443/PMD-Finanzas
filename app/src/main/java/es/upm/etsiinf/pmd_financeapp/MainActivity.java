@@ -7,9 +7,8 @@ import androidx.appcompat.widget.Toolbar;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,6 +19,11 @@ public class MainActivity extends AppCompatActivity{
 //    Button btnStocks;
 //    Button btnHome;
 //    Button btnHistorial;
+    Button btnAñadirGasto;
+    Button btnAñadirIngreso;
+    ImageView imFilter;
+    ImageView imCalendar;
+
 
     //private NavigationBarView bottomNavigationView;
     public BottomNavigationView bottomNavigationView;
@@ -35,10 +39,14 @@ public class MainActivity extends AppCompatActivity{
 //        btnStocks = findViewById(R.id.main_btn_stocks);
 //        btnHome = findViewById(R.id.main_btn_home);
 //        btnHistorial = findViewById(R.id.main_btn_historial);
+         btnAñadirGasto = findViewById(R.id.añadir_gasto);
+         btnAñadirIngreso = findViewById(R.id.añadir_ingreso);
+         imFilter = findViewById(R.id.btnFilter);
+         imCalendar = findViewById(R.id.btnCalendar);
 
         //Inicializacion de bottom navigation view
         bottomNavigationView = findViewById(R.id.main_btn_nav);
-        textoPrueba = findViewById(R.id.main_texto_prueba);
+        textoPrueba = findViewById(R.id.txt_home);
 
         //Inicializacion de toolbar
         toolbar = findViewById(R.id.main_toolbar);
@@ -48,6 +56,12 @@ public class MainActivity extends AppCompatActivity{
 //        btnStocks.setOnClickListener(this);
 //        btnHome.setOnClickListener(this);
 //        btnHistorial.setOnClickListener(this);
+        //btnAñadirGasto.setOnClickListener(this);
+        //btnAñadirIngreso.setOnClickListener(this);
+        //imFilter.setOnClickListener(this);
+        //imCalendar.setOnClickListener(this);
+
+
         bottomNavigationView.setSelectedItemId(R.id.action_home);
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override

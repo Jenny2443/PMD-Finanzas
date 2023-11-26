@@ -7,25 +7,19 @@
     tools:context=".MainActivity">
 
     <include
-        layout="@layout/toolbar"
-        />
+        android:id="@+id/include2"
+        layout="@layout/toolbar" />
 
     <FrameLayout
         android:id="@+id/main_frameLayout"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:orientation="vertical"
+        android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@+id/main_btn_nav"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
-
-        <TextView
-            android:id="@+id/main_texto_prueba"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:textSize="60dp"
-            android:text="Home" />
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/main_toolbar"
@@ -34,15 +28,75 @@
             android:background="?attr/colorPrimary"
             android:minHeight="?attr/actionBarSize"
             android:theme="?attr/actionBarTheme" />
+
+        <Button
+            android:id="@+id/añadir_gasto"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center"
+            android:layout_marginEnd="0dp"
+            android:layout_marginBottom="40dp"
+            android:text="Añadir gasto"
+            android:textSize="24sp" />
+
+        <Button
+            android:id="@+id/añadir_ingreso"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center"
+            android:layout_marginEnd="0dp"
+            android:layout_marginBottom="120dp"
+            android:text="Añadir ingreso"
+            android:textSize="24sp" />
+
+        <ImageView
+            android:id="@+id/btnFilter"
+            android:layout_width="56dp"
+            android:layout_height="58dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="80dp"
+            android:src="@tools:sample/avatars"
+            app:srcCompat="@drawable/filter" />
+
+        <ImageView
+            android:id="@+id/btnCalendar"
+            android:layout_width="56dp"
+            android:layout_height="58dp"
+            android:layout_gravity="right"
+            android:layout_marginRight="30dp"
+            android:layout_marginTop="80dp"
+            android:src="@tools:sample/avatars"
+            app:srcCompat="@drawable/calendar" />
+
+        <TextView
+            android:id="@+id/txt_balance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|top"
+            android:layout_marginTop="160dp"
+            android:text="Balance: 0€"
+            android:textColor="#000000"
+            android:textSize="40sp" />
+
+        <TextView
+            android:id="@+id/txt_home"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|top"
+            android:text="Home"
+            android:textColor="#FFFFFF"
+            android:textSize="50dp" />
+
     </FrameLayout>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/main_btn_nav"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        app:itemIconTint="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:itemIconTint="@color/black"
-        app:menu="@menu/bottom_navigation_menu"/>
+        app:menu="@menu/bottom_navigation_menu" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
