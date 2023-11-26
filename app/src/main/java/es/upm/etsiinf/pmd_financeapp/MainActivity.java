@@ -15,6 +15,8 @@ import android.widget.Toast;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
+import java.io.IOException;
+
 public class MainActivity extends AppCompatActivity{
 //    Button btnStocks;
 //    Button btnHome;
@@ -34,6 +36,13 @@ public class MainActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //Call StockManager.updateStocks() for AAPL stock
+        try {
+            StockManager.updateStocks(new Stock("AAPL", "Apple Inc.", 0, null));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
         //Inicializacion de botones
 //        btnStocks = findViewById(R.id.main_btn_stocks);
