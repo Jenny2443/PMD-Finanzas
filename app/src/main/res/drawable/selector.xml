@@ -7,7 +7,7 @@
 
     <item
         android:state_selected="true"
-        android:drawable="@drawable/baseline_home_24"
-        android:color="@color/white"/>
+        android:color="@color/white"
+       />
     />
 </selector>

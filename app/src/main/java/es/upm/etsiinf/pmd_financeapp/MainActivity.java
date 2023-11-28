@@ -3,10 +3,12 @@ package es.upm.etsiinf.pmd_financeapp;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -14,6 +16,7 @@ import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
+import com.google.android.material.navigation.NavigationView;
 
 public class MainActivity extends AppCompatActivity{
 //    Button btnStocks;
@@ -28,7 +31,6 @@ public class MainActivity extends AppCompatActivity{
     //private NavigationBarView bottomNavigationView;
     public BottomNavigationView bottomNavigationView;
     private TextView textoPrueba;
-    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,9 +38,6 @@ public class MainActivity extends AppCompatActivity{
         setContentView(R.layout.activity_main);
 
         //Inicializacion de botones
-//        btnStocks = findViewById(R.id.main_btn_stocks);
-//        btnHome = findViewById(R.id.main_btn_home);
-//        btnHistorial = findViewById(R.id.main_btn_historial);
          btnAñadirGasto = findViewById(R.id.añadir_gasto);
          btnAñadirIngreso = findViewById(R.id.añadir_ingreso);
          imFilter = findViewById(R.id.btnFilter);
@@ -48,24 +47,12 @@ public class MainActivity extends AppCompatActivity{
         bottomNavigationView = findViewById(R.id.main_btn_nav);
         textoPrueba = findViewById(R.id.txt_home);
 
-        //Inicializacion de toolbar
-        toolbar = findViewById(R.id.main_toolbar);
-        setSupportActionBar(toolbar);
-        //bottomNavigationView.setSelectedItemId(R.id.action_home);
-        //Asignacion de listener
-//        btnStocks.setOnClickListener(this);
-//        btnHome.setOnClickListener(this);
-//        btnHistorial.setOnClickListener(this);
-        //btnAñadirGasto.setOnClickListener(this);
-        //btnAñadirIngreso.setOnClickListener(this);
-        //imFilter.setOnClickListener(this);
-        //imCalendar.setOnClickListener(this);
-
 
         bottomNavigationView.setSelectedItemId(R.id.action_home);
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                item.setChecked(false);
                 int id = item.getItemId();
                 if(id == R.id.action_home) {
                     Toast.makeText(MainActivity.this, "Home", Toast.LENGTH_SHORT).show();
@@ -80,6 +67,19 @@ public class MainActivity extends AppCompatActivity{
             }
         });
 
+        btnAñadirGasto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(MainActivity.this, "Añadir gasto", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        btnAñadirIngreso.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(MainActivity.this, "Añadir ingreso", Toast.LENGTH_SHORT).show();
+            }
+        });
 
 
     }
