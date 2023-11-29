@@ -20,15 +20,17 @@ public class StocksActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stocks);
+        //Inicializamos el menu de navegacion inferior
         bottomNavigationView = findViewById(R.id.main_btn_nav);
         bottomNavigationView.setSelectedItemId(R.id.action_stocks);
 
+        //Inicializamos el texto de la actividad (titulo)
         textoStocks = findViewById(R.id.stocks_title);
 
+        //Funcion para cambiar de actividad al pulsar un boton del menu de navegacion inferior
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                item.setChecked(false);
                 int id = item.getItemId();
                 if(id == R.id.action_home) {
                     Toast.makeText(StocksActivity.this, "Home", Toast.LENGTH_SHORT).show();
@@ -44,10 +46,13 @@ public class StocksActivity extends AppCompatActivity {
         });
     }
 
+    //Funcion para abrir la actividad de historial
     public void openActivityHistorial(){
         Intent intent = new Intent(this, HistorialActivity.class);
         startActivity(intent);
     }
+
+    //Funcion para abrir la actividad de home
     public void openActivityHome(){
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);

@@ -103,10 +103,14 @@ public class MainActivity extends AppCompatActivity{
 
     }
 
+    //Funcion para abrir la actividad de stocks
     public void openActivityStocks(){
         Intent intent = new Intent(this, StocksActivity.class);
         startActivity(intent);
     }
+
+    //Funcion para abrir la actividad de historial
+
     public void openActivityHistorial(){
         Intent intent = new Intent(this, HistorialActivity.class);
         startActivity(intent);

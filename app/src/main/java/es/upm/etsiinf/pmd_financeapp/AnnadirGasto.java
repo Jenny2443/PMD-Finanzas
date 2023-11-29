@@ -64,6 +64,7 @@ public class AnnadirGasto extends AppCompatActivity {
 
         txt_fechaSeleccionada = findViewById(R.id.fecha_seleccionada);
 
+        // Configuración de selección de categoría
         spinnerCat.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
@@ -79,21 +80,24 @@ public class AnnadirGasto extends AppCompatActivity {
 
         });
 
-        // Configuración de botón de mostrar datePicker
+        // Configuración de botón de mostrar datePicker (el calendario desplegable para elegir una fecha)
         datePicker = findViewById(R.id.calendario);
         btn_DatePicker = findViewById(R.id.im_Calendario);
 
-        // Desactivar DatePicker al inicio
+        // Desactivar calendatio al inicio
         datePicker.setEnabled(false);
         datePicker.setVisibility(View.INVISIBLE);
 
+        //Si hace click en el calendario
         btn_DatePicker.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // Activar DatePicker al hacer clic en el botón
                 datePicker.setEnabled(true);
                 datePicker.setVisibility(View.VISIBLE);
+                //Qtamos el boton de calendario
                 btn_DatePicker.setVisibility(View.INVISIBLE);
+                //Hacemos el background mas oscuro para que se vea mejor
                 datePicker.setBackgroundColor(getResources().getColor(R.color.grey));
             }
         });
@@ -118,6 +122,7 @@ public class AnnadirGasto extends AppCompatActivity {
                 }
         );
 
+        // Configuración de botones de cancelar y guardar
         btnCancelar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -133,9 +138,11 @@ public class AnnadirGasto extends AppCompatActivity {
             }
         });
 
+        // Inicialización de bottom navigation view
         bottomNavigationView = findViewById(R.id.main_btn_nav);
         bottomNavigationView.setSelectedItemId(R.id.action_home);
 
+        // Funcion para cambiar de actividad al pulsar un boton del menu de navegacion inferior
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -157,15 +164,20 @@ public class AnnadirGasto extends AppCompatActivity {
 
     }
 
+    //Funcion para abrir la actividad de stocks
     public void openActivityStocks(){
         Intent intent = new Intent(this, StocksActivity.class);
         startActivity(intent);
     }
+
+    //Funcion para abrir la actividad de home
+
     public void openActivityHome(){
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
 
+    //Funcion para abrir la actividad de historial
     public void openActivityHistorial(){
         Intent intent = new Intent(this, HistorialActivity.class);
         startActivity(intent);
