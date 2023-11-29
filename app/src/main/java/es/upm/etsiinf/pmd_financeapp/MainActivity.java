@@ -6,6 +6,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -38,11 +39,10 @@ public class MainActivity extends AppCompatActivity{
         setContentView(R.layout.activity_main);
 
         //Call StockManager.updateStocks() for AAPL stock
-        try {
-            StockManager.updateStocks(new Stock("AAPL", "Apple Inc.", 0, null));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        StockManager.addStock(new Stock("AAPL", "Apple Inc.", 0, null));
+        StockManager.addStock(new Stock("TSLA", "Tesla Inc.", 0, null));
+        Thread thread = new Thread(new DownloadStocksManager());
+        thread.start();
 
         //Inicializacion de botones
 //        btnStocks = findViewById(R.id.main_btn_stocks);
