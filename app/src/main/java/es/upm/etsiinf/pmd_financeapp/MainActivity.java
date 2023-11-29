@@ -88,6 +88,9 @@ public class MainActivity extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 Toast.makeText(MainActivity.this, "Añadir gasto", Toast.LENGTH_SHORT).show();
+                // Intent para ir a la pantalla de añadir gasto
+                Intent intentAnnadirGasto = new Intent(MainActivity.this, AnnadirGasto.class);
+                startActivity(intentAnnadirGasto);
             }
         });
 
