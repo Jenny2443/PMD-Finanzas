@@ -69,7 +69,6 @@ public class MainActivity extends AppCompatActivity{
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                item.setChecked(false);
                 int id = item.getItemId();
                 if(id == R.id.action_home) {
                     Toast.makeText(MainActivity.this, "Home", Toast.LENGTH_SHORT).show();

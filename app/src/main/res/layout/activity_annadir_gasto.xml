@@ -78,8 +78,8 @@
             android:layout_marginTop="140dp"
             android:layout_marginRight="20dp"
             android:ems="10"
-            android:inputType="text"
-            android:text="0"
+            android:inputType="numberDecimal"
+            android:hint="0"
             android:textSize="24sp" />
 
         <TextView
@@ -109,8 +109,8 @@
 
             android:layout_marginBottom="170dp"
             android:ems="10"
+            android:hint="Nota..."
             android:inputType="text"
-            android:text="Notas"
             android:textSize="24sp" />
 
         <Spinner
@@ -137,7 +137,6 @@
             android:layout_gravity="center"
             android:layout_marginTop="30dp"
             android:layout_marginRight="100dp"
-            android:src="@tools:sample/avatars"
             app:srcCompat="@drawable/calendar" />
 
     </FrameLayout>

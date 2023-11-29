@@ -93,8 +93,11 @@ public class AnnadirGasto extends AppCompatActivity {
                 // Activar DatePicker al hacer clic en el botón
                 datePicker.setEnabled(true);
                 datePicker.setVisibility(View.VISIBLE);
+                btn_DatePicker.setVisibility(View.INVISIBLE);
+                datePicker.setBackgroundColor(getResources().getColor(R.color.grey));
             }
         });
+
 
 
         // Configuración de selección de fecha
@@ -109,6 +112,7 @@ public class AnnadirGasto extends AppCompatActivity {
                     String fechaSeleccionada = dayOfMonth + "/" + (monthOfYear + 1) + "/" + year;
                     datePicker.setEnabled(false);
                     datePicker.setVisibility(View.INVISIBLE);
+                    btn_DatePicker.setVisibility(View.VISIBLE);
                     txt_fechaSeleccionada.setText(fechaSeleccionada);
 
                 }
@@ -130,7 +134,7 @@ public class AnnadirGasto extends AppCompatActivity {
         });
 
         bottomNavigationView = findViewById(R.id.main_btn_nav);
-        bottomNavigationView.setSelectedItemId(R.id.action_history);
+        bottomNavigationView.setSelectedItemId(R.id.action_home);
 
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
