@@ -1,5 +1,7 @@
 package es.upm.etsiinf.pmd_financeapp;
 
+import android.util.Log;
+
 import java.time.LocalDateTime;
 
 public class Stock {
@@ -28,9 +30,7 @@ public class Stock {
         return price;
     }
 
-    public void setPrice(double price) {
-        this.price = price;
-    }
+    public void setPrice(double price) { this.price = price;}
 
     public LocalDateTime getLastUpdate() {
         return lastUpdate;

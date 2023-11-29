@@ -70,7 +70,13 @@ public class StockManager {
         try {
             Log.println(Log.INFO, "Stocks", "Conexion a : " + url);
             String response = getURLText(url);
-            Log.println(Log.INFO, "Stocks", "Respuesta: " + response);
+            String[] parts = response.split(",");
+            String price = parts[6];
+            String newPrice =  price.split(":")[1];
+            //Parse the price to double
+            double priceDouble = Double.parseDouble(newPrice);
+            stock.setPrice(priceDouble);
+            stock.setLastUpdate(LocalDateTime.now());
 
 
         } catch (IOException e) {
@@ -79,11 +85,6 @@ public class StockManager {
             throw new RuntimeException(e);
         }
 
-
-        int newPrice = 0;
-        stock.setPrice(newPrice);
-        LocalDateTime now = LocalDateTime.now();
-        stock.setLastUpdate(now);
 
     }
 

@@ -40,9 +40,17 @@ public class MainActivity extends AppCompatActivity{
 
         //Call StockManager.updateStocks() for AAPL stock
         StockManager.addStock(new Stock("AAPL", "Apple Inc.", 0, null));
-        StockManager.addStock(new Stock("TSLA", "Tesla Inc.", 0, null));
+        //StockManager.addStock(new Stock("TSLA", "Tesla Inc.", 0, null));
         Thread thread = new Thread(new DownloadStocksManager());
         thread.start();
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        for (Stock stock: StockManager.getStocks()) {
+            Log.println(Log.INFO, "Stocks", stock.toString());
+        }
 
         //Inicializacion de botones
 //        btnStocks = findViewById(R.id.main_btn_stocks);
