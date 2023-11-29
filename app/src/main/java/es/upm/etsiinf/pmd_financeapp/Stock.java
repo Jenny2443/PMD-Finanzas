@@ -8,6 +8,11 @@ public class Stock {
     private String symbol;
     private String name;
     private double price;
+
+
+
+    private double maxPrice;
+    private double minPrice;
     private LocalDateTime lastUpdate;
 
     public String getSymbol() {
@@ -32,6 +37,22 @@ public class Stock {
 
     public void setPrice(double price) { this.price = price;}
 
+    public double getMaxPrice() {
+        return maxPrice;
+    }
+
+    public void setMaxPrice(double maxPrice) {
+        this.maxPrice = maxPrice;
+    }
+
+    public double getMinPrice() {
+        return minPrice;
+    }
+
+    public void setMinPrice(double minPrice) {
+        this.minPrice = minPrice;
+    }
+
     public LocalDateTime getLastUpdate() {
         return lastUpdate;
     }
@@ -54,6 +75,8 @@ public class Stock {
                 "symbol='" + symbol + '\'' +
                 ", name='" + name + '\'' +
                 ", price=" + price +
+                ", maxPrice=" + maxPrice +
+                ", minPrice=" + minPrice +
                 ", lastUpdate=" + lastUpdate +
                 '}';
     }

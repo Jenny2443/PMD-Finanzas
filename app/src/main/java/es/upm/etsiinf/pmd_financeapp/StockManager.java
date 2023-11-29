@@ -68,14 +68,29 @@ public class StockManager {
         String url = "https://api.polygon.io/v1/open-close/" + stock.getSymbol() + "/2023-11-24?adjusted=true&apiKey=" + API_KEY;
         HttpURLConnection  con = null;
         try {
-            Log.println(Log.INFO, "Stocks", "Conexion a : " + url);
             String response = getURLText(url);
             String[] parts = response.split(",");
+
+            //Update price
             String price = parts[6];
             String newPrice =  price.split(":")[1];
             //Parse the price to double
             double priceDouble = Double.parseDouble(newPrice);
             stock.setPrice(priceDouble);
+
+            //Update maxPrice
+            String maxPrice = parts[4];
+            String newMaxPrice = maxPrice.split(":")[1];
+            double maxPriceDouble = Double.parseDouble(newMaxPrice);
+            stock.setMaxPrice(maxPriceDouble);
+
+            //Update minPrice
+            String minPrice = parts[5];
+            String newMinPrice = minPrice.split(":")[1];
+            double minPriceDouble = Double.parseDouble(newMinPrice);
+            stock.setMinPrice(minPriceDouble);
+
+            //Update lastUpdate
             stock.setLastUpdate(LocalDateTime.now());
 
 
