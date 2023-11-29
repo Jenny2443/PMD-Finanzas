@@ -7,6 +7,7 @@ import androidx.core.view.GravityCompat;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -17,6 +18,8 @@ import android.widget.Toast;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.android.material.navigation.NavigationView;
+
+import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity{
 //    Button btnStocks;
@@ -36,6 +39,20 @@ public class MainActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //Call StockManager.updateStocks() for AAPL stock
+        StockManager.addStock(new Stock("AAPL", "Apple Inc.", 0, null));
+        //StockManager.addStock(new Stock("TSLA", "Tesla Inc.", 0, null));
+        Thread thread = new Thread(new DownloadStocksManager());
+        thread.start();
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        for (Stock stock: StockManager.getStocks()) {
+            Log.println(Log.INFO, "Stocks", stock.toString());
+        }
 
         //Inicializacion de botones
          btnAñadirGasto = findViewById(R.id.añadir_gasto);
