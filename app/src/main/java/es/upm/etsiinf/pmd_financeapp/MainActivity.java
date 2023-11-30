@@ -40,9 +40,10 @@ public class MainActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        /*
         //Call StockManager.updateStocks() for AAPL stock
         StockManager.addStock(new Stock("AAPL", "Apple Inc.", 0, null));
-        //StockManager.addStock(new Stock("TSLA", "Tesla Inc.", 0, null));
+        StockManager.addStock(new Stock("TSLA", "Tesla Inc.", 0, null));
         Thread thread = new Thread(new DownloadStocksManager());
         thread.start();
         try {
@@ -53,6 +54,8 @@ public class MainActivity extends AppCompatActivity{
         for (Stock stock: StockManager.getStocks()) {
             Log.println(Log.INFO, "Stocks", stock.toString());
         }
+        */
+
 
         //Inicializacion de botones
          btnAñadirGasto = findViewById(R.id.main_btn_anadir_gasto);

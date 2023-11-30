@@ -3,4 +3,5 @@
     <string name="main_btn_historial_txt">Historial</string>
     <string name="main_btn_home_txt">Home</string>
     <string name="main_btn_stocks_txt">Stocks</string>
+    <string name="nombre_empresa">Nombre empresa</string>
 </resources>

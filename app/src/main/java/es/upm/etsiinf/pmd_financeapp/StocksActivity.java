@@ -5,7 +5,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -15,6 +17,7 @@ import com.google.android.material.navigation.NavigationBarView;
 public class StocksActivity extends AppCompatActivity {
     public BottomNavigationView bottomNavigationView;
     public TextView tituloStocks;
+    public SearchView barraBusqueda;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +29,31 @@ public class StocksActivity extends AppCompatActivity {
 
         //Inicializamos el texto de la actividad (titulo)
         tituloStocks = findViewById(R.id.stocks_title);
+        barraBusqueda = findViewById(R.id.search_stocks);
+
+        barraBusqueda.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                // Este método se llama cuando se presiona Enter o se envía la búsqueda
+                Log.d("MainActivity", "Query submitted: " + query);
+                //Create a intent to open the StockItemActivity
+                Intent intent = new Intent(StocksActivity.this, StockItemActivity.class);
+                //Add the symbol of the stock to the intent
+                intent.putExtra("symbol", query);
+                //Start the activity
+                startActivity(intent);
+                //Delete text
+                barraBusqueda.setQuery("", false);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                // Este método se llama cuando cambia el texto en la barra de búsqueda
+                return false;
+            }
+        });
+
 
         //Funcion para cambiar de actividad al pulsar un boton del menu de navegacion inferior
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {

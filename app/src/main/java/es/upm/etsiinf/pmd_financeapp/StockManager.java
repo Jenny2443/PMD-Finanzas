@@ -106,6 +106,7 @@ public class StockManager {
     public static String getURLText(String url) throws Exception {
         URL website = new URL(url);
         URLConnection connection = website.openConnection();
+        //Check response code
         BufferedReader in = new BufferedReader(
                 new InputStreamReader(
                         connection.getInputStream()));
@@ -119,6 +120,16 @@ public class StockManager {
         in.close();
 
         return response.toString();
+    }
+
+    public static boolean checkExistance(String symbol){
+
+        for (Stock stock: stocks) {
+            if (stock.getSymbol().equals(symbol)) {
+                return true;
+            }
+        }
+        return false;
     }
 
 
