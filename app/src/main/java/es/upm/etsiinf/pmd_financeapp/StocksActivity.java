@@ -14,7 +14,7 @@ import com.google.android.material.navigation.NavigationBarView;
 
 public class StocksActivity extends AppCompatActivity {
     public BottomNavigationView bottomNavigationView;
-    public TextView textoStocks;
+    public TextView tituloStocks;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,22 +22,22 @@ public class StocksActivity extends AppCompatActivity {
         setContentView(R.layout.activity_stocks);
         //Inicializamos el menu de navegacion inferior
         bottomNavigationView = findViewById(R.id.main_btn_nav);
-        bottomNavigationView.setSelectedItemId(R.id.action_stocks);
+        bottomNavigationView.setSelectedItemId(R.id.menu_nav_action_stocks);
 
         //Inicializamos el texto de la actividad (titulo)
-        textoStocks = findViewById(R.id.stocks_title);
+        tituloStocks = findViewById(R.id.stocks_title);
 
         //Funcion para cambiar de actividad al pulsar un boton del menu de navegacion inferior
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 int id = item.getItemId();
-                if(id == R.id.action_home) {
+                if(id == R.id.menu_nav_action_home) {
                     Toast.makeText(StocksActivity.this, "Home", Toast.LENGTH_SHORT).show();
                     openActivityHome();
-                }else if(id == R.id.action_stocks) {
+                }else if(id == R.id.menu_nav_action_stocks) {
                     Toast.makeText(StocksActivity.this, "Stocks", Toast.LENGTH_SHORT).show();
-                }else if(id == R.id.action_history) {
+                }else if(id == R.id.menu_nav_action_history) {
                     Toast.makeText(StocksActivity.this, "Historial", Toast.LENGTH_SHORT).show();
                     openActivityHistorial();
                 }

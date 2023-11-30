@@ -29,12 +29,12 @@ public class MainActivity extends AppCompatActivity{
     Button btnAñadirIngreso;
     ImageView imFilter;
     ImageView imCalendar;
+    TextView txtBalance;
 
 
     //private NavigationBarView bottomNavigationView;
     public BottomNavigationView bottomNavigationView;
-    private TextView textoPrueba;
-
+    public TextView tituloHome;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,27 +55,28 @@ public class MainActivity extends AppCompatActivity{
         }
 
         //Inicializacion de botones
-         btnAñadirGasto = findViewById(R.id.añadir_gasto);
-         btnAñadirIngreso = findViewById(R.id.añadir_ingreso);
-         imFilter = findViewById(R.id.btnFilter);
-         imCalendar = findViewById(R.id.btnCalendar);
+         btnAñadirGasto = findViewById(R.id.main_btn_anadir_gasto);
+         btnAñadirIngreso = findViewById(R.id.main_btn_anadir_ingreso);
+         imFilter = findViewById(R.id.main_btnFilter);
+         imCalendar = findViewById(R.id.main_btnCalendar);
+         txtBalance = findViewById(R.id.main_txt_balance);
 
         //Inicializacion de bottom navigation view
         bottomNavigationView = findViewById(R.id.main_btn_nav);
-        textoPrueba = findViewById(R.id.txt_home);
+        tituloHome = findViewById(R.id.main_txt_home);
 
 
-        bottomNavigationView.setSelectedItemId(R.id.action_home);
+        bottomNavigationView.setSelectedItemId(R.id.menu_nav_action_home);
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 int id = item.getItemId();
-                if(id == R.id.action_home) {
+                if(id == R.id.menu_nav_action_home) {
                     Toast.makeText(MainActivity.this, "Home", Toast.LENGTH_SHORT).show();
-                }else if(id == R.id.action_stocks) {
+                }else if(id == R.id.menu_nav_action_stocks) {
                     Toast.makeText(MainActivity.this, "Stocks", Toast.LENGTH_SHORT).show();
                     openActivityStocks();
-                }else if(id == R.id.action_history) {
+                }else if(id == R.id.menu_nav_action_history) {
                     Toast.makeText(MainActivity.this, "Historial", Toast.LENGTH_SHORT).show();
                     openActivityHistorial();
                 }

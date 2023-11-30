@@ -138,20 +138,20 @@ public class AnnadirGasto extends AppCompatActivity {
 
         // Inicialización de bottom navigation view
         bottomNavigationView = findViewById(R.id.main_btn_nav);
-        bottomNavigationView.setSelectedItemId(R.id.action_home);
+        bottomNavigationView.setSelectedItemId(R.id.menu_nav_action_home);
 
         // Funcion para cambiar de actividad al pulsar un boton del menu de navegacion inferior
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 int id = item.getItemId();
-                if(id == R.id.action_home) {
+                if(id == R.id.menu_nav_action_home) {
                     Toast.makeText(AnnadirGasto.this, "Home", Toast.LENGTH_SHORT).show();
                     openActivityHome();
-                }else if(id == R.id.action_stocks) {
+                }else if(id == R.id.menu_nav_action_stocks) {
                     Toast.makeText(AnnadirGasto.this, "Stocks", Toast.LENGTH_SHORT).show();
                     openActivityStocks();
-                }else if(id == R.id.action_history) {
+                }else if(id == R.id.menu_nav_action_history) {
                     Toast.makeText(AnnadirGasto.this, "Historial", Toast.LENGTH_SHORT).show();
                     openActivityHistorial();
                 }
