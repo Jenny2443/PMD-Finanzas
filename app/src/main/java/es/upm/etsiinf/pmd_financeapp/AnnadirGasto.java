@@ -25,7 +25,6 @@ import java.util.Calendar;
 public class AnnadirGasto extends AppCompatActivity {
 
     public BottomNavigationView bottomNavigationView;
-    private TextView textoHistorial;
 
     // categorias que selecciona al crear un gasto
     public String[] opCategorias = {"Casa", "Comida", "Higiene", "Ropa", "Salud", "Facturas", "Transporte", "Entetenimiento"};

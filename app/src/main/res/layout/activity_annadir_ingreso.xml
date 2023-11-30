@@ -56,9 +56,7 @@
             android:backgroundTint="#39AF3D"
             android:text="Guardar"
             android:textColorHighlight="#4CAF50"
-            android:textSize="24sp"
-            app:iconTint="@color/verde" />
-
+            android:textSize="24sp" />
         <Button
             android:id="@+id/btn_cancelar"
             android:layout_width="152dp"

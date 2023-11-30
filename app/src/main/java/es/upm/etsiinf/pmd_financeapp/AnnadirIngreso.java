@@ -25,9 +25,8 @@ import java.util.Calendar;
 public class AnnadirIngreso extends AppCompatActivity {
 
     public BottomNavigationView bottomNavigationView;
-    private TextView textoHistorial;
 
-    // categorias que selecciona al crear un gasto
+    // categorias que selecciona al crear un ingreso
     public String[] opCategorias = {"Ahorros", "Depósitos", "Salario", "Ventas", "Activos", "Donaciones"};
 
     // fechas calendario
@@ -50,7 +49,7 @@ public class AnnadirIngreso extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_annadir_gasto);
+        setContentView(R.layout.activity_annadir_ingreso);
 
         // Iniciamos botones
         btnCancelar = findViewById(R.id.btn_cancelar);
