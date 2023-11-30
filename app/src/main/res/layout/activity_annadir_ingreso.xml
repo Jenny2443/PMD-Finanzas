@@ -27,7 +27,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/fecha_seleccionada"
+            android:id="@+id/AnIn_fecha_seleccionada"
             android:layout_width="161dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -37,7 +37,7 @@
             android:textSize="24sp" />
 
         <TextView
-            android:id="@+id/txt_categoria"
+            android:id="@+id/AnIn_txt_categoria"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -47,7 +47,7 @@
             android:textSize="24sp" />
 
         <Button
-            android:id="@+id/btn_guardar"
+            android:id="@+id/AnIn_btn_guardar"
             android:layout_width="152dp"
             android:layout_height="64dp"
             android:layout_gravity="bottom|center"
@@ -58,7 +58,7 @@
             android:textColorHighlight="#4CAF50"
             android:textSize="24sp" />
         <Button
-            android:id="@+id/btn_cancelar"
+            android:id="@+id/AnIn_btn_cancelar"
             android:layout_width="152dp"
             android:layout_height="64dp"
             android:layout_gravity="bottom|center"
@@ -69,7 +69,7 @@
             android:textSize="24sp" />
 
         <EditText
-            android:id="@+id/ent_cantidad"
+            android:id="@+id/AnIn_ent_cantidad"
             android:layout_width="183dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center|top"
@@ -81,7 +81,7 @@
             android:textSize="24sp" />
 
         <TextView
-            android:id="@+id/txt_euros"
+            android:id="@+id/AnIn_txt_euros"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center|top"
@@ -91,7 +91,7 @@
             android:textSize="34sp" />
 
         <TextView
-            android:id="@+id/txt_ingreso"
+            android:id="@+id/AnIn_txt_ingreso"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center|top"
@@ -100,7 +100,7 @@
             android:textSize="34sp" />
 
         <EditText
-            android:id="@+id/ent_notas"
+            android:id="@+id/AnIn_ent_notas"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|center"
@@ -112,7 +112,7 @@
             android:textSize="24sp" />
 
         <Spinner
-            android:id="@+id/categorias"
+            android:id="@+id/AnIn_categorias"
             android:layout_width="213dp"
             android:layout_height="64dp"
             android:layout_gravity="center"
@@ -120,7 +120,7 @@
             android:layout_marginLeft="60dp"/>
 
         <DatePicker
-            android:id="@+id/calendario"
+            android:id="@+id/AnIn_calendario"
             android:layout_width="316dp"
             android:layout_height="400dp"
             android:layout_gravity="center"
@@ -129,7 +129,7 @@
             android:enabled="false"/>
 
         <ImageView
-            android:id="@+id/im_Calendario"
+            android:id="@+id/AnIn_im_Calendario"
             android:layout_width="71dp"
             android:layout_height="93dp"
             android:layout_gravity="center"

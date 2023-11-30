@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.media.Image;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -52,16 +51,16 @@ public class AnnadirIngreso extends AppCompatActivity {
         setContentView(R.layout.activity_annadir_ingreso);
 
         // Iniciamos botones
-        btnCancelar = findViewById(R.id.btn_cancelar);
-        btnGuardar = findViewById(R.id.btn_guardar);
+        btnCancelar = findViewById(R.id.AnIn_btn_cancelar);
+        btnGuardar = findViewById(R.id.AnIn_btn_guardar);
 
         // Inicialización de la lista de categorías
-        Spinner spinnerCat = findViewById(R.id.categorias);
+        Spinner spinnerCat = findViewById(R.id.AnIn_categorias);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, opCategorias);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerCat.setAdapter(adapter);
 
-        txt_fechaSeleccionada = findViewById(R.id.fecha_seleccionada);
+        txt_fechaSeleccionada = findViewById(R.id.AnIn_fecha_seleccionada);
 
         // Configuración de selección de categoría
         spinnerCat.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -80,8 +79,8 @@ public class AnnadirIngreso extends AppCompatActivity {
         });
 
         // Configuración de botón de mostrar datePicker (el calendario desplegable para elegir una fecha)
-        datePicker = findViewById(R.id.calendario);
-        btn_DatePicker = findViewById(R.id.im_Calendario);
+        datePicker = findViewById(R.id.AnIn_calendario);
+        btn_DatePicker = findViewById(R.id.AnIn_im_Calendario);
 
         // Desactivar calendatio al inicio
         datePicker.setEnabled(false);
@@ -104,7 +103,7 @@ public class AnnadirIngreso extends AppCompatActivity {
 
 
         // Configuración de selección de fecha
-        DatePicker datePicker = findViewById(R.id.calendario);
+        DatePicker datePicker = findViewById(R.id.AnIn_calendario);
         // Configura el DatePicker para mostrar el calendario
         datePicker.init(
                 anioActual,
