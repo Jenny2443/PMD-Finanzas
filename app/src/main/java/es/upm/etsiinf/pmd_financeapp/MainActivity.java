@@ -97,6 +97,9 @@ public class MainActivity extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 Toast.makeText(MainActivity.this, "Añadir ingreso", Toast.LENGTH_SHORT).show();
+                // Intent para ir a la pantalla de añadir ingreso
+                Intent intentAnnadirIngreso = new Intent(MainActivity.this, AnnadirIngreso.class);
+                startActivity(intentAnnadirIngreso);
             }
         });
 

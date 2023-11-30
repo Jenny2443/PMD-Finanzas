@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AnnadirGasto">
+    tools:context=".AnnadirIngreso">
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/main_btn_nav"
@@ -98,7 +98,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center|top"
             android:layout_marginTop="30dp"
-            android:text="AÑADIR GASTO"
+            android:text="AÑADIR INGRESO"
             android:textSize="34sp" />
 
         <EditText
