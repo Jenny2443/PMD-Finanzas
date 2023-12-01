@@ -56,12 +56,18 @@ public class StockItemActivity extends AppCompatActivity {
         }
 
 
-        Thread thread = new Thread(new DownloadStockManager(symbol));
+        Thread thread = new Thread(new DownloadStockManager(this, symbol) );
         thread.start();
         try {
             thread.join();
         } catch (InterruptedException e) {
             e.printStackTrace();
+        }
+        boolean error = getIntent().getBooleanExtra("ERROR", true);
+        if (error) {
+            Toast.makeText(this, "No existe el símbolo", Toast.LENGTH_SHORT).show();
+            openActivityStocks();
+            return;
         }
         price.setText(String.valueOf(StockManager.getStock(symbol).getPrice()));
         Log.println(Log.INFO, "Stocks", "Stocks updated");

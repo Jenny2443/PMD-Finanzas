@@ -1,6 +1,7 @@
 package es.upm.etsiinf.pmd_financeapp;
 
 import android.util.Log;
+import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -55,11 +56,11 @@ public class StockManager {
         }
     }
 
-    public static void updateStock(Stock stock) throws IOException {
+    public static boolean updateStock(Stock stock) throws IOException {
         //Make the API connection and update the stock
         if (stock == null) {
             System.out.println("Stock is null");
-            return;
+            return false;
         }
         if (API_KEY == null || API_KEY.isEmpty()) {
             System.err.println("Make sure you set your polygon API key in the POLYGON_API_KEY environment variable!");
@@ -69,6 +70,11 @@ public class StockManager {
         HttpURLConnection  con = null;
         try {
             String response = getURLText(url);
+            if (response == null) {
+                //Send a intent to the main activity to show a toast
+            return false;
+
+            }
             String[] parts = response.split(",");
 
             //Update price
@@ -94,11 +100,14 @@ public class StockManager {
             stock.setLastUpdate(LocalDateTime.now());
 
 
+
         } catch (IOException e) {
             throw new RuntimeException(e);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+
+        return true;
 
 
     }
@@ -107,19 +116,25 @@ public class StockManager {
         URL website = new URL(url);
         URLConnection connection = website.openConnection();
         //Check response code
-        BufferedReader in = new BufferedReader(
-                new InputStreamReader(
-                        connection.getInputStream()));
+        try {
+            BufferedReader in = new BufferedReader(
+                    new InputStreamReader(
+                            connection.getInputStream()));
+            StringBuilder response = new StringBuilder();
+            String inputLine;
 
-        StringBuilder response = new StringBuilder();
-        String inputLine;
+            while ((inputLine = in.readLine()) != null)
+                response.append(inputLine);
 
-        while ((inputLine = in.readLine()) != null)
-            response.append(inputLine);
+            in.close();
 
-        in.close();
+            return response.toString();
+        }catch (Exception e) {
+            return null;
+        }
 
-        return response.toString();
+
+
     }
 
     public static boolean checkExistance(String symbol){
