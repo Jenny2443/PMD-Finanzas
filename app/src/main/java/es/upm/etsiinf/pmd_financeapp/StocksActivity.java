@@ -25,6 +25,7 @@ public class StocksActivity extends AppCompatActivity {
     public SearchView barraBusqueda;
 
     public ListView stocksListView;
+    public TextView emptyStocksList;
 
     public StocksAdapter stocksAdapter;
 
@@ -40,6 +41,7 @@ public class StocksActivity extends AppCompatActivity {
         tituloStocks = findViewById(R.id.stocks_title);
         barraBusqueda = findViewById(R.id.search_stocks);
         stocksListView = findViewById(R.id.stocks_list);
+        emptyStocksList = findViewById(R.id.emptyListViewMessage);
 
         ArrayList<Stock> stocks = (ArrayList<Stock>) StockManager.getStocks();
         StocksAdapter stocksAdapter = new StocksAdapter(this, stocks);
@@ -102,6 +104,14 @@ public class StocksActivity extends AppCompatActivity {
                 return true;
             }
         });
+
+        if (stocks.isEmpty()){
+            emptyStocksList.setVisibility(View.VISIBLE);
+            stocksListView.setVisibility(View.GONE);
+        }else{
+            emptyStocksList.setVisibility(View.GONE);
+            stocksListView.setVisibility(View.VISIBLE);
+        }
     }
 
     //Funcion para abrir la actividad de historial
