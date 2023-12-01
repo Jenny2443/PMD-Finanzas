@@ -5,4 +5,7 @@
     <color name="verde">#2B982B</color>
     <color name="morado">#8B5FD8</color>
     <color name="grey">#777474</color>
+    <color name="azul">#3F51B5</color>
+    <color name="rojo">#F44336</color>
+    <color name="amarillo">#FFEB3B</color>
 </resources>
