@@ -7,7 +7,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,6 +24,7 @@ public class StockItemActivity extends AppCompatActivity {
     TextView price;
 
     Switch switchFavorite;
+    ImageView botonReturn;
     public BottomNavigationView bottomNavigationView;
 
     @Override
@@ -38,6 +41,8 @@ public class StockItemActivity extends AppCompatActivity {
         price = findViewById(R.id.stock_item_price);
         switchFavorite = findViewById(R.id.switch_stock_favorite);
         bottomNavigationView = findViewById(R.id.main_btn_nav);
+        bottomNavigationView.setSelectedItemId(R.id.menu_nav_action_stocks);
+        botonReturn = findViewById(R.id.buttom_retroceder_stock);
 
         if (StockManager.checkExistance(symbol)){
             if (StockManager.getStock(symbol).getName() != null)
@@ -80,21 +85,50 @@ public class StockItemActivity extends AppCompatActivity {
             }
         });
 
+        botonReturn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                salir(stock);
+                openActivityStocks();
+            }
+        });
 
     }
 
+    protected void onPause() {
+        super.onPause();
+        // Get the stock
+        Stock stock = StockManager.getStock(title.getText().toString());
+        salir(stock);
+
+
+    }
+
+    private void salir(Stock stock) {
+
+        if (!switchFavorite.isChecked()) {
+            // If it is not, set the stock as not favorite
+            StockManager.removeStock(stock);
+        }else {
+            stock.setName(fullName.getText().toString());
+        }
+
+    }
     public void openActivityHistorial(){
+        salir(StockManager.getStock(title.getText().toString()));
         Intent intent = new Intent(this, HistorialActivity.class);
         startActivity(intent);
     }
 
     //Funcion para abrir la actividad de home
     public void openActivityHome(){
+        salir(StockManager.getStock(title.getText().toString()));
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
 
     public void openActivityStocks(){
+        salir(StockManager.getStock(title.getText().toString()));
         Intent intent = new Intent(this, StocksActivity.class);
         startActivity(intent);
     }

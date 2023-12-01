@@ -7,6 +7,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -14,10 +17,16 @@ import android.widget.Toast;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
+import java.util.ArrayList;
+
 public class StocksActivity extends AppCompatActivity {
     public BottomNavigationView bottomNavigationView;
     public TextView tituloStocks;
     public SearchView barraBusqueda;
+
+    public ListView stocksListView;
+
+    public StocksAdapter stocksAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +39,27 @@ public class StocksActivity extends AppCompatActivity {
         //Inicializamos el texto de la actividad (titulo)
         tituloStocks = findViewById(R.id.stocks_title);
         barraBusqueda = findViewById(R.id.search_stocks);
+        stocksListView = findViewById(R.id.stocks_list);
+
+        ArrayList<Stock> stocks = (ArrayList<Stock>) StockManager.getStocks();
+        StocksAdapter stocksAdapter = new StocksAdapter(this, stocks);
+
+        stocksListView.setAdapter(stocksAdapter);
+
+        stocksListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                // Acción a realizar cuando se pulsa un elemento de la lista
+                Stock selectedStock = stocks.get(position);
+
+                //Create a intent to open the StockItemActivity
+                Intent intent = new Intent(StocksActivity.this, StockItemActivity.class);
+                //Add the symbol of the stock to the intent
+                intent.putExtra("symbol", selectedStock.getSymbol());
+                //Start the activity
+                startActivity(intent);
+            }
+        });
 
         barraBusqueda.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -86,3 +116,4 @@ public class StocksActivity extends AppCompatActivity {
         startActivity(intent);
     }
 }
+
