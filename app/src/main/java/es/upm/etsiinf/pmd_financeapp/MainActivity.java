@@ -3,9 +3,11 @@ package es.upm.etsiinf.pmd_financeapp;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -15,11 +17,20 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.formatter.PercentFormatter;
+import com.github.mikephil.charting.formatter.ValueFormatter;
+import com.github.mikephil.charting.utils.ViewPortHandler;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.android.material.navigation.NavigationView;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity{
 //    Button btnStocks;
@@ -35,6 +46,11 @@ public class MainActivity extends AppCompatActivity{
     //private NavigationBarView bottomNavigationView;
     public BottomNavigationView bottomNavigationView;
     public TextView tituloHome;
+
+    //Grafica
+    public PieChart pieChart;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -107,6 +123,43 @@ public class MainActivity extends AppCompatActivity{
             }
         });
 
+        //Inicializacion de la grafica
+        pieChart = findViewById(R.id.main_piechart);
+
+        ArrayList<PieEntry> categorias = new ArrayList<>();
+        categorias.add(new PieEntry(5, "Casa"));
+        categorias.add(new PieEntry(25, "Comida"));
+        categorias.add(new PieEntry(2, "Ropa"));
+        categorias.add(new PieEntry(8, "Salud"));
+        categorias.add(new PieEntry(40f, "Trasporte"));
+        categorias.add(new PieEntry(20f, "Entretenimiento"));
+
+        PieDataSet dataSet = new PieDataSet(categorias, "");
+        //dataSet.setColors(Color.rgb(120,178,255), Color.rgb(50,255,150), Color.rgb(255,51,51));
+        dataSet.setColors(getColor(R.color.azul), getColor(R.color.verde), getColor(R.color.morado), getColor(R.color.grey), getColor(R.color.rojo), getColor(R.color.amarillo));
+        dataSet.setSliceSpace(2f);
+
+        PieData data = new PieData(dataSet);
+        //data.setValueFormatter(new PercentFormatter(pieChart)); // Utilizar el PercentFormatter
+        dataSet.setDrawValues(false);   // No mostrar valores dentro de los segmentos
+        //data.setValueTextSize(20f);
+
+        pieChart.setData(data);
+
+        //dataSet.setDrawValues(true); // Mostrar valores dentro de los segmentos
+
+        // Configuraciones adicionales
+        pieChart.setHoleRadius(20f);
+        pieChart.setTransparentCircleRadius(25f);
+        //Desactiva descripcion
+        pieChart.getDescription().setEnabled(false);
+
+        //Si se activa -> saldria "Categoria 1"... en cada segmento
+        pieChart.setDrawEntryLabels(false);
+
+        pieChart.setDrawCenterText(true);
+        pieChart.setCenterText("Gastos");
+        pieChart.getLegend().setEnabled(true);
 
     }
 
