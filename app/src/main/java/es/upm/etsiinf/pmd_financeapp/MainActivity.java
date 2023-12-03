@@ -32,6 +32,9 @@ import com.google.android.material.navigation.NavigationView;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import es.upm.etsiinf.pmd_financeapp.db.DBHelperStock;
+import es.upm.etsiinf.pmd_financeapp.db.DbStock;
+
 public class MainActivity extends AppCompatActivity{
 //    Button btnStocks;
 //    Button btnHome;
@@ -49,6 +52,9 @@ public class MainActivity extends AppCompatActivity{
 
     //Grafica
     public PieChart pieChart;
+
+    //BBDD
+    private DBHelperStock dbHelperStock;
 
 
     @Override
@@ -161,6 +167,15 @@ public class MainActivity extends AppCompatActivity{
         pieChart.setCenterText("Gastos");
         pieChart.getLegend().setEnabled(true);
 
+
+        //BBDD
+        Log.i("MainActivity", "onCreate: " + getDatabasePath("FinanceApp.db"));
+        dbHelperStock = new DBHelperStock(this);
+
+        if(dbHelperStock != null){
+            Log.d("DatabasePath", "DB: " + dbHelperStock.toString());
+            Toast.makeText(MainActivity.this, "Base de datos creada correctamente " + dbHelperStock.toString(), Toast.LENGTH_SHORT).show();
+        }
     }
 
     //Funcion para abrir la actividad de stocks

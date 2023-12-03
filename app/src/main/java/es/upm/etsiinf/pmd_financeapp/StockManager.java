@@ -132,9 +132,4 @@ public class StockManager {
         return false;
     }
 
-
-
-
-
-
 }
