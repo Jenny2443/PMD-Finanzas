@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 public class DbStock extends DBHelperStock{
@@ -13,7 +14,7 @@ public class DbStock extends DBHelperStock{
         this.context = context;
     }
 
-    public long insertarStock(String ticker, String nombre, float precioCierre, float precioMax, float precioMin, Date lastUpdate){
+    public long insertarStock(String ticker, String nombre, double precioCierre, double precioMax, double precioMin, LocalDateTime lastUpdate){
         long id = 0;
         try{
             DBHelperStock dbHelper = new DBHelperStock(context);
