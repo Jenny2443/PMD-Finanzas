@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.MenuItem;
@@ -51,6 +52,7 @@ public class AnnadirGasto extends AppCompatActivity {
     // Variables para que el usuario suba una imagen
     private static final int PICK_IMAGE_REQUEST = 1;
     private Button subirImg;
+    private ImageView img;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +60,7 @@ public class AnnadirGasto extends AppCompatActivity {
         setContentView(R.layout.activity_annadir_gasto);
 
         subirImg = findViewById(R.id.AnGa_btn_cargar_im);
+        img = findViewById(R.id.AnGa_imSubida);
 
         // Iniciamos botones
         btnCancelar = findViewById(R.id.AnGa_btn_cancelar);
@@ -168,7 +171,31 @@ public class AnnadirGasto extends AppCompatActivity {
             }
         });
 
+        subirImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                abrirGaleria();
+            }
+        });
 
+
+    }
+
+    // Tratar imagen subida
+    private void abrirGaleria() {
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(intent, PICK_IMAGE_REQUEST);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null) {
+            Uri imagenUri = data.getData();
+
+            img.setImageURI(imagenUri);
+        }
     }
 
     //Funcion para abrir la actividad de stocks

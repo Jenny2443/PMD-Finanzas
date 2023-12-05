@@ -1,10 +1,13 @@
 package es.upm.etsiinf.pmd_financeapp;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -43,12 +46,21 @@ public class AnnadirIngreso extends AppCompatActivity {
     private Button btnCancelar;
     private Button btnGuardar;
 
+    // Variables para que el usuario suba una imagen
+    private static final int PICK_IMAGE_REQUEST = 1;
+
+    private Button subirImg;
+    private ImageView img;
+
     private TextView txt_fechaSeleccionada;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_annadir_ingreso);
+
+        subirImg = findViewById(R.id.AnIn_btn_cargar_im);
+        img = findViewById(R.id.AnIn_imSubida);
 
         // Iniciamos botones
         btnCancelar = findViewById(R.id.AnIn_btn_cancelar);
@@ -159,7 +171,31 @@ public class AnnadirIngreso extends AppCompatActivity {
             }
         });
 
+        subirImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                abrirGaleria();
+            }
+        });
 
+
+    }
+
+    // Tratar imagen subida
+    private void abrirGaleria() {
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(intent, PICK_IMAGE_REQUEST);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null) {
+            Uri imagenUri = data.getData();
+
+            img.setImageURI(imagenUri);
+        }
     }
 
     //Funcion para abrir la actividad de stocks
