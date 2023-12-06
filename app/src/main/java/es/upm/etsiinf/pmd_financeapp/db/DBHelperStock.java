@@ -9,7 +9,7 @@ public class DBHelperStock extends SQLiteOpenHelper {
     //Version de BBDD
     private static final int DATABASE_VERSION = 1;
     //Nombre de BBDD
-    private static final String DATABASE_NOMBRE = "finance_app.db";
+    private static final String DATABASE_NOMBRE = "finance_app_fav_stocks.db";
     //Tabla contactos
     private static final String TABLA_STOCKS = "t_fav_stocks";
     public DBHelperStock(Context context) {

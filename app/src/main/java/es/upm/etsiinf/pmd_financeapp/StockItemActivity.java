@@ -118,7 +118,9 @@ public class StockItemActivity extends AppCompatActivity {
         }else {
             stock.setName(fullName.getText().toString());
             long id = dbStock.insertarStock(stock.getSymbol(), stock.getName(), stock.getPrice(), stock.getMaxPrice(), stock.getMinPrice(), stock.getLastUpdate());
-            Log.i("StockItemActivity", "Stock insertado con id: " + id);
+            //dbStock.borrarStock(stock.getSymbol());
+            //Log.i("StockItemActivity", "Stock insertado: nombre:" + stock.getName() +  "con id: " + id);
+            Log.i("StockItemActivity", "Stock borrado: nombre:" + stock.getName());
         }
 
     }

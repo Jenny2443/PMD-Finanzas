@@ -7,6 +7,7 @@ import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -33,6 +34,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import es.upm.etsiinf.pmd_financeapp.db.DBHelperStock;
+import es.upm.etsiinf.pmd_financeapp.db.DBHelperTransacciones;
 import es.upm.etsiinf.pmd_financeapp.db.DbStock;
 
 public class MainActivity extends AppCompatActivity{
@@ -55,6 +57,7 @@ public class MainActivity extends AppCompatActivity{
 
     //BBDD
     private DBHelperStock dbHelperStock;
+    private DBHelperTransacciones dbHelperTransacciones;
 
 
     @Override
@@ -171,10 +174,20 @@ public class MainActivity extends AppCompatActivity{
         //BBDD
         Log.i("MainActivity", "onCreate: " + getDatabasePath("FinanceApp.db"));
         dbHelperStock = new DBHelperStock(this);
+        SQLiteDatabase dbStock = dbHelperStock.getWritableDatabase(); //Indica q vamos a scribir
+
+        Log.i("MainActivity", "onCreate: " + getDatabasePath("FinanceApp.db"));
+        dbHelperTransacciones = new DBHelperTransacciones(this);
+        SQLiteDatabase dbTransacciones = dbHelperTransacciones.getWritableDatabase(); //Indica q vamos a scribir
 
         if(dbHelperStock != null){
             Log.d("DatabasePath", "DB: " + dbHelperStock.toString());
-            Toast.makeText(MainActivity.this, "Base de datos creada correctamente " + dbHelperStock.toString(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(MainActivity.this, "Stock Base de datos creada correctamente " + dbHelperStock.toString(), Toast.LENGTH_SHORT).show();
+        }
+
+        if(dbHelperTransacciones != null){
+            Log.d("DatabasePath", "DB: " + dbHelperTransacciones.toString());
+            Toast.makeText(MainActivity.this, "Transaccion Base de datos creada correctamente " + dbHelperTransacciones.toString(), Toast.LENGTH_SHORT).show();
         }
     }
 

@@ -5,12 +5,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -20,6 +22,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
 import java.util.Calendar;
+
+import es.upm.etsiinf.pmd_financeapp.db.DbTransacciones;
 
 public class AnnadirIngreso extends AppCompatActivity {
 
@@ -45,10 +49,18 @@ public class AnnadirIngreso extends AppCompatActivity {
 
     private TextView txt_fechaSeleccionada;
 
+    private DbTransacciones dbTransacciones;
+
+    private EditText txtCantidad;
+    private EditText txtDescripcion;
+    private String categoriaSeleccionada;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_annadir_ingreso);
+
+        dbTransacciones = new DbTransacciones(this);
 
         // Iniciamos botones
         btnCancelar = findViewById(R.id.AnIn_btn_cancelar);
@@ -60,14 +72,18 @@ public class AnnadirIngreso extends AppCompatActivity {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerCat.setAdapter(adapter);
 
+        //Datos a recoger (fecha, categorio, cantidad, descripcion)
         txt_fechaSeleccionada = findViewById(R.id.AnIn_fecha_seleccionada);
+        txtCantidad = findViewById(R.id.AnIn_ent_cantidad);
+        txtDescripcion = findViewById(R.id.AnIn_ent_notas);
+
 
         // Configuración de selección de categoría
         spinnerCat.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
 
-                String catSeleccionada = opCategorias[position];
+                categoriaSeleccionada = opCategorias[position];
 
             }
 
@@ -132,6 +148,16 @@ public class AnnadirIngreso extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // TODO: GUARDAR GASTO
+                DbTransacciones dbTransacciones = new DbTransacciones(AnnadirIngreso.this);
+
+                //TODO: FALLA
+                Log.i("AnnadirIngreso", "Fecha: " + txt_fechaSeleccionada.getText().toString());
+                Log.i("AnnadirIngreso", "Cantidad: " + txtCantidad.getText().toString());
+                Log.i("AnnadirIngreso", "Categoría: " + categoriaSeleccionada);
+                Log.i("AnnadirIngreso", "Notas: " + txtDescripcion.getText().toString());
+
+                long id = dbTransacciones.insertarTransaccion(txt_fechaSeleccionada.getText().toString(), Double.parseDouble(txtCantidad.getText().toString()), categoriaSeleccionada,null, txtDescripcion.getText().toString());
+                Log.i("AnnadirIngreso", "Transaccion insertado con id: " + id);
                 openActivityHome();
             }
         });

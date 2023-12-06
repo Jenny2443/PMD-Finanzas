@@ -3,12 +3,13 @@ package es.upm.etsiinf.pmd_financeapp.db;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 public class DBHelperTransacciones extends SQLiteOpenHelper {
     //Version de BBDD
     private static final int DATABASE_VERSION = 1;
     //Nombre de BBDD
-    private static final String DATABASE_NOMBRE = "finance_app.db";
+    private static final String DATABASE_NOMBRE = "finance_app_transaccion.db";
     //Tabla contactos
     private static final String TABLA_TRANSACCIONES = "t_transacciones";
     public DBHelperTransacciones(Context context) {
@@ -17,6 +18,7 @@ public class DBHelperTransacciones extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+        Log.i("DBHelperTransacciones", "onCreate iniciado");
         //Crear query de crear tabla
         db.execSQL("CREATE TABLE " + TABLA_TRANSACCIONES + " (" +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -25,10 +27,11 @@ public class DBHelperTransacciones extends SQLiteOpenHelper {
                 "categoria TEXT NOT NULL, " +
                 "imagen IMAGE, " +
                 "notas TEXT)");
+        Log.i("DBHelperTransacciones", "onCreate creado tabla t_transacciones");
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
+        onCreate(db);
     }
 }

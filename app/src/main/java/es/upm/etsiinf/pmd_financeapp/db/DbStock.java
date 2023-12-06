@@ -82,14 +82,14 @@ public class DbStock extends DBHelperStock{
         }
     }
 
-    public void leerStock(String ticker){
+    public void leerStock(String ticker, String groupBy, String having, String orderBy){
         try{
             DBHelperStock dbHelper = new DBHelperStock(context);
             //Creamos conexion
             SQLiteDatabase conn = dbHelper.getWritableDatabase();
 
             //Leemos
-            conn.query("t_fav_stocks", null, "ticker = ?", new String[]{ticker}, null, null, null);
+            conn.query("t_fav_stocks", null, "ticker = ?", new String[]{ticker}, groupBy, having, orderBy);
 
             //Cerrar conexion con bbdd
             conn.close();
