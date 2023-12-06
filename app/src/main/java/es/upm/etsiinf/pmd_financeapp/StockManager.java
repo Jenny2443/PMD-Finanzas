@@ -1,6 +1,7 @@
 package es.upm.etsiinf.pmd_financeapp;
 
 import android.util.Log;
+import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -13,8 +14,13 @@ import java.net.URLConnection;
 import java.time.LocalDateTime;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 import io.polygon.kotlin.sdk.rest.PolygonRestClient;
 
@@ -55,20 +61,32 @@ public class StockManager {
         }
     }
 
-    public static void updateStock(Stock stock) throws IOException {
+    public static boolean updateStock(Stock stock) throws IOException {
         //Make the API connection and update the stock
         if (stock == null) {
             System.out.println("Stock is null");
-            return;
+            return false;
         }
         if (API_KEY == null || API_KEY.isEmpty()) {
             System.err.println("Make sure you set your polygon API key in the POLYGON_API_KEY environment variable!");
             System.exit(1);
         }
-        String url = "https://api.polygon.io/v1/open-close/" + stock.getSymbol() + "/2023-11-24?adjusted=true&apiKey=" + API_KEY;
+        Calendar calendar = Calendar.getInstance();
+        Date currentDate = calendar.getTime();
+
+        // Restar un día a la fecha actual
+        calendar.add(Calendar.DAY_OF_MONTH, -1);
+        Date desiredDate = calendar.getTime();
+        String desiredDateString = formatDate(desiredDate);
+        String url = "https://api.polygon.io/v1/open-close/" + stock.getSymbol() + "/" + desiredDateString +"?adjusted=true&apiKey=" + API_KEY;
         HttpURLConnection  con = null;
         try {
             String response = getURLText(url);
+            if (response == null) {
+                //Send a intent to the main activity to show a toast
+            return false;
+
+            }
             String[] parts = response.split(",");
 
             //Update price
@@ -94,32 +112,49 @@ public class StockManager {
             stock.setLastUpdate(LocalDateTime.now());
 
 
+
         } catch (IOException e) {
             throw new RuntimeException(e);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
 
+        return true;
 
+
+    }
+
+    private static String formatDate(Date date) {
+        // Especificar el formato deseado
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+
+        // Formatear la fecha a una cadena
+        return sdf.format(date);
     }
 
     public static String getURLText(String url) throws Exception {
         URL website = new URL(url);
         URLConnection connection = website.openConnection();
         //Check response code
-        BufferedReader in = new BufferedReader(
-                new InputStreamReader(
-                        connection.getInputStream()));
+        try {
+            BufferedReader in = new BufferedReader(
+                    new InputStreamReader(
+                            connection.getInputStream()));
+            StringBuilder response = new StringBuilder();
+            String inputLine;
 
-        StringBuilder response = new StringBuilder();
-        String inputLine;
+            while ((inputLine = in.readLine()) != null)
+                response.append(inputLine);
 
-        while ((inputLine = in.readLine()) != null)
-            response.append(inputLine);
+            in.close();
 
-        in.close();
+            return response.toString();
+        }catch (Exception e) {
+            return null;
+        }
 
-        return response.toString();
+
+
     }
 
     public static boolean checkExistance(String symbol){
