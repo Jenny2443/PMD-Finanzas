@@ -9,8 +9,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:layout_editor_absoluteX="96dp"
-        tools:layout_editor_absoluteY="-16dp">
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="0dp">
 
 
         <TextView
@@ -43,7 +43,7 @@
             android:id="@+id/stock_item_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="37dp"
+            android:layout_marginTop="40dp"
             android:text="TextView"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -52,17 +52,58 @@
             app:layout_constraintTop_toBottomOf="@+id/full_stock_name"
             app:layout_constraintVertical_bias="0.0" />
 
-        <Switch
-            android:id="@+id/switch_stock_favorite"
-            android:layout_width="166dp"
-            android:layout_height="56dp"
-            android:text="Favoritos"
+        <TextView
+            android:id="@+id/stock_item_max_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:text="TextView"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/full_stock_name"
-            app:layout_constraintVertical_bias="0.184" />
+            app:layout_constraintTop_toBottomOf="@+id/stock_item_price"
+            app:layout_constraintVertical_bias="0.02
+" />
+
+        <TextView
+            android:id="@+id/stock_item_min_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:text="TextView"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/stock_item_max_price"
+            app:layout_constraintVertical_bias="0.02
+" />
+
+        <TextView
+            android:id="@+id/stock_item_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TextView"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/stock_item_min_price"
+            app:layout_constraintVertical_bias="0.05" />
+
+        <Switch
+            android:id="@+id/switch_stock_favorite"
+            android:layout_width="166dp"
+            android:layout_height="50dp"
+            android:text="Favoritos"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.497"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/stock_item_date"
+            app:layout_constraintVertical_bias="0.1
+" />
 
         <ImageView
             android:id="@+id/buttom_retroceder_stock"

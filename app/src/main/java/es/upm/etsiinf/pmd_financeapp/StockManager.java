@@ -13,6 +13,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.time.LocalDateTime;
 import java.net.URI;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -108,8 +109,8 @@ public class StockManager {
             double minPriceDouble = Double.parseDouble(newMinPrice);
             stock.setMinPrice(minPriceDouble);
 
-            //Update lastUpdate
-            stock.setLastUpdate(LocalDateTime.now());
+            LocalDateTime localDateTime = desiredDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();            //Update lastUpdate
+            stock.setLastUpdate(localDateTime);
 
 
 
@@ -124,7 +125,7 @@ public class StockManager {
 
     }
 
-    private static String formatDate(Date date) {
+    public static String formatDate(Date date) {
         // Especificar el formato deseado
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
 

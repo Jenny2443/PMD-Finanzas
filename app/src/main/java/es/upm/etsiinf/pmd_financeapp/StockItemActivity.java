@@ -18,6 +18,10 @@ import android.widget.Toast;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
+
 import es.upm.etsiinf.pmd_financeapp.db.DbStock;
 
 public class StockItemActivity extends AppCompatActivity {
@@ -25,6 +29,9 @@ public class StockItemActivity extends AppCompatActivity {
     TextView title;
     EditText fullName;
     TextView price;
+    TextView maxPrice;
+    TextView minPrice;
+    TextView lastUpdate;
 
     Switch switchFavorite;
     ImageView botonReturn;
@@ -43,6 +50,9 @@ public class StockItemActivity extends AppCompatActivity {
         title.setText(symbol);
         fullName = findViewById(R.id.full_stock_name);
         price = findViewById(R.id.stock_item_price);
+        maxPrice = findViewById(R.id.stock_item_max_price);
+        minPrice = findViewById(R.id.stock_item_min_price);
+        lastUpdate = findViewById(R.id.stock_item_date);
         switchFavorite = findViewById(R.id.switch_stock_favorite);
         bottomNavigationView = findViewById(R.id.main_btn_nav);
         bottomNavigationView.setSelectedItemId(R.id.menu_nav_action_stocks);
@@ -73,7 +83,18 @@ public class StockItemActivity extends AppCompatActivity {
             openActivityStocks();
             return;
         }
-        price.setText(String.valueOf(StockManager.getStock(symbol).getPrice()));
+
+        price.setText(String.valueOf("Precio cierre: " + StockManager.getStock(symbol).getPrice()));
+        maxPrice.setText(String.valueOf("Precio máximo (24h): " + StockManager.getStock(symbol).getMaxPrice()));
+        minPrice.setText(String.valueOf("Precio mínimo (24h): " + StockManager.getStock(symbol).getMinPrice()));
+        LocalDateTime localDateTime = StockManager.getStock(symbol).getLastUpdate();
+
+        // Especificar el formato deseado (por ejemplo, "yyyy-MM-dd HH:mm:ss")
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+
+        // Convertir LocalDateTime a String
+        String formattedDateTime = localDateTime.format(formatter);
+        lastUpdate.setText(String.valueOf("Última actualización: " + formattedDateTime));
         Log.println(Log.INFO, "Stocks", "Stocks updated");
         Log.println(Log.INFO, "Stocks", "New price: " + stock.getPrice());
 

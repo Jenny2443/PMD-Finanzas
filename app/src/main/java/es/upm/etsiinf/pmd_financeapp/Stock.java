@@ -1,8 +1,7 @@
 package es.upm.etsiinf.pmd_financeapp;
 
-import android.util.Log;
-
 import java.time.LocalDateTime;
+import java.util.Date;
 
 public class Stock {
     private String symbol;
