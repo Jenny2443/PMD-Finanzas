@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Debug;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,6 +18,8 @@ import android.widget.Toast;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
+import es.upm.etsiinf.pmd_financeapp.db.DbStock;
+
 public class StockItemActivity extends AppCompatActivity {
 
     TextView title;
@@ -26,6 +29,7 @@ public class StockItemActivity extends AppCompatActivity {
     Switch switchFavorite;
     ImageView botonReturn;
     public BottomNavigationView bottomNavigationView;
+    public DbStock dbStock;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +71,7 @@ public class StockItemActivity extends AppCompatActivity {
         Log.println(Log.INFO, "Stocks", "Stocks updated");
         Log.println(Log.INFO, "Stocks", "New price: " + stock.getPrice());
 
+
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -85,6 +90,7 @@ public class StockItemActivity extends AppCompatActivity {
             }
         });
 
+        dbStock = new DbStock(this);
         botonReturn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -111,6 +117,10 @@ public class StockItemActivity extends AppCompatActivity {
             StockManager.removeStock(stock);
         }else {
             stock.setName(fullName.getText().toString());
+            long id = dbStock.insertarStock(stock.getSymbol(), stock.getName(), stock.getPrice(), stock.getMaxPrice(), stock.getMinPrice(), stock.getLastUpdate());
+            //dbStock.borrarStock(stock.getSymbol());
+            //Log.i("StockItemActivity", "Stock insertado: nombre:" + stock.getName() +  "con id: " + id);
+            Log.i("StockItemActivity", "Stock borrado: nombre:" + stock.getName());
         }
 
     }
