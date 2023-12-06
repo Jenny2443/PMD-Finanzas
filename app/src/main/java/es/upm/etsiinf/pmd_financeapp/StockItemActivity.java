@@ -63,7 +63,7 @@ public class StockItemActivity extends AppCompatActivity {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        boolean error = getIntent().getBooleanExtra("ERROR", true);
+        boolean error = StockManager.getStock(symbol).getPrice() == 0;
         if (error) {
             Toast.makeText(this, "No existe el símbolo", Toast.LENGTH_SHORT).show();
             openActivityStocks();

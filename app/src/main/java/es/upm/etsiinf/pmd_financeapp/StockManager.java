@@ -14,8 +14,13 @@ import java.net.URLConnection;
 import java.time.LocalDateTime;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 import io.polygon.kotlin.sdk.rest.PolygonRestClient;
 
@@ -66,7 +71,14 @@ public class StockManager {
             System.err.println("Make sure you set your polygon API key in the POLYGON_API_KEY environment variable!");
             System.exit(1);
         }
-        String url = "https://api.polygon.io/v1/open-close/" + stock.getSymbol() + "/2023-11-24?adjusted=true&apiKey=" + API_KEY;
+        Calendar calendar = Calendar.getInstance();
+        Date currentDate = calendar.getTime();
+
+        // Restar un día a la fecha actual
+        calendar.add(Calendar.DAY_OF_MONTH, -1);
+        Date desiredDate = calendar.getTime();
+        String desiredDateString = formatDate(desiredDate);
+        String url = "https://api.polygon.io/v1/open-close/" + stock.getSymbol() + "/" + desiredDateString +"?adjusted=true&apiKey=" + API_KEY;
         HttpURLConnection  con = null;
         try {
             String response = getURLText(url);
@@ -110,6 +122,14 @@ public class StockManager {
         return true;
 
 
+    }
+
+    private static String formatDate(Date date) {
+        // Especificar el formato deseado
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+
+        // Formatear la fecha a una cadena
+        return sdf.format(date);
     }
 
     public static String getURLText(String url) throws Exception {

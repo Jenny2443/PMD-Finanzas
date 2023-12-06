@@ -23,14 +23,10 @@ public class DownloadStockManager implements Runnable{
         try {
             Log.println(Log.INFO, "Stocks", "Updating stock " + symbol);
             Stock stock = StockManager.getStock(symbol);
-            Intent intent = new Intent(context, StocksActivity.class);
             if(StockManager.updateStock(stock)) {
                 Log.println(Log.INFO, "Stocks", "Stock updated");
-                intent.putExtra("ERROR", false);
             } else {
                 Log.println(Log.INFO, "Stocks", "Stock not updated");
-                intent.putExtra("ERROR", true);
-                showToast("Error al actualizar el stock");
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
