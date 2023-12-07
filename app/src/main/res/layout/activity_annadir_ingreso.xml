@@ -106,7 +106,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center|top"
             android:layout_marginTop="30dp"
-            android:text="AÑADIR GASTO"
+            android:text="AÑADIR INGRESO"
             android:textSize="34sp" />
 
         <EditText

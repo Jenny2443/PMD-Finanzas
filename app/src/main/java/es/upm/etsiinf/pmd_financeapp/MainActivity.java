@@ -2,35 +2,21 @@ package es.upm.etsiinf.pmd_financeapp;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.content.ContextCompat;
-import androidx.core.view.GravityCompat;
 
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.*;
 
 import com.github.mikephil.charting.charts.PieChart;
-import com.github.mikephil.charting.components.Legend;
-import com.github.mikephil.charting.data.PieData;
-import com.github.mikephil.charting.data.PieDataSet;
-import com.github.mikephil.charting.data.PieEntry;
-import com.github.mikephil.charting.formatter.PercentFormatter;
-import com.github.mikephil.charting.formatter.ValueFormatter;
-import com.github.mikephil.charting.utils.ViewPortHandler;
+import com.github.mikephil.charting.data.*;
+
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
-import com.google.android.material.navigation.NavigationView;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 import es.upm.etsiinf.pmd_financeapp.db.DBHelperStock;
@@ -38,11 +24,8 @@ import es.upm.etsiinf.pmd_financeapp.db.DBHelperTransacciones;
 import es.upm.etsiinf.pmd_financeapp.db.DbStock;
 
 public class MainActivity extends AppCompatActivity{
-//    Button btnStocks;
-//    Button btnHome;
-//    Button btnHistorial;
-    Button btnAñadirGasto;
-    Button btnAñadirIngreso;
+    Button btnAnadirGasto;
+    Button btnAnadirIngreso;
     ImageView imFilter;
     ImageView imCalendar;
     TextView txtBalance;
@@ -83,8 +66,8 @@ public class MainActivity extends AppCompatActivity{
 
 
         //Inicializacion de botones
-         btnAñadirGasto = findViewById(R.id.main_btn_anadir_gasto);
-         btnAñadirIngreso = findViewById(R.id.main_btn_anadir_ingreso);
+         btnAnadirGasto = findViewById(R.id.main_btn_anadir_gasto);
+         btnAnadirIngreso = findViewById(R.id.main_btn_anadir_ingreso);
          imFilter = findViewById(R.id.main_btnFilter);
          imCalendar = findViewById(R.id.main_btnCalendar);
          txtBalance = findViewById(R.id.main_txt_balance);
@@ -112,7 +95,7 @@ public class MainActivity extends AppCompatActivity{
             }
         });
 
-        btnAñadirGasto.setOnClickListener(new View.OnClickListener() {
+        btnAnadirGasto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Toast.makeText(MainActivity.this, "Añadir gasto", Toast.LENGTH_SHORT).show();
@@ -122,7 +105,7 @@ public class MainActivity extends AppCompatActivity{
             }
         });
 
-        btnAñadirIngreso.setOnClickListener(new View.OnClickListener() {
+        btnAnadirIngreso.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Toast.makeText(MainActivity.this, "Añadir ingreso", Toast.LENGTH_SHORT).show();

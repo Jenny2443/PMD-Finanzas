@@ -108,7 +108,7 @@ public class AnnadirGasto extends AppCompatActivity {
                 //Qtamos el boton de calendario
                 btn_DatePicker.setVisibility(View.INVISIBLE);
                 //Hacemos el background mas oscuro para que se vea mejor
-                datePicker.setBackgroundColor(getResources().getColor(R.color.grey));
+                datePicker.setBackgroundColor(getResources().getColor(R.color.white));
             }
         });
 
