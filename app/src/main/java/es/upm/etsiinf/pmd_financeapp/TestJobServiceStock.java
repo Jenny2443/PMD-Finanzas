@@ -14,12 +14,13 @@ public class TestJobServiceStock extends JobService {
 
     @Override
     public boolean onStartJob(JobParameters params) {
-        Log.i("TestJobServiceStock", "Servicio ejecutado");
+        Log.i("TestJobServiceStock", "Servicio ejecutado: " );
         //TODO: llamar a API
         // Llama al método de actualización de la API
         actualizarAPI(params);
 
-        StockJobUtil.scheduleJob(this);
+        //StockJobUtil.scheduleJob(this);
+        Log.i("TestJobServiceStock", "Servicio reprogramado: " );
         return true;
     }
 

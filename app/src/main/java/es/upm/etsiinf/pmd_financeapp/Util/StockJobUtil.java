@@ -25,10 +25,10 @@ public class StockJobUtil {
         //se mantiene la programación de la tarea tras el reinicio -> si usuario apaga y reinicia, q se mantenga
         //requiere permiso para avisar si se ha reiniciado -> se añade al manifet
         jobBuilderInfo.setPersisted(true);
-        jobBuilderInfo.setMinimumLatency(6000); //Cda 3 segs
-        jobBuilderInfo.setOverrideDeadline(6000); //cada 3 segs
+        //jobBuilderInfo.setMinimumLatency(6000); //Cda 3 segs
+        //jobBuilderInfo.setOverrideDeadline(6000); //cada 3 segs
         //Q la bateria no este baja
-        //jobBuilderInfo.setPeriodic(15 * 60 * 1000);
+        jobBuilderInfo.setPeriodic(15 * 60 * 1000);
         jobBuilderInfo.setRequiresBatteryNotLow(true);
 
         //decir a scheduler q es un servicio del sistema
