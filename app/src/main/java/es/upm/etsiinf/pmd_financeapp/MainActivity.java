@@ -33,6 +33,7 @@ import com.google.android.material.navigation.NavigationView;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import es.upm.etsiinf.pmd_financeapp.Util.StockJobUtil;
 import es.upm.etsiinf.pmd_financeapp.db.DBHelperStock;
 import es.upm.etsiinf.pmd_financeapp.db.DBHelperTransacciones;
 import es.upm.etsiinf.pmd_financeapp.db.DbStock;
@@ -189,6 +190,9 @@ public class MainActivity extends AppCompatActivity{
             Log.d("DatabasePath", "DB: " + dbHelperTransacciones.toString());
             Toast.makeText(MainActivity.this, "Transaccion Base de datos creada correctamente " + dbHelperTransacciones.toString(), Toast.LENGTH_SHORT).show();
         }
+
+        Log.i("TestJobServiceStock","Mainactivity on create");
+        StockJobUtil.scheduleJob(this);
     }
 
     //Funcion para abrir la actividad de stocks
