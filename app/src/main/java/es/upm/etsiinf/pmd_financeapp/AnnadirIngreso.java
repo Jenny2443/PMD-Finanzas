@@ -17,6 +17,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -64,6 +65,13 @@ public class AnnadirIngreso extends AppCompatActivity {
     private EditText txtCantidad;
     private EditText txtDescripcion;
     private String categoriaSeleccionada;
+    private FrameLayout guardado;
+    private String datosCompartidos;
+
+    private ImageView AnIn_ok;
+
+    private ImageView AnIn_compartir;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +88,10 @@ public class AnnadirIngreso extends AppCompatActivity {
         // Iniciamos botones
         btnCancelar = findViewById(R.id.AnIn_btn_cancelar);
         btnGuardar = findViewById(R.id.AnIn_btn_guardar);
+
+        guardado = findViewById(R.id.guardado);
+        AnIn_ok = findViewById(R.id.AnIn_im_ok);
+        AnIn_compartir = findViewById(R.id.AnIn_im_compartir);
 
         // Inicialización de la lista de categorías
         Spinner spinnerCat = findViewById(R.id.AnIn_categorias);
@@ -162,6 +174,10 @@ public class AnnadirIngreso extends AppCompatActivity {
         btnGuardar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                datosCompartidos = "En la fecha " + txt_fechaSeleccionada.getText().toString() +
+                                    " he tenido un ingreso de " + txtCantidad.getText().toString() +
+                                    "€ en la categoría de " + categoriaSeleccionada +
+                                    ". Notas: " + txtDescripcion.getText().toString();
                 // TODO: GUARDAR GASTO
                 DbTransacciones dbTransacciones = new DbTransacciones(AnnadirIngreso.this);
 
@@ -171,9 +187,9 @@ public class AnnadirIngreso extends AppCompatActivity {
                 Log.i("AnnadirIngreso", "Categoría: " + categoriaSeleccionada);
                 Log.i("AnnadirIngreso", "Notas: " + txtDescripcion.getText().toString());
 
-                long id = dbTransacciones.insertarTransaccion(txt_fechaSeleccionada.getText().toString(), Double.parseDouble(txtCantidad.getText().toString()), categoriaSeleccionada,null, txtDescripcion.getText().toString());
+                long id = dbTransacciones.insertarTransaccion(txt_fechaSeleccionada.getText().toString(), Double.parseDouble(txtCantidad.getText().toString()), categoriaSeleccionada,img, txtDescripcion.getText().toString());
                 Log.i("AnnadirIngreso", "Transaccion insertado con id: " + id);
-                openActivityHome();
+                mostrarGuardado();
             }
         });
 
@@ -204,6 +220,20 @@ public class AnnadirIngreso extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 abrirGaleria();
+            }
+        });
+
+        AnIn_ok.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                openActivityHome();
+            }
+        });
+
+        AnIn_compartir.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                compartirDatos();
             }
         });
 
@@ -246,6 +276,28 @@ public class AnnadirIngreso extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void mostrarGuardado() {
+        // Cambiar la visibilidad del FrameLayout
+        if (guardado.getVisibility() == View.VISIBLE) {
+            guardado.setVisibility(View.GONE);
+        } else {
+            guardado.setVisibility(View.VISIBLE);
+        }
+    }
+
+    public void compartirDatos() {
+        // Crear un Intent con la acción ACTION_SEND
+        Intent intent = new Intent(Intent.ACTION_SEND);
+
+        // Establecer el tipo de contenido
+        intent.setType("text/plain");
+
+        // Establecer el texto que se compartirá
+        intent.putExtra(Intent.EXTRA_TEXT, datosCompartidos);
+
+        // Mostrar el selector de aplicaciones para compartir
+        startActivity(Intent.createChooser(intent, "Compartir con"));
+    }
 
 
 }

@@ -15,6 +15,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -54,6 +56,18 @@ public class AnnadirGasto extends AppCompatActivity {
     private Button subirImg;
     private ImageView img;
 
+    private FrameLayout guardado;
+
+    private ImageView AnGa_ok;
+    private ImageView AnGa_compartir;
+
+    private String datosCompartidos;
+
+    private EditText AnGa_dinero;
+    private EditText notas;
+
+    private String catSeleccionada;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,6 +79,13 @@ public class AnnadirGasto extends AppCompatActivity {
         // Iniciamos botones
         btnCancelar = findViewById(R.id.AnGa_btn_cancelar);
         btnGuardar = findViewById(R.id.AnGa_btn_guardar);
+
+        guardado = findViewById(R.id.guardado);
+        AnGa_ok = findViewById(R.id.AnGa_im_ok);
+        AnGa_compartir = findViewById(R.id.AnGa_im_compartir);
+        AnGa_dinero = findViewById(R.id.AnGa_ent_cantidad);
+        notas = findViewById(R.id.AnGa_ent_notas);
+
 
         // Inicialización de la lista de categorías
         Spinner spinnerCat = findViewById(R.id.AnGa_categorias);
@@ -79,7 +100,7 @@ public class AnnadirGasto extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
 
-                String catSeleccionada = opCategorias[position];
+                catSeleccionada = opCategorias[position];
 
             }
 
@@ -143,8 +164,25 @@ public class AnnadirGasto extends AppCompatActivity {
         btnGuardar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO: GUARDAR GASTO
+                datosCompartidos = "En la fecha " + txt_fechaSeleccionada.getText().toString() +
+                                    " he tenido un gasto de " + AnGa_dinero.getText().toString() +
+                                    "€ en la categoría de " + catSeleccionada +
+                                    ". Notas: " + notas.getText().toString();
+                mostrarGuardado();
+            }
+        });
+
+        AnGa_ok.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
                 openActivityHome();
+            }
+        });
+
+        AnGa_compartir.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                compartirDatos();
             }
         });
 
@@ -217,9 +255,28 @@ public class AnnadirGasto extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void mostrarGuardado() {
+        // Cambiar la visibilidad del FrameLayout
+        if (guardado.getVisibility() == View.VISIBLE) {
+            guardado.setVisibility(View.GONE);
+        } else {
+            guardado.setVisibility(View.VISIBLE);
+        }
+    }
 
+    public void compartirDatos() {
+        // Crear un Intent con la acción ACTION_SEND
+        Intent intent = new Intent(Intent.ACTION_SEND);
 
+        // Establecer el tipo de contenido
+        intent.setType("text/plain");
 
+        // Establecer el texto que se compartirá
+        intent.putExtra(Intent.EXTRA_TEXT, datosCompartidos);
+
+        // Mostrar el selector de aplicaciones para compartir
+        startActivity(Intent.createChooser(intent, "Compartir con"));
+    }
 
 
 }

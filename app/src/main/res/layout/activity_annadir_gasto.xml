@@ -63,6 +63,7 @@
             android:layout_marginBottom="30dp"
             android:backgroundTint="#39AF3D"
             android:text="Guardar"
+            android:onClick="mostrarGuardado"
             android:textColorHighlight="#4CAF50"
             android:textSize="24sp"
             app:iconTint="@color/verde" />
@@ -161,14 +162,14 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:id="@+id/fondo_guardado"
+            android:id="@+id/AnGa_fondo_guardado"
             android:layout_width="274dp"
             android:layout_height="296dp"
             android:layout_gravity="bottom|center"
             android:foreground="@drawable/guardado" />
 
         <TextView
-            android:id="@+id/txt_guardado"
+            android:id="@+id/AnGa_txt_guardado"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center|top"
@@ -180,7 +181,7 @@
             android:textStyle="bold" />
 
         <ImageView
-            android:id="@+id/im_compartir"
+            android:id="@+id/AnGa_im_compartir"
             android:layout_width="97dp"
             android:layout_height="94dp"
             android:layout_gravity="bottom|left"
@@ -189,12 +190,14 @@
             android:foreground="@drawable/btn_compartir" />
 
         <ImageView
-            android:id="@+id/im_ok"
+            android:id="@+id/AnGa_im_ok"
             android:layout_width="97dp"
             android:layout_height="94dp"
             android:layout_gravity="bottom|right"
             android:layout_marginRight="30dp"
             android:layout_marginBottom="40dp"
+            android:clickable="true"
+            android:onClick="openActivityHome"
             android:foreground="@drawable/btn_ok" />
     </FrameLayout>
 
