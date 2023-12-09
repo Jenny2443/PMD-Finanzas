@@ -28,8 +28,6 @@ public class TestJobServiceStock extends JobService {
     public boolean onStartJob(JobParameters params) {
         Log.i("TestJobServiceStock", "Servicio ejecutado: " );
         actualizarAPI(params, getApplicationContext());
-        //Reprogramar el servicio (si setPeriodic entonces no hace falta)
-        //StockJobUtil.scheduleJob(this);
         Log.i("TestJobServiceStock", "Servicio reprogramado: " );
         return true;
     }
@@ -43,6 +41,7 @@ public class TestJobServiceStock extends JobService {
                 try {
                     StockManager.updateStocks();
                     makeNotification();
+                    //Ponemos que se vuelva a ejecutar el servicio
                     jobFinished(jobParameters, true);
                 } catch (IOException e) {
                     throw new RuntimeException(e);
@@ -54,14 +53,18 @@ public class TestJobServiceStock extends JobService {
     private void makeNotification(){
         Log.i("TestJobService", "Notificacion");
         String chanelID = "CHANNEL_ID";
+        String groupId = "GROUP_ID"; // Identificador de grupo
+
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, chanelID);
         builder.setSmallIcon(R.drawable.ic_launcher_foreground);
         builder.setContentTitle("Titulo");
         builder.setContentText("Texto");
         builder.setAutoCancel(true);
         builder.setPriority(NotificationCompat.PRIORITY_DEFAULT);
+        builder.setGroup(groupId); // Asignar el grupo a la notificación
 
         Intent intent = new Intent(getApplicationContext(), StocksActivity.class);
+        //TODO: VER Q FLAGS PONER (LOS ACTIVOS SON DE UN VIDEO DE YT) LOS COMENTADOS SON DE CLASE, POR AHORA FUNCIONA CON LOS DEL VIDEO
         //intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, intent, PendingIntent.FLAG_MUTABLE);

@@ -28,19 +28,12 @@ public class StockJobUtil {
 
         jobBuilderInfo.setPersisted(true);
 
-        //jobBuilderInfo.setMinimumLatency(5 * 60 * 1000); //Cda 3 segs
-        //jobBuilderInfo.setOverrideDeadline(5 * 60 * 1000); //cada 3 segs
-
-        //Se ejecuta cada 15 min
+        //Se ejecuta cada 15 min aprox
         jobBuilderInfo.setPeriodic(15 * 60 * 1000);
-
-        // Establecer el tiempo de vencimiento (deadline) para que se ejecute en 15 minutos
-        //jobBuilderInfo.setOverrideDeadline(15 * 60 * 1000);
-
 
         //decir a scheduler q es un servicio del sistema
         JobScheduler jobScheduler = context.getSystemService(JobScheduler.class);
-        //planifique
+        //planificar
         jobScheduler.schedule(jobBuilderInfo.build());
     }
 }
