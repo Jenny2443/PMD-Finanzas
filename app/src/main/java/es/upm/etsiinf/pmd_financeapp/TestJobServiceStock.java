@@ -1,42 +1,85 @@
 package es.upm.etsiinf.pmd_financeapp;
 
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.job.JobParameters;
 import android.app.job.JobService;
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.Color;
 import android.os.AsyncTask;
+import android.os.Build;
+import android.os.Debug;
 import android.util.Log;
+
+import androidx.annotation.RequiresApi;
+import androidx.core.app.NotificationCompat;
 
 import java.io.IOException;
 
 import es.upm.etsiinf.pmd_financeapp.Util.StockJobUtil;
 
 public class TestJobServiceStock extends JobService {
-    private static final int JOB_SCHEDULE_INTERVAL = 15 * 60 * 1000; // 15 minutos
 
+    @RequiresApi(api = Build.VERSION_CODES.P)
     @Override
     public boolean onStartJob(JobParameters params) {
         Log.i("TestJobServiceStock", "Servicio ejecutado: " );
-        //TODO: llamar a API
-        // Llama al método de actualización de la API
-        actualizarAPI(params);
-
+        actualizarAPI(params, getApplicationContext());
+        //Reprogramar el servicio (si setPeriodic entonces no hace falta)
         //StockJobUtil.scheduleJob(this);
         Log.i("TestJobServiceStock", "Servicio reprogramado: " );
         return true;
     }
 
-    private void actualizarAPI(JobParameters jobParameters) {
+    //Funcion para llamar a la API y actualizar datos a traves de otro thread
+    private void actualizarAPI(JobParameters jobParameters, Context context) {
         Log.i("TestJobService", "Actualizando API");
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
                     StockManager.updateStocks();
-                    jobFinished(jobParameters, false);
+                    makeNotification();
+                    jobFinished(jobParameters, true);
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
             }
         }).start();
+    }
+
+    private void makeNotification(){
+        Log.i("TestJobService", "Notificacion");
+        String chanelID = "CHANNEL_ID";
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, chanelID);
+        builder.setSmallIcon(R.drawable.ic_launcher_foreground);
+        builder.setContentTitle("Titulo");
+        builder.setContentText("Texto");
+        builder.setAutoCancel(true);
+        builder.setPriority(NotificationCompat.PRIORITY_DEFAULT);
+
+        Intent intent = new Intent(getApplicationContext(), StocksActivity.class);
+        //intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, intent, PendingIntent.FLAG_MUTABLE);
+        //PendingIntent pendingIntent = PendingIntent.getActivity(this, 1, intent, PendingIntent.FLAG_CANCEL_CURRENT  | PendingIntent.FLAG_IMMUTABLE);
+        builder.setContentIntent(pendingIntent);
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            NotificationChannel notificationChannel = notificationManager.getNotificationChannel(chanelID);
+            if(notificationChannel == null){
+                int importance = NotificationManager.IMPORTANCE_HIGH;
+                notificationChannel = new NotificationChannel(chanelID, "NOTIFICATION_CHANNEL_NAME", importance);
+                notificationChannel.setLightColor(Color.GREEN);
+                notificationChannel.enableVibration(true);
+                notificationManager.createNotificationChannel(notificationChannel);
+            }
+        }
+        notificationManager.notify(0, builder.build());
     }
 
     @Override

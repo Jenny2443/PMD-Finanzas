@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".notification.NewActivity">
+
+    <TextView
+        android:id="@+id/v_title2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="  TITULO FINAL"
+        android:textAlignment="textStart"
+        android:textColor="#A39A9A"
+        android:textColorLink="#B1A4A4"
+        android:textSize="16sp"
+        android:translationX="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.195"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.106" />
+
+    <TextView
+        android:id="@+id/vMsg2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="CONTENIDO"
+        android:textAlignment="viewStart"
+        android:textColor="#7E7474"
+        android:translationX="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.188"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/v_title2"
+        app:layout_constraintVertical_bias="0.152" />
+</androidx.constraintlayout.widget.ConstraintLayout>

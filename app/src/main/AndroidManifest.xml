@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
-
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
@@ -16,6 +16,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.PMD_FinanceApp"
         tools:targetApi="31">
+        <activity
+            android:name=".notification.NewActivity"
+            android:exported="false" />
         <activity
             android:name=".StockItemActivity"
             android:exported="false" />
@@ -40,13 +43,12 @@
         <activity
             android:name=".HistorialActivity"
             android:exported="false" />
+
         <service
             android:name=".TestJobServiceStock"
             android:enabled="true"
             android:exported="true"
-            android:permission="android.permission.BIND_JOB_SERVICE"
-            ></service>
-
+            android:permission="android.permission.BIND_JOB_SERVICE" />
     </application>
 
 </manifest>

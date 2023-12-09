@@ -1,14 +1,22 @@
 package es.upm.etsiinf.pmd_financeapp;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
-import androidx.core.view.GravityCompat;
 
+import android.Manifest;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -19,27 +27,20 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.PieChart;
-import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
-import com.github.mikephil.charting.formatter.PercentFormatter;
-import com.github.mikephil.charting.formatter.ValueFormatter;
-import com.github.mikephil.charting.utils.ViewPortHandler;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
-import com.google.android.material.navigation.NavigationView;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 import es.upm.etsiinf.pmd_financeapp.Util.StockJobUtil;
 import es.upm.etsiinf.pmd_financeapp.db.DBHelperStock;
 import es.upm.etsiinf.pmd_financeapp.db.DBHelperTransacciones;
-import es.upm.etsiinf.pmd_financeapp.db.DbStock;
 
-public class MainActivity extends AppCompatActivity{
-//    Button btnStocks;
+public class MainActivity extends AppCompatActivity {
+    //    Button btnStocks;
 //    Button btnHome;
 //    Button btnHistorial;
     Button btnAñadirGasto;
@@ -60,7 +61,7 @@ public class MainActivity extends AppCompatActivity{
     private DBHelperStock dbHelperStock;
     private DBHelperTransacciones dbHelperTransacciones;
 
-
+    @RequiresApi(api = Build.VERSION_CODES.P)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,16 +85,22 @@ public class MainActivity extends AppCompatActivity{
 
 
         //Inicializacion de botones
-         btnAñadirGasto = findViewById(R.id.main_btn_anadir_gasto);
-         btnAñadirIngreso = findViewById(R.id.main_btn_anadir_ingreso);
-         imFilter = findViewById(R.id.main_btnFilter);
-         imCalendar = findViewById(R.id.main_btnCalendar);
-         txtBalance = findViewById(R.id.main_txt_balance);
+        btnAñadirGasto = findViewById(R.id.main_btn_anadir_gasto);
+        btnAñadirIngreso = findViewById(R.id.main_btn_anadir_ingreso);
+        imFilter = findViewById(R.id.main_btnFilter);
+        imCalendar = findViewById(R.id.main_btnCalendar);
+        txtBalance = findViewById(R.id.main_txt_balance);
 
         //Inicializacion de bottom navigation view
         bottomNavigationView = findViewById(R.id.main_btn_nav);
         tituloHome = findViewById(R.id.main_txt_home);
 
+        //Pedir permiso de notificaciones si no lo tiene activado
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
+            if(ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED){
+                ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.POST_NOTIFICATIONS}, 101);
+            }
+        }
 
         bottomNavigationView.setSelectedItemId(R.id.menu_nav_action_home);
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
@@ -127,7 +134,7 @@ public class MainActivity extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 Toast.makeText(MainActivity.this, "Añadir ingreso", Toast.LENGTH_SHORT).show();
-                // Intent para ir a la pantalla de añadir ingreso
+                Log.i("MainActivity", "click en añadir ingreso");
                 Intent intentAnnadirIngreso = new Intent(MainActivity.this, AnnadirIngreso.class);
                 startActivity(intentAnnadirIngreso);
             }
@@ -136,6 +143,33 @@ public class MainActivity extends AppCompatActivity{
         //Inicializacion de la grafica
         pieChart = findViewById(R.id.main_piechart);
 
+        crearPieChart();
+
+
+        //BBDD
+        Log.i("MainActivity", "onCreate: " + getDatabasePath("FinanceApp.db"));
+        dbHelperStock = new DBHelperStock(this);
+        SQLiteDatabase dbStock = dbHelperStock.getWritableDatabase(); //Indica q vamos a scribir
+
+        Log.i("MainActivity", "onCreate: " + getDatabasePath("FinanceApp.db"));
+        dbHelperTransacciones = new DBHelperTransacciones(this);
+        SQLiteDatabase dbTransacciones = dbHelperTransacciones.getWritableDatabase(); //Indica q vamos a scribir
+
+        if(dbHelperStock != null){
+            Log.d("DatabasePath", "DB: " + dbHelperStock.toString());
+            Toast.makeText(MainActivity.this, "Stock Base de datos creada correctamente " + dbHelperStock.toString(), Toast.LENGTH_SHORT).show();
+        }
+
+        if(dbHelperTransacciones != null){
+            Log.d("DatabasePath", "DB: " + dbHelperTransacciones.toString());
+            Toast.makeText(MainActivity.this, "Transaccion Base de datos creada correctamente " + dbHelperTransacciones.toString(), Toast.LENGTH_SHORT).show();
+        }
+
+        Log.i("TestJobServiceStock","Mainactivity on create");
+        StockJobUtil.scheduleJob(this);
+    }
+
+    private void crearPieChart() {
         ArrayList<PieEntry> categorias = new ArrayList<>();
         categorias.add(new PieEntry(5, "Casa"));
         categorias.add(new PieEntry(25, "Comida"));
@@ -170,29 +204,6 @@ public class MainActivity extends AppCompatActivity{
         pieChart.setDrawCenterText(true);
         pieChart.setCenterText("Gastos");
         pieChart.getLegend().setEnabled(true);
-
-
-        //BBDD
-        Log.i("MainActivity", "onCreate: " + getDatabasePath("FinanceApp.db"));
-        dbHelperStock = new DBHelperStock(this);
-        SQLiteDatabase dbStock = dbHelperStock.getWritableDatabase(); //Indica q vamos a scribir
-
-        Log.i("MainActivity", "onCreate: " + getDatabasePath("FinanceApp.db"));
-        dbHelperTransacciones = new DBHelperTransacciones(this);
-        SQLiteDatabase dbTransacciones = dbHelperTransacciones.getWritableDatabase(); //Indica q vamos a scribir
-
-        if(dbHelperStock != null){
-            Log.d("DatabasePath", "DB: " + dbHelperStock.toString());
-            Toast.makeText(MainActivity.this, "Stock Base de datos creada correctamente " + dbHelperStock.toString(), Toast.LENGTH_SHORT).show();
-        }
-
-        if(dbHelperTransacciones != null){
-            Log.d("DatabasePath", "DB: " + dbHelperTransacciones.toString());
-            Toast.makeText(MainActivity.this, "Transaccion Base de datos creada correctamente " + dbHelperTransacciones.toString(), Toast.LENGTH_SHORT).show();
-        }
-
-        Log.i("TestJobServiceStock","Mainactivity on create");
-        StockJobUtil.scheduleJob(this);
     }
 
     //Funcion para abrir la actividad de stocks
@@ -207,6 +218,36 @@ public class MainActivity extends AppCompatActivity{
         Intent intent = new Intent(this, HistorialActivity.class);
         startActivity(intent);
     }
+
+//    private void makeNotification(){
+//        String chanelID = "CHANNEL_ID";
+//        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, chanelID);
+//        builder.setSmallIcon(R.drawable.ic_launcher_foreground);
+//        builder.setContentTitle("Titulo");
+//        builder.setContentText("Texto");
+//        builder.setAutoCancel(true);
+//        builder.setPriority(NotificationCompat.PRIORITY_DEFAULT);
+//
+//        Intent intent = new Intent(getApplicationContext(), StocksActivity.class);
+//        //intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//        PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, intent, PendingIntent.FLAG_MUTABLE);
+//        //PendingIntent pendingIntent = PendingIntent.getActivity(this, 1, intent, PendingIntent.FLAG_CANCEL_CURRENT  | PendingIntent.FLAG_IMMUTABLE);
+//        builder.setContentIntent(pendingIntent);
+//        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+//
+//        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+//            NotificationChannel notificationChannel = notificationManager.getNotificationChannel(chanelID);
+//            if(notificationChannel == null){
+//                int importance = NotificationManager.IMPORTANCE_HIGH;
+//                notificationChannel = new NotificationChannel(chanelID, "NOTIFICATION_CHANNEL_NAME", importance);
+//                notificationChannel.setLightColor(Color.GREEN);
+//                notificationChannel.enableVibration(true);
+//                notificationManager.createNotificationChannel(notificationChannel);
+//            }
+//        }
+//        notificationManager.notify(0, builder.build());
+//    }
 
 
 }
