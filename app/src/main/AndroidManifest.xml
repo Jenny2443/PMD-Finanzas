@@ -17,9 +17,6 @@
         android:theme="@style/Theme.PMD_FinanceApp"
         tools:targetApi="31">
         <activity
-            android:name=".notification.NewActivity"
-            android:exported="false" />
-        <activity
             android:name=".StockItemActivity"
             android:exported="false" />
         <activity
@@ -43,6 +40,9 @@
         <activity
             android:name=".HistorialActivity"
             android:exported="false" />
+        <receiver
+            android:name=".Util.AlarmReceiver">
+        </receiver>
 
         <service
             android:name=".TestJobServiceStock"
