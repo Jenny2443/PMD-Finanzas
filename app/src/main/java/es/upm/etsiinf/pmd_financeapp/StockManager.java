@@ -75,7 +75,7 @@ public class StockManager {
         Date currentDate = calendar.getTime();
 
         // Restar un día a la fecha actual
-        calendar.add(Calendar.DAY_OF_MONTH, -1);
+        calendar.add(Calendar.DAY_OF_MONTH, -2);
         Date desiredDate = calendar.getTime();
         String desiredDateString = formatDate(desiredDate);
         String url = "https://api.polygon.io/v1/open-close/" + stock.getSymbol() + "/" + desiredDateString +"?adjusted=true&apiKey=" + API_KEY;
