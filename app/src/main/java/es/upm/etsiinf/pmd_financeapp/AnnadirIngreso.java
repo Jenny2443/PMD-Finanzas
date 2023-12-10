@@ -187,7 +187,7 @@ public class AnnadirIngreso extends AppCompatActivity {
                 Log.i("AnnadirIngreso", "Categoría: " + categoriaSeleccionada);
                 Log.i("AnnadirIngreso", "Notas: " + txtDescripcion.getText().toString());
 
-                long id = dbTransacciones.insertarTransaccion(txt_fechaSeleccionada.getText().toString(), Double.parseDouble(txtCantidad.getText().toString()), categoriaSeleccionada,img, txtDescripcion.getText().toString());
+                long id = dbTransacciones.insertarTransaccion(txt_fechaSeleccionada.getText().toString(), Double.parseDouble(txtCantidad.getText().toString()), categoriaSeleccionada,img, txtDescripcion.getText().toString(),false);
                 Log.i("AnnadirIngreso", "Transaccion insertado con id: " + id);
                 mostrarGuardado();
             }

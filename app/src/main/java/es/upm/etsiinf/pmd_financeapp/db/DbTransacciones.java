@@ -17,7 +17,7 @@ public class DbTransacciones extends DBHelperTransacciones{
     }
 
     //Las imagenes y las notas no las pongo como argumentos porq no son obligatorios
-    public long insertarTransaccion(String fecha, double cantidad, String categoria, ImageView imagen, String notas){
+    public long insertarTransaccion(String fecha, double cantidad, String categoria, ImageView imagen, String notas, boolean esGasto){
         long id = 0;
         try{
             DBHelperTransacciones dbHelper = new DBHelperTransacciones(context);
@@ -26,9 +26,12 @@ public class DbTransacciones extends DBHelperTransacciones{
 
             //Damos valores
             ContentValues values = new ContentValues();
+            double cantidadConSigno = esGasto ? -cantidad : cantidad;
+
             values.put("fecha", fecha);
-            values.put("cantidad", cantidad);
+            values.put("cantidad", cantidadConSigno);
             values.put("categoria", categoria);
+
             if(imagen != null) {
                 values.put("imagen", imagen.toString());
             }
@@ -112,7 +115,7 @@ public class DbTransacciones extends DBHelperTransacciones{
         Log.i("Historial", "obtenerTodasLasTransacciones");
         //return db.query("t_transacciones", null, null, null, null, null, null);
         //return db.rawQuery("SELECT * FROM t_transacciones", null);
-        return db.query("t_transacciones", new String[]{"id AS _id", "fecha", "cantidad", "categoria", "notas"}, null, null, null, null, null);
+        return db.query("t_transacciones", new String[]{"id AS _id", "fecha", "cantidad", "categoria", "notas", "imagen"}, null, null, null, null, null);
     }
 
 }

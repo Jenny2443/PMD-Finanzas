@@ -32,6 +32,8 @@ import com.google.android.material.navigation.NavigationBarView;
 
 import java.util.Calendar;
 
+import es.upm.etsiinf.pmd_financeapp.db.DbTransacciones;
+
 public class AnnadirGasto extends AppCompatActivity {
 
     public BottomNavigationView bottomNavigationView;
@@ -173,6 +175,13 @@ public class AnnadirGasto extends AppCompatActivity {
                                     " he tenido un gasto de " + AnGa_dinero.getText().toString() +
                                     "€ en la categoría de " + catSeleccionada +
                                     ". Notas: " + notas.getText().toString();
+                DbTransacciones dbTransacciones = new DbTransacciones(AnnadirGasto.this);
+                dbTransacciones.insertarTransaccion(
+                        txt_fechaSeleccionada.getText().toString(),
+                        Double.parseDouble(AnGa_dinero.getText().toString()),
+                        catSeleccionada,img,
+                        notas.getText().toString(),true
+                );
                 mostrarGuardado();
             }
         });

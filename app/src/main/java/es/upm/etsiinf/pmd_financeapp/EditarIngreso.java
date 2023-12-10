@@ -212,7 +212,6 @@ public class EditarIngreso extends AppCompatActivity {
                 Log.i("EditarIngreso", "Transaccion actualizada con id: " + identificadorTransaccion);
                 //Log.i("AnnadirIngreso", "Transaccion insertado con id: " + id);
                 mostrarGuardado();
-                openActivityHistorial();
             }
         });
 

@@ -72,6 +72,8 @@ public class EditarGasto extends AppCompatActivity {
     private TextView txt_fechaSeleccionada;
     private DbTransacciones dbTransacciones;
 
+    private int identificadorTransaccion;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -167,14 +169,18 @@ public class EditarGasto extends AppCompatActivity {
         if (intent != null) {
             String fecha = intent.getStringExtra("fecha");
             catSeleccionada = intent.getStringExtra("categoria");
-            String cantidad = intent.getStringExtra("cantidad");
+            double cantidad = intent.getDoubleExtra("cantidad", 0);
+            String descripcion = intent.getStringExtra("notas");
+
+            identificadorTransaccion = intent.getIntExtra("id", 0);
 
             // Configurar vistas con datos recibidos
             int categoriaPosition = adapter.getPosition(catSeleccionada);
             spinnerCat.setSelection(categoriaPosition);
 
             txt_fechaSeleccionada.setText(fecha);
-            EdGa_dinero.setText(cantidad);
+            EdGa_dinero.setText(String.valueOf(cantidad));
+            notas.setText(descripcion);
         }
 
         btnGuardar.setOnClickListener(new View.OnClickListener() {
@@ -184,6 +190,8 @@ public class EditarGasto extends AppCompatActivity {
                         " he tenido un gasto de " + EdGa_dinero.getText().toString() +
                         "€ en la categoría de " + catSeleccionada +
                         ". Notas: " + notas.getText().toString();
+                DbTransacciones dbTransacciones = new DbTransacciones(EditarGasto.this);
+                dbTransacciones.actualizarTransaccion(identificadorTransaccion, txt_fechaSeleccionada.getText().toString(), Double.parseDouble(EdGa_dinero.getText().toString()), catSeleccionada, img, notas.getText().toString());
                 mostrarGuardado();
             }
         });

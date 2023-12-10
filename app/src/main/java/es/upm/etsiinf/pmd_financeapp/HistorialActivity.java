@@ -3,10 +3,12 @@ package es.upm.etsiinf.pmd_financeapp;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
@@ -96,14 +98,14 @@ public class HistorialActivity extends AppCompatActivity {
                 int colCategoria = c.getColumnIndex("categoria");
                 int identificadorTransaccion = c.getColumnIndex("_id");
                 int colNotas = c.getColumnIndex("notas");
+                int colImg = c.getColumnIndex("imagen");
 
-                if(colCategoria != -1 && colCantidad != -1 && colFecha != -1 && identificadorTransaccion != -1 && colNotas != -1) {
+                if(colCategoria != -1 && colCantidad != -1 && colFecha != -1 && identificadorTransaccion != -1 && colNotas != -1 && colImg != -1) {
                     String fecha = c.getString(colFecha);
                     double cantidad = c.getDouble(colCantidad);
                     String categoria = c.getString(colCategoria);
                     identificadorTransaccion = c.getInt(identificadorTransaccion);
                     String notas = c.getString(colNotas);
-
                     Toast.makeText(HistorialActivity.this, "Fecha: " + fecha + "\nCantidad: " + cantidad + "\nCategoria: " + categoria, Toast.LENGTH_SHORT).show();
 
                         //Verificar si es gasto o ingreso
