@@ -4,9 +4,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.MenuItem;
@@ -175,6 +180,9 @@ public class AnnadirGasto extends AppCompatActivity {
         AnGa_ok.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
+                // TODO: GUARDAR GASTO en BBDD
+                //Crear notificacion
+                mostrarNotificacion("Gasto guardado");
                 openActivityHome();
             }
         });
@@ -277,6 +285,26 @@ public class AnnadirGasto extends AppCompatActivity {
         // Mostrar el selector de aplicaciones para compartir
         startActivity(Intent.createChooser(intent, "Compartir con"));
     }
+    // Método para mostrar una notificación
+    private void mostrarNotificacion(String mensaje) {
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
+        // Verificar la versión de Android para crear un canal de notificación (requerido a partir de Android 8.0)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            String channelId = "mi_canal_id";
+            CharSequence channelName = "Mi Canal";
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel(channelId, channelName, importance);
+            notificationManager.createNotificationChannel(channel);
+        }
+
+        Notification.Builder builder = new Notification.Builder(this, "mi_canal_id")
+                .setSmallIcon(R.drawable.ic_launcher_foreground)
+                .setContentTitle("App de Finanzas")
+                .setContentText(mensaje)
+                .setAutoCancel(true);
+
+        notificationManager.notify(1, builder.build());
+    }
 
 }

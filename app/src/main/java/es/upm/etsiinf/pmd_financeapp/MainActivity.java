@@ -12,6 +12,12 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.sqlite.SQLiteDatabase;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -28,6 +34,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
 import java.util.ArrayList;
+
 
 import es.upm.etsiinf.pmd_financeapp.db.DBHelperStock;
 import es.upm.etsiinf.pmd_financeapp.db.DBHelperTransacciones;
@@ -50,6 +57,9 @@ public class MainActivity extends AppCompatActivity {
     //BBDD
     private DBHelperStock dbHelperStock;
     private DBHelperTransacciones dbHelperTransacciones;
+//    private static final String PREFS_NAME = "MyPrefsFile";
+//    private static final String JOB_SCHEDULED_KEY = "jobScheduled";
+
 
     @RequiresApi(api = Build.VERSION_CODES.P)
     @Override
@@ -157,6 +167,20 @@ public class MainActivity extends AppCompatActivity {
 
         Log.i("TestJobServiceStock","Mainactivity on create");
         //StockJobUtil.scheduleJob(this);
+
+        // Verificar si el trabajo ya está programado
+//        SharedPreferences preferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+//        boolean jobScheduled = preferences.getBoolean(JOB_SCHEDULED_KEY, false);
+
+//        if (!jobScheduled) {
+//            // Programar el trabajo utilizando JobScheduler
+//            StockJobUtil.scheduleJob(this);
+//
+//            // Marcar que el trabajo ya ha sido programado
+//            SharedPreferences.Editor editor = preferences.edit();
+//            editor.putBoolean(JOB_SCHEDULED_KEY, true);
+//            editor.apply();
+//        }
     }
 
     private void crearPieChart() {

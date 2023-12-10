@@ -40,6 +40,9 @@
         <activity
             android:name=".HistorialActivity"
             android:exported="false" />
+        <receiver
+            android:name=".Util.AlarmReceiver">
+        </receiver>
 
         <service
             android:name=".TestJobServiceStock"
