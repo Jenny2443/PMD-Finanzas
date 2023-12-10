@@ -1,0 +1,41 @@
+<!-- item_transaccion.xml -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="40dp"
+    android:orientation="horizontal"
+    android:gravity="start"
+    android:layout_marginStart="25dp"
+    android:layout_marginEnd="16dp"
+    android:layout_marginBottom="8dp"
+    android:layout_marginTop="8dp"
+    >
+
+    <TextView
+        android:id="@+id/textCategoria"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center_vertical"
+        android:paddingStart="30dp"
+        android:text="Categoría"
+        android:translationY="10dp" />
+
+    <TextView
+        android:id="@+id/textCantidad"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center_vertical"
+        android:text="Cantidad"
+        android:translationX="15dp"
+        android:translationY="10dp" />
+
+    <TextView
+        android:id="@+id/textFecha"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:paddingEnd="20dp"
+        android:text="Fecha"
+        android:translationY="10dp" />
+</LinearLayout>

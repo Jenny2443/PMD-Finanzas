@@ -2,6 +2,7 @@ package es.upm.etsiinf.pmd_financeapp.db;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.util.Log;
 import android.widget.ImageView;
 import android.database.sqlite.SQLiteDatabase;
@@ -63,7 +64,7 @@ public class DbTransacciones extends DBHelperTransacciones{
         }
     }
 
-    public void actualizarTransaccion(int id, Date fecha, double cantidad, String categoria, ImageView imagen, String notas){
+    public void actualizarTransaccion(int id, String fecha, double cantidad, String categoria, ImageView imagen, String notas){
         try{
             DBHelperTransacciones dbHelper = new DBHelperTransacciones(context);
             //Creamos conexion
@@ -104,4 +105,14 @@ public class DbTransacciones extends DBHelperTransacciones{
             e.toString();
         }
     }
+
+    public Cursor obtenerTodasLasTransacciones() {
+        DBHelperTransacciones dbHelper = new DBHelperTransacciones(context);
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        Log.i("Historial", "obtenerTodasLasTransacciones");
+        //return db.query("t_transacciones", null, null, null, null, null, null);
+        //return db.rawQuery("SELECT * FROM t_transacciones", null);
+        return db.query("t_transacciones", new String[]{"id AS _id", "fecha", "cantidad", "categoria", "notas"}, null, null, null, null, null);
+    }
+
 }

@@ -9,7 +9,6 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -32,11 +31,11 @@ import com.google.android.material.navigation.NavigationBarView;
 
 import java.util.Calendar;
 
-public class AnnadirGasto extends AppCompatActivity {
+import es.upm.etsiinf.pmd_financeapp.db.DbTransacciones;
+
+public class EditarGasto extends AppCompatActivity {
 
     public BottomNavigationView bottomNavigationView;
-
-    // categorias que selecciona al crear un gasto
     public String[] opCategorias = {"Casa", "Comida", "Ropa", "Salud", "Transporte", "Entetenimiento"};
 
     // fechas calendario
@@ -54,51 +53,51 @@ public class AnnadirGasto extends AppCompatActivity {
     private Button btnCancelar;
     private Button btnGuardar;
 
-    private TextView txt_fechaSeleccionada;
-
     // Variables para que el usuario suba una imagen
     private static final int PICK_IMAGE_REQUEST = 1;
     private Button subirImg;
     private ImageView img;
 
     private FrameLayout guardado;
-
-    private ImageView AnGa_ok;
-    private ImageView AnGa_compartir;
+    private ImageView EdGa_ok;
+    private ImageView EdGa_compartir;
 
     private String datosCompartidos;
 
-    private EditText AnGa_dinero;
     private EditText notas;
 
+    private EditText EdGa_dinero;
     private String catSeleccionada;
+
+    private TextView txt_fechaSeleccionada;
+    private DbTransacciones dbTransacciones;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_annadir_gasto);
+        setContentView(R.layout.activity_editar_gasto);
+        dbTransacciones = new DbTransacciones(this);
 
-        subirImg = findViewById(R.id.AnGa_btn_cargar_im);
-        img = findViewById(R.id.AnGa_imSubida);
+        subirImg = findViewById(R.id.EdGa_btn_cargar_im);
+        img = findViewById(R.id.EdGa_imSubida);
 
-        // Iniciamos botones
-        btnCancelar = findViewById(R.id.AnGa_btn_cancelar);
-        btnGuardar = findViewById(R.id.AnGa_btn_guardar);
+        btnCancelar = findViewById(R.id.EdGa_btn_cancelar);
+        btnGuardar = findViewById(R.id.EdGa_btn_guardar);
 
         guardado = findViewById(R.id.guardado);
-        AnGa_ok = findViewById(R.id.AnGa_im_ok);
-        AnGa_compartir = findViewById(R.id.AnGa_im_compartir);
-        AnGa_dinero = findViewById(R.id.AnGa_ent_cantidad);
-        notas = findViewById(R.id.AnGa_ent_notas);
-
+        EdGa_ok = findViewById(R.id.EdGa_im_ok);
+        EdGa_compartir = findViewById(R.id.EdGa_im_compartir);
+        EdGa_dinero = findViewById(R.id.EdGa_ent_cantidad);
+        notas = findViewById(R.id.EdGa_ent_notas);
 
         // Inicialización de la lista de categorías
-        Spinner spinnerCat = findViewById(R.id.AnGa_categorias);
+        Spinner spinnerCat = findViewById(R.id.EdGa_categorias);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, opCategorias);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerCat.setAdapter(adapter);
 
-        txt_fechaSeleccionada = findViewById(R.id.AnGa_fecha_seleccionada);
+        txt_fechaSeleccionada = findViewById(R.id.EdGa_fecha_seleccionada);
 
         // Configuración de selección de categoría
         spinnerCat.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -108,7 +107,6 @@ public class AnnadirGasto extends AppCompatActivity {
                 catSeleccionada = opCategorias[position];
 
             }
-
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
 
@@ -117,8 +115,8 @@ public class AnnadirGasto extends AppCompatActivity {
         });
 
         // Configuración de botón de mostrar datePicker (el calendario desplegable para elegir una fecha)
-        datePicker = findViewById(R.id.AnGa_calendario);
-        btn_DatePicker = findViewById(R.id.AnGa_im_Calendario);
+        datePicker = findViewById(R.id.EdGa_calendario);
+        btn_DatePicker = findViewById(R.id.EdGa_im_Calendario);
 
         // Desactivar calendatio al inicio
         datePicker.setEnabled(false);
@@ -131,17 +129,15 @@ public class AnnadirGasto extends AppCompatActivity {
                 // Activar DatePicker al hacer clic en el botón
                 datePicker.setEnabled(true);
                 datePicker.setVisibility(View.VISIBLE);
-                //Qtamos el boton de calendario
+                //Quitamos el botón de calendario
                 btn_DatePicker.setVisibility(View.INVISIBLE);
-                //Hacemos el background mas oscuro para que se vea mejor
+                //Hacemos el background más oscuro para que se vea mejor
                 datePicker.setBackgroundColor(getResources().getColor(R.color.white));
             }
         });
 
-
-
         // Configuración de selección de fecha
-        DatePicker datePicker = findViewById(R.id.AnGa_calendario);
+        DatePicker datePicker = findViewById(R.id.EdGa_calendario);
         // Configura el DatePicker para mostrar el calendario
         datePicker.init(
                 anioActual,
@@ -166,51 +162,64 @@ public class AnnadirGasto extends AppCompatActivity {
             }
         });
 
+        // Obtener datos extras del Intent
+        Intent intent = getIntent();
+        if (intent != null) {
+            String fecha = intent.getStringExtra("fecha");
+            catSeleccionada = intent.getStringExtra("categoria");
+            String cantidad = intent.getStringExtra("cantidad");
+
+            // Configurar vistas con datos recibidos
+            int categoriaPosition = adapter.getPosition(catSeleccionada);
+            spinnerCat.setSelection(categoriaPosition);
+
+            txt_fechaSeleccionada.setText(fecha);
+            EdGa_dinero.setText(cantidad);
+        }
+
         btnGuardar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 datosCompartidos = "En la fecha " + txt_fechaSeleccionada.getText().toString() +
-                                    " he tenido un gasto de " + AnGa_dinero.getText().toString() +
-                                    "€ en la categoría de " + catSeleccionada +
-                                    ". Notas: " + notas.getText().toString();
+                        " he tenido un gasto de " + EdGa_dinero.getText().toString() +
+                        "€ en la categoría de " + catSeleccionada +
+                        ". Notas: " + notas.getText().toString();
                 mostrarGuardado();
             }
         });
 
-//        AnGa_ok.setOnClickListener(new View.OnClickListener(){
+//        EdGa_ok.setOnClickListener(new View.OnClickListener() {
 //            @Override
-//            public void onClick(View v){
-//                // TODO: GUARDAR GASTO en BBDD
-//                //Crear notificacion
-//                mostrarNotificacion("Gasto guardado");
+//            public void onClick(View v) {
+//                // TODO: ACTUALIZAR GASTO en BBDD
+//                //Crear notificación
+//                mostrarNotificacion("Gasto actualizado");
 //                openActivityHome();
 //            }
 //        });
 
-//        AnGa_compartir.setOnClickListener(new View.OnClickListener(){
+//        EdGa_compartir.setOnClickListener(new View.OnClickListener() {
 //            @Override
-//            public void onClick(View v){
+//            public void onClick(View v) {
 //                compartirDatos();
 //            }
 //        });
 
-        // Inicialización de bottom navigation view
         bottomNavigationView = findViewById(R.id.main_btn_nav);
-        bottomNavigationView.setSelectedItemId(R.id.menu_nav_action_home);
-
+        bottomNavigationView.setSelectedItemId(R.id.menu_nav_action_history);
         // Funcion para cambiar de actividad al pulsar un boton del menu de navegacion inferior
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 int id = item.getItemId();
                 if(id == R.id.menu_nav_action_home) {
-                    Toast.makeText(AnnadirGasto.this, "Home", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(EditarGasto.this, "Home", Toast.LENGTH_SHORT).show();
                     openActivityHome();
-                }else if(id == R.id.menu_nav_action_stocks) {
-                    Toast.makeText(AnnadirGasto.this, "Stocks", Toast.LENGTH_SHORT).show();
+                } else if(id == R.id.menu_nav_action_stocks) {
+                    Toast.makeText(EditarGasto.this, "Stocks", Toast.LENGTH_SHORT).show();
                     openActivityStocks();
-                }else if(id == R.id.menu_nav_action_history) {
-                    Toast.makeText(AnnadirGasto.this, "Historial", Toast.LENGTH_SHORT).show();
+                } else if(id == R.id.menu_nav_action_history) {
+                    Toast.makeText(EditarGasto.this, "Historial", Toast.LENGTH_SHORT).show();
                     openActivityHistorial();
                 }
                 return true;
@@ -223,8 +232,6 @@ public class AnnadirGasto extends AppCompatActivity {
                 abrirGaleria();
             }
         });
-
-
     }
 
     // Tratar imagen subida
@@ -251,7 +258,6 @@ public class AnnadirGasto extends AppCompatActivity {
     }
 
     //Funcion para abrir la actividad de home
-
     public void openActivityHome(){
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
@@ -285,6 +291,7 @@ public class AnnadirGasto extends AppCompatActivity {
         // Mostrar el selector de aplicaciones para compartir
         startActivity(Intent.createChooser(intent, "Compartir con"));
     }
+
     // Método para mostrar una notificación
     private void mostrarNotificacion(String mensaje) {
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
@@ -306,5 +313,4 @@ public class AnnadirGasto extends AppCompatActivity {
 
         notificationManager.notify(1, builder.build());
     }
-
 }

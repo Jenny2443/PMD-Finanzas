@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -16,6 +17,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.PMD_FinanceApp"
         tools:targetApi="31">
+        <activity
+            android:name=".EditarIngreso"
+            android:exported="false" />
+        <activity
+            android:name=".EditarGasto"
+            android:exported="false" />
         <activity
             android:name=".StockItemActivity"
             android:exported="false" />
@@ -40,9 +47,8 @@
         <activity
             android:name=".HistorialActivity"
             android:exported="false" />
-        <receiver
-            android:name=".Util.AlarmReceiver">
-        </receiver>
+
+        <receiver android:name=".Util.AlarmReceiver" />
 
         <service
             android:name=".TestJobServiceStock"
