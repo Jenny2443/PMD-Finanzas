@@ -10,6 +10,7 @@ import androidx.core.content.ContextCompat;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import android.app.AlarmManager;
@@ -27,6 +28,7 @@ import android.widget.*;
 
 import com.github.mikephil.charting.charts.PieChart;
 
+import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
@@ -34,10 +36,13 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 
 import es.upm.etsiinf.pmd_financeapp.db.DBHelperStock;
 import es.upm.etsiinf.pmd_financeapp.db.DBHelperTransacciones;
+import es.upm.etsiinf.pmd_financeapp.db.DbTransacciones;
 
 public class MainActivity extends AppCompatActivity {
     Button btnAnadirGasto;
@@ -183,14 +188,81 @@ public class MainActivity extends AppCompatActivity {
 //        }
     }
 
+//    private void crearPieChart() {
+//        ArrayList<PieEntry> categorias = new ArrayList<>();
+//
+//        categorias.add(new PieEntry(5, "Casa"));
+//        categorias.add(new PieEntry(25, "Comida"));
+//        categorias.add(new PieEntry(2, "Ropa"));
+//        categorias.add(new PieEntry(8, "Salud"));
+//        categorias.add(new PieEntry(40f, "Trasporte"));
+//        categorias.add(new PieEntry(20f, "Entretenimiento"));
+//
+//        PieDataSet dataSet = new PieDataSet(categorias, "");
+//        //dataSet.setColors(Color.rgb(120,178,255), Color.rgb(50,255,150), Color.rgb(255,51,51));
+//        dataSet.setColors(getColor(R.color.azul), getColor(R.color.verde), getColor(R.color.morado), getColor(R.color.grey), getColor(R.color.rojo), getColor(R.color.amarillo));
+//        dataSet.setSliceSpace(2f);
+//
+//        PieData data = new PieData(dataSet);
+//        //data.setValueFormatter(new PercentFormatter(pieChart)); // Utilizar el PercentFormatter
+//        dataSet.setDrawValues(false);   // No mostrar valores dentro de los segmentos
+//        //data.setValueTextSize(20f);
+//
+//        pieChart.setData(data);
+//
+//        //dataSet.setDrawValues(true); // Mostrar valores dentro de los segmentos
+//
+//        // Configuraciones adicionales
+//        pieChart.setHoleRadius(20f);
+//        pieChart.setTransparentCircleRadius(25f);
+//        //Desactiva descripcion
+//        pieChart.getDescription().setEnabled(false);
+//
+//        //Si se activa -> saldria "Categoria 1"... en cada segmento
+//        pieChart.setDrawEntryLabels(false);
+//
+//        pieChart.setDrawCenterText(true);
+//        pieChart.setCenterText("Gastos");
+//        pieChart.getLegend().setEnabled(true);
+//    }
+
     private void crearPieChart() {
+        DbTransacciones dbTransacciones = new DbTransacciones(this);
+        Cursor cursor = dbTransacciones.obtenerTodasLasTransacciones();
         ArrayList<PieEntry> categorias = new ArrayList<>();
-        categorias.add(new PieEntry(5, "Casa"));
-        categorias.add(new PieEntry(25, "Comida"));
-        categorias.add(new PieEntry(2, "Ropa"));
-        categorias.add(new PieEntry(8, "Salud"));
-        categorias.add(new PieEntry(40f, "Trasporte"));
-        categorias.add(new PieEntry(20f, "Entretenimiento"));
+        // Mapa para almacenar el recuento de gastos por categoría
+        HashMap<String, Integer> countMap = new HashMap<>();
+        double totalGastos = 0;
+        if(cursor.moveToFirst()){
+            int colCantidad = cursor.getColumnIndex("cantidad");
+            int colCategoria = cursor.getColumnIndex("categoria");
+            if(colCantidad != -1 && colCategoria != -1){
+                do{
+                    double cantidad = cursor.getDouble(colCantidad);
+                    if(cantidad < 0){
+                        String categoria = cursor.getString(colCategoria);
+                        if(countMap.containsKey(categoria)){
+                            countMap.put(categoria, countMap.get(categoria) + 1);
+                        }else{
+                            countMap.put(categoria, 1);
+                        }
+                    }
+                }while(cursor.moveToNext());
+            }
+        }
+        cursor.close();
+        for(Map.Entry<String,Integer> entry: countMap.entrySet()){
+            String categoria = entry.getKey();
+            int count = entry.getValue();
+            categorias.add(new PieEntry(count, categoria));
+        }
+
+//        categorias.add(new PieEntry(5, "Casa"));
+//        categorias.add(new PieEntry(25, "Comida"));
+//        categorias.add(new PieEntry(2, "Ropa"));
+//        categorias.add(new PieEntry(8, "Salud"));
+//        categorias.add(new PieEntry(40f, "Trasporte"));
+//        categorias.add(new PieEntry(20f, "Entretenimiento"));
 
         PieDataSet dataSet = new PieDataSet(categorias, "");
         //dataSet.setColors(Color.rgb(120,178,255), Color.rgb(50,255,150), Color.rgb(255,51,51));
@@ -218,6 +290,16 @@ public class MainActivity extends AppCompatActivity {
         pieChart.setDrawCenterText(true);
         pieChart.setCenterText("Gastos");
         pieChart.getLegend().setEnabled(true);
+        Legend legend = pieChart.getLegend();
+        legend.setVerticalAlignment(Legend.LegendVerticalAlignment.BOTTOM);
+        legend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.CENTER);
+        // Desplazar la leyenda hacia la izquierda a medida que se añaden más categorías
+        if (countMap.size() > 1) {
+            legend.setXEntrySpace(20f * (countMap.size() - 1));
+        } else {
+            legend.setXEntrySpace(20f);
+        }
+        pieChart.invalidate();
     }
 
     //Funcion para abrir la actividad de stocks
