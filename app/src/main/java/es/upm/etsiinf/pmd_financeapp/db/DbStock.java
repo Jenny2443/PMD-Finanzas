@@ -2,7 +2,9 @@ package es.upm.etsiinf.pmd_financeapp.db;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -96,5 +98,14 @@ public class DbStock extends DBHelperStock{
         }catch (Exception e) {
             e.toString();
         }
+    }
+
+    public Cursor obtenerTodasLosStocks() {
+        DBHelperStock dbHelper = new DBHelperStock(context);
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        Log.i("Stocks", "obtenerTodosLosStocks");
+        //return db.query("t_transacciones", null, null, null, null, null, null);
+        //return db.rawQuery("SELECT * FROM t_transacciones", null);
+        return db.query("t_fav_stocks", new String[]{"ticker AS _id", "nombre", "precioCierre", "precioMax", "precioMin", "lastUpdate"}, null, null, null, null, null);
     }
 }
