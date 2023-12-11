@@ -70,7 +70,7 @@ public class AnnadirIngreso extends AppCompatActivity {
 
     private ImageView AnIn_ok;
 
-    private ImageView AnIn_compartir;
+    private ImageView AnIn_ctexto;
 
 
     @Override
@@ -91,7 +91,7 @@ public class AnnadirIngreso extends AppCompatActivity {
 
         guardado = findViewById(R.id.guardado);
         AnIn_ok = findViewById(R.id.AnIn_im_ok);
-        AnIn_compartir = findViewById(R.id.AnIn_im_compartir);
+        AnIn_ctexto = findViewById(R.id.AnIn_im_ctexto);
 
         // Inicialización de la lista de categorías
         Spinner spinnerCat = findViewById(R.id.AnIn_categorias);
@@ -230,7 +230,7 @@ public class AnnadirIngreso extends AppCompatActivity {
             }
         });
 
-        AnIn_compartir.setOnClickListener(new View.OnClickListener(){
+        AnIn_ctexto.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
                 compartirDatos();

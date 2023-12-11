@@ -66,7 +66,7 @@ public class AnnadirGasto extends AppCompatActivity {
     private FrameLayout guardado;
 
     private ImageView AnGa_ok;
-    private ImageView AnGa_compartir;
+    private ImageView AnGa_ctexto;
 
     private String datosCompartidos;
 
@@ -89,7 +89,7 @@ public class AnnadirGasto extends AppCompatActivity {
 
         guardado = findViewById(R.id.guardado);
         AnGa_ok = findViewById(R.id.AnGa_im_ok);
-        AnGa_compartir = findViewById(R.id.AnGa_im_compartir);
+        AnGa_ctexto = findViewById(R.id.AnGa_im_ctexto);
         AnGa_dinero = findViewById(R.id.AnGa_ent_cantidad);
         notas = findViewById(R.id.AnGa_ent_notas);
 
@@ -196,12 +196,12 @@ public class AnnadirGasto extends AppCompatActivity {
 //            }
 //        });
 
-//        AnGa_compartir.setOnClickListener(new View.OnClickListener(){
-//            @Override
-//            public void onClick(View v){
-//                compartirDatos();
-//            }
-//        });
+        AnGa_ctexto.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                compartirDatos();
+            }
+        });
 
         // Inicialización de bottom navigation view
         bottomNavigationView = findViewById(R.id.main_btn_nav);

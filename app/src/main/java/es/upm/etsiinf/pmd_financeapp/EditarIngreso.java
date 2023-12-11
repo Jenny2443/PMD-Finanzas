@@ -68,9 +68,11 @@ public class EditarIngreso extends AppCompatActivity {
 
     private ImageView AnIn_ok;
 
-    private ImageView AnIn_compartir;
+    private ImageView AnIn_ctexto;
 
     public int identificadorTransaccion;
+    private ImageView EdIn_ok;
+    private ImageView EdIn_ctexto;
 
 
     @Override
@@ -84,7 +86,8 @@ public class EditarIngreso extends AppCompatActivity {
         subirImg = findViewById(R.id.EdIn_btn_cargar_im);
         img = findViewById(R.id.EdIn_imSubida);
 
-        //TODO: Falta lo de guardado, anin_ok y anin_compartir
+        EdIn_ok = findViewById(R.id.EdIn_im_ok);
+        EdIn_ctexto = findViewById(R.id.EdIn_im_ctexto);
 
         // Iniciamos botones
         btnCancelar = findViewById(R.id.EdIn_btn_cancelar);
@@ -212,6 +215,23 @@ public class EditarIngreso extends AppCompatActivity {
                 Log.i("EditarIngreso", "Transaccion actualizada con id: " + identificadorTransaccion);
                 //Log.i("AnnadirIngreso", "Transaccion insertado con id: " + id);
                 mostrarGuardado();
+            }
+        });
+
+        //        EdIn_ok.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                // TODO: ACTUALIZAR GASTO en BBDD
+//                //Crear notificación
+//                mostrarNotificacion("Gasto actualizado");
+//                openActivityHome();
+//            }
+//        });
+
+        EdIn_ctexto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                compartirDatos();
             }
         });
 

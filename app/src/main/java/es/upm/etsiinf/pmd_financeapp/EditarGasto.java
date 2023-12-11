@@ -60,7 +60,7 @@ public class EditarGasto extends AppCompatActivity {
 
     private FrameLayout guardado;
     private ImageView EdGa_ok;
-    private ImageView EdGa_compartir;
+    private ImageView EdGa_ctexto;
 
     private String datosCompartidos;
 
@@ -89,7 +89,7 @@ public class EditarGasto extends AppCompatActivity {
 
         guardado = findViewById(R.id.guardado);
         EdGa_ok = findViewById(R.id.EdGa_im_ok);
-        EdGa_compartir = findViewById(R.id.EdGa_im_compartir);
+        EdGa_ctexto = findViewById(R.id.EdGa_im_ctexto);
         EdGa_dinero = findViewById(R.id.EdGa_ent_cantidad);
         notas = findViewById(R.id.EdGa_ent_notas);
 
@@ -206,12 +206,12 @@ public class EditarGasto extends AppCompatActivity {
 //            }
 //        });
 
-//        EdGa_compartir.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                compartirDatos();
-//            }
-//        });
+        EdGa_ctexto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                compartirDatos();
+            }
+        });
 
         bottomNavigationView = findViewById(R.id.main_btn_nav);
         bottomNavigationView.setSelectedItemId(R.id.menu_nav_action_history);
