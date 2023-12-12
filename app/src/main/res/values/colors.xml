@@ -8,4 +8,5 @@
     <color name="azul">#3F51B5</color>
     <color name="rojo">#F44336</color>
     <color name="amarillo">#FFEB3B</color>
+    <color name="azulLogin">#7DB3DC</color>
 </resources>

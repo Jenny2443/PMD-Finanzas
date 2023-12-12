@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "689184233521",
+    "project_id": "login-register-financeapp",
+    "storage_bucket": "login-register-financeapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:689184233521:android:85cdade71fd2127b7a1d10",
+        "android_client_info": {
+          "package_name": "es.upm.etsiinf.pmd_financeapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCvJnWMPT2rTklwnwjsQU5TDLDQXsC7agE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

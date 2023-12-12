@@ -34,6 +34,8 @@ import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -50,6 +52,9 @@ public class MainActivity extends AppCompatActivity {
     ImageView imFilter;
     ImageView imCalendar;
     TextView txtBalance;
+
+    FirebaseUser user;
+    FirebaseAuth mAuth;
 
 
     //private NavigationBarView bottomNavigationView;
@@ -71,6 +76,14 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mAuth = FirebaseAuth.getInstance();
+        user = mAuth.getCurrentUser();
+        if(user == null){
+            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+            startActivity(intent);
+            finish();
+        }
 
         /*
         //Call StockManager.updateStocks() for AAPL stock
