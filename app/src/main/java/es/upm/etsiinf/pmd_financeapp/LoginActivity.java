@@ -87,6 +87,11 @@ public class LoginActivity extends AppCompatActivity {
                                         editor.putString("email", email);
                                         editor.putString("password", password);
                                         editor.apply();
+                                    }else{
+                                        SharedPreferences.Editor editor = getSharedPreferences(FILE_NAME, MODE_PRIVATE).edit();
+                                        editor.putString("email", "");
+                                        editor.putString("password", "");
+                                        editor.apply();
                                     }
 
                                     Toast.makeText(LoginActivity.this, "Login correcto",

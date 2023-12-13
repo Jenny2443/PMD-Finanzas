@@ -68,11 +68,6 @@ public class MainActivity extends AppCompatActivity {
     //BBDD
     private DBHelperStock dbHelperStock;
     private DBHelperTransacciones dbHelperTransacciones;
-//    private static final String PREFS_NAME = "MyPrefsFile";
-//    private static final String JOB_SCHEDULED_KEY = "jobScheduled";
-
-    private static final String FILE_NAME = "login";
-
 
 
     @RequiresApi(api = Build.VERSION_CODES.P)
@@ -88,9 +83,6 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         }
-
-        SharedPreferences sharedPreferences = getSharedPreferences(FILE_NAME, MODE_PRIVATE);
-        String email = sharedPreferences.getString("email", null);
 
         /*
         //Call StockManager.updateStocks() for AAPL stock

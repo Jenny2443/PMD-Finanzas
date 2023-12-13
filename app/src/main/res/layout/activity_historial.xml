@@ -82,7 +82,6 @@
         android:layout_height="48dp"
         app:layout_constraintBottom_toTopOf="@+id/historial_listview"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.719"
         app:layout_constraintStart_toEndOf="@+id/historial_title"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.642"
