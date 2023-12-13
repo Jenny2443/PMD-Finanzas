@@ -9,4 +9,5 @@
     <color name="rojo">#F44336</color>
     <color name="amarillo">#FFEB3B</color>
     <color name="azulLogin">#7DB3DC</color>
+    <color name="azulToolbar">7CC6FE</color>
 </resources>
