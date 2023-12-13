@@ -69,6 +69,11 @@ public class MainActivity extends AppCompatActivity {
     private DBHelperStock dbHelperStock;
     private DBHelperTransacciones dbHelperTransacciones;
 
+    private DbTransacciones dbTransacciones;
+    double ingresos = 0;
+    double gasto = 0;
+    double balance = 0;
+
 
     @RequiresApi(api = Build.VERSION_CODES.P)
     @Override
@@ -101,12 +106,27 @@ public class MainActivity extends AppCompatActivity {
         */
 
 
+        //Obtenemos los ingresos y gastos de la bbdd
+        dbTransacciones = new DbTransacciones(this);
+        ingresos = dbTransacciones.obtenerSumaIngresos();
+        Log.i("MainActivity", "onCreate: ingresos: " + ingresos);
+
+
+        gasto = dbTransacciones.obtenerSumaGastos();
+        Log.i("MainActivity", "onCreate: gastos: " + gasto);
+
         //Inicializacion de botones
          btnAnadirGasto = findViewById(R.id.main_btn_anadir_gasto);
          btnAnadirIngreso = findViewById(R.id.main_btn_anadir_ingreso);
          txtBalance = findViewById(R.id.main_txt_balance);
 
-         logOut = findViewById(R.id.main_btn_logout);
+         //Calculamos el balance en funcion de ingresos y gastos y lo ponemos
+        balance = ingresos + gasto;
+        txtBalance.setText(String.format("Balance: %.2f €", balance));
+
+
+        //Inicializacion de boton de logout y su funcion
+        logOut = findViewById(R.id.main_btn_logout);
          logOut.setOnClickListener(new View.OnClickListener() {
              @Override
              public void onClick(View v) {
@@ -117,16 +137,16 @@ public class MainActivity extends AppCompatActivity {
              }
          });
 
-        //Inicializacion de bottom navigation view
-        bottomNavigationView = findViewById(R.id.main_btn_nav);
-        tituloHome = findViewById(R.id.main_txt_home);
-
         //Pedir permiso de notificaciones si no lo tiene activado
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
             if(ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED){
                 ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.POST_NOTIFICATIONS}, 101);
             }
         }
+
+        //Inicializacion de bottom navigation view
+        bottomNavigationView = findViewById(R.id.main_btn_nav);
+        tituloHome = findViewById(R.id.main_txt_home);
 
         bottomNavigationView.setSelectedItemId(R.id.menu_nav_action_home);
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
@@ -146,6 +166,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        //Anade funcion al boton de anadir gasto
         btnAnadirGasto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -156,6 +177,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        //Anade funcion al boton de anadir ingreso
         btnAnadirIngreso.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -168,9 +190,8 @@ public class MainActivity extends AppCompatActivity {
 
         //Inicializacion de la grafica
         pieChart = findViewById(R.id.main_piechart);
-
+        //Creamos la grafica
         crearPieChart();
-
 
         //BBDD
         Log.i("MainActivity", "onCreate: " + getDatabasePath("FinanceApp.db"));
@@ -191,7 +212,6 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(MainActivity.this, "Transaccion Base de datos creada correctamente " + dbHelperTransacciones.toString(), Toast.LENGTH_SHORT).show();
         }
 
-        Log.i("TestJobServiceStock","Mainactivity on create");
         //StockJobUtil.scheduleJob(this);
 
         // Verificar si el trabajo ya está programado
@@ -311,15 +331,15 @@ public class MainActivity extends AppCompatActivity {
         pieChart.setDrawCenterText(true);
         pieChart.setCenterText("Gastos");
         pieChart.getLegend().setEnabled(true);
-        Legend legend = pieChart.getLegend();
-        legend.setVerticalAlignment(Legend.LegendVerticalAlignment.BOTTOM);
-        legend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.CENTER);
-        // Desplazar la leyenda hacia la izquierda a medida que se añaden más categorías
-        if (countMap.size() > 1) {
-            legend.setXEntrySpace(20f * (countMap.size() - 1));
-        } else {
-            legend.setXEntrySpace(20f);
-        }
+//        Legend legend = pieChart.getLegend();
+//        legend.setVerticalAlignment(Legend.LegendVerticalAlignment.BOTTOM);
+//        legend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.CENTER);
+//        // Desplazar la leyenda hacia la izquierda a medida que se añaden más categorías
+//        if (countMap.size() > 1) {
+//            legend.setXEntrySpace(20f * (countMap.size() - 1));
+//        } else {
+//            legend.setXEntrySpace(20f);
+//        }
         pieChart.invalidate();
     }
 
@@ -365,6 +385,4 @@ public class MainActivity extends AppCompatActivity {
 //        }
 //        notificationManager.notify(0, builder.build());
 //    }
-
-
 }

@@ -118,4 +118,49 @@ public class DbTransacciones extends DBHelperTransacciones{
         return db.query("t_transacciones", new String[]{"id AS _id", "fecha", "cantidad", "categoria", "notas", "imagen"}, null, null, null, null, null);
     }
 
+    // Obtener la suma de ingresos
+    public double obtenerSumaIngresos() {
+        DBHelperTransacciones dbHelper = new DBHelperTransacciones(context);
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        double sumaIngresos = 0;
+
+        String query = "SELECT SUM(cantidad) FROM t_transacciones" + " WHERE cantidad > 0";
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        if (cursor.moveToFirst()) {
+            Log.i("Historial", "obtenerSumaIngresos: " + cursor.getDouble(0));
+            sumaIngresos = cursor.getDouble(0);
+        }
+
+        Log.i("Historial", "obtenerSumaIngresos: " + sumaIngresos);
+
+        cursor.close();
+        db.close();
+
+        return sumaIngresos;
+    }
+
+    // Obtener la suma de gastos
+    public double obtenerSumaGastos() {
+        DBHelperTransacciones dbHelper = new DBHelperTransacciones(context);
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        double sumaGastos = 0;
+
+        String query = "SELECT SUM(cantidad) FROM t_transacciones" + " WHERE cantidad < 0";
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        if (cursor.moveToFirst()) {
+            sumaGastos = cursor.getDouble(0);
+        }
+
+        Log.i("Historial", "obtenerSumaGastos: " + cursor.getDouble(0));
+
+        cursor.close();
+        db.close();
+
+        return sumaGastos;
+    }
+
 }

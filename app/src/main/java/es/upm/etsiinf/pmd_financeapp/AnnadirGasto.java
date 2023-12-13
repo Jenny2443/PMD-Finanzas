@@ -186,15 +186,15 @@ public class AnnadirGasto extends AppCompatActivity {
             }
         });
 
-//        AnGa_ok.setOnClickListener(new View.OnClickListener(){
-//            @Override
-//            public void onClick(View v){
-//                // TODO: GUARDAR GASTO en BBDD
-//                //Crear notificacion
-//                mostrarNotificacion("Gasto guardado");
-//                openActivityHome();
-//            }
-//        });
+        AnGa_ok.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                // TODO: GUARDAR GASTO en BBDD
+                //Crear notificacion
+                mostrarNotificacion("Gasto guardado");
+                openActivityHome();
+            }
+        });
 
         AnGa_ctexto.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -302,7 +302,7 @@ public class AnnadirGasto extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             String channelId = "mi_canal_id";
             CharSequence channelName = "Mi Canal";
-            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            int importance = NotificationManager.IMPORTANCE_HIGH;
             NotificationChannel channel = new NotificationChannel(channelId, channelName, importance);
             notificationManager.createNotificationChannel(channel);
         }
