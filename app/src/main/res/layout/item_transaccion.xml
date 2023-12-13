@@ -9,15 +9,18 @@
     android:layout_marginEnd="16dp"
     android:layout_marginBottom="8dp"
     android:layout_marginTop="8dp"
+    android:clickable="true"
+    android:focusable="true"
+    android:id="@+id/item_transaccion_layout"
     >
 
     <TextView
         android:id="@+id/textCategoria"
-        android:layout_width="35dp"
+        android:layout_width="45dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:gravity="center_vertical"
-        android:paddingStart="30dp"
+        android:paddingStart="35dp"
         android:text="Categoría"
         android:translationY="10dp" />
 
@@ -38,7 +41,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:gravity="center"
-        android:paddingStart="15dp"
+        android:layout_marginStart="25dp"
         android:text="Fecha"
         android:translationY="10dp" />
 
@@ -47,6 +50,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center|end"
+        android:layout_marginStart="25dp"
         android:layout_weight="1"
         app:srcCompat="@drawable/baseline_delete_24" />
 

@@ -13,8 +13,9 @@
         app:layout_constraintBottom_toTopOf="@+id/main_btn_nav"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" >
+
         <TextView
-            android:id="@+id/txt_home"
+            android:id="@+id/txt_historial"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -33,7 +34,9 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:itemIconTint="@color/black"
-        app:menu="@menu/bottom_navigation_menu"/>
+        app:menu="@menu/bottom_navigation_menu">
+
+    </com.google.android.material.bottomnavigation.BottomNavigationView>
 
 
 
@@ -48,7 +51,9 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/historial_title" />
+        app:layout_constraintTop_toBottomOf="@+id/historial_title" >
+
+    </ListView>
 
     <TextView
         android:id="@+id/historial_title"

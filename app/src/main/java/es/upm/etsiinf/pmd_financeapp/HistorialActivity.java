@@ -1,9 +1,11 @@
 package es.upm.etsiinf.pmd_financeapp;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.drawable.BitmapDrawable;
+import android.media.Image;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -41,6 +43,7 @@ public class HistorialActivity extends AppCompatActivity {
 
         listView = findViewById(R.id.historial_listview);
 
+
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -71,7 +74,68 @@ public class HistorialActivity extends AppCompatActivity {
                 fromColumns,
                 toViews,
                 0
-        );
+        ){
+            @Override
+            public void bindView(View view, Context context, Cursor cursor){
+                super.bindView(view, context, cursor);
+
+                ImageView imageView = view.findViewById(R.id.historial_btn_delete);
+                imageView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                       Toast.makeText(HistorialActivity.this, "Click en borrar", Toast.LENGTH_SHORT).show();
+                       //Borrar transaccion de la bbdd
+                        int colId = cursor.getColumnIndex("_id");
+                        int identificadorTransaccion = cursor.getInt(colId);
+                        dbTransacciones.borrarTransaccion(identificadorTransaccion);
+                        //Actualizar lista
+                        cargarTransacciones();
+                        openActivityHome();
+                    }
+                });
+
+                view.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Toast.makeText(HistorialActivity.this, "Click en item", Toast.LENGTH_SHORT).show();
+                        int colFecha = cursor.getColumnIndex("fecha");
+                        int colCantidad = cursor.getColumnIndex("cantidad");
+                        int colCategoria = cursor.getColumnIndex("categoria");
+                        int identificadorTransaccion = cursor.getColumnIndex("_id");
+                        int colNotas = cursor.getColumnIndex("notas");
+                        int colImg = cursor.getColumnIndex("imagen");
+
+                        if(colCategoria != -1 && colCantidad != -1 && colFecha != -1 && identificadorTransaccion != -1 && colNotas != -1 && colImg != -1) {
+                            String fecha = cursor.getString(colFecha);
+                            double cantidad = cursor.getDouble(colCantidad);
+                            String categoria = cursor.getString(colCategoria);
+                            identificadorTransaccion = cursor.getInt(identificadorTransaccion);
+                            String notas = cursor.getString(colNotas);
+                            Toast.makeText(HistorialActivity.this, "Fecha: " + fecha + "\nCantidad: " + cantidad + "\nCategoria: " + categoria, Toast.LENGTH_SHORT).show();
+
+                            //Verificar si es gasto o ingreso
+                            if (cantidad < 0) {
+                                Intent intent = new Intent(HistorialActivity.this, EditarGasto.class);
+                                intent.putExtra("fecha", fecha);
+                                intent.putExtra("cantidad", cantidad);
+                                intent.putExtra("categoria", categoria);
+                                intent.putExtra("id", identificadorTransaccion);
+                                intent.putExtra("notas", notas);
+                                startActivity(intent);
+                            } else {
+                                Intent intent = new Intent(HistorialActivity.this, EditarIngreso.class);
+                                intent.putExtra("fecha", fecha);
+                                intent.putExtra("cantidad", cantidad);
+                                intent.putExtra("categoria", categoria);
+                                intent.putExtra("id", identificadorTransaccion);
+                                intent.putExtra("notas", notas);
+                                startActivity(intent);
+                            }
+                        }
+                    }
+                });
+            }
+        };
         adapter.setViewBinder(new SimpleCursorAdapter.ViewBinder() {
             @SuppressLint("DefaultLocale")
             @Override
@@ -88,49 +152,6 @@ public class HistorialActivity extends AppCompatActivity {
 
         // Establecer el adaptador en el ListView
         listView.setAdapter(adapter);
-
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                Cursor c = (Cursor) adapterView.getItemAtPosition(position);
-                int colFecha = c.getColumnIndex("fecha");
-                int colCantidad = c.getColumnIndex("cantidad");
-                int colCategoria = c.getColumnIndex("categoria");
-                int identificadorTransaccion = c.getColumnIndex("_id");
-                int colNotas = c.getColumnIndex("notas");
-                int colImg = c.getColumnIndex("imagen");
-
-                if(colCategoria != -1 && colCantidad != -1 && colFecha != -1 && identificadorTransaccion != -1 && colNotas != -1 && colImg != -1) {
-                    String fecha = c.getString(colFecha);
-                    double cantidad = c.getDouble(colCantidad);
-                    String categoria = c.getString(colCategoria);
-                    identificadorTransaccion = c.getInt(identificadorTransaccion);
-                    String notas = c.getString(colNotas);
-                    Toast.makeText(HistorialActivity.this, "Fecha: " + fecha + "\nCantidad: " + cantidad + "\nCategoria: " + categoria, Toast.LENGTH_SHORT).show();
-
-                        //Verificar si es gasto o ingreso
-                        if (cantidad < 0) {
-                            Intent intent = new Intent(HistorialActivity.this, EditarGasto.class);
-                            intent.putExtra("fecha", fecha);
-                            intent.putExtra("cantidad", cantidad);
-                            intent.putExtra("categoria", categoria);
-                            intent.putExtra("id", identificadorTransaccion);
-                            intent.putExtra("notas", notas);
-                            startActivity(intent);
-                        } else {
-                            Intent intent = new Intent(HistorialActivity.this, EditarIngreso.class);
-                            intent.putExtra("fecha", fecha);
-                            intent.putExtra("cantidad", cantidad);
-                            intent.putExtra("categoria", categoria);
-                            intent.putExtra("id", identificadorTransaccion);
-                            intent.putExtra("notas", notas);
-                            startActivity(intent);
-                        }
-
-
-                    }
-            }
-        });
     }
 
     public void openActivityStocks(){
