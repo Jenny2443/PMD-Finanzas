@@ -311,7 +311,8 @@ public class AnnadirGasto extends AppCompatActivity {
                 .setSmallIcon(R.drawable.ic_launcher_foreground)
                 .setContentTitle("App de Finanzas")
                 .setContentText(mensaje)
-                .setAutoCancel(true);
+                .setAutoCancel(true)
+                .addAction(R.drawable.ic_launcher_foreground, "Abrir app", null);
 
         notificationManager.notify(1, builder.build());
     }
