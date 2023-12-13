@@ -4,10 +4,12 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -20,10 +22,12 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class LoginActivity extends AppCompatActivity {
     EditText editTextEmail, editTextPassw;
-    Button buttonRegistrar, buttonLogin;
+    Button buttonLogin;
     FirebaseAuth mAuth;
     ProgressBar progressBar;
 
+    CheckBox checkBox;
+    private static final String FILE_NAME = "login";
     @Override
     public void onStart(){
         super.onStart();
@@ -45,22 +49,22 @@ public class LoginActivity extends AppCompatActivity {
         editTextPassw = findViewById(R.id.login_txt_password);
 
         buttonLogin = findViewById(R.id.login_btn_login);
-        buttonRegistrar = findViewById(R.id.login_btn_registrar);
         progressBar = findViewById(R.id.login_progressBar);
+
+        checkBox = findViewById(R.id.login_checkBox);
 
         mAuth = FirebaseAuth.getInstance();
 
-        buttonRegistrar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(LoginActivity.this, es.upm.etsiinf.pmd_financeapp.RegisterActivity.class);
-                startActivity(intent);
-                finish();
-            }
-        });
+        SharedPreferences prefs = getSharedPreferences(FILE_NAME, MODE_PRIVATE);
+        String email = prefs.getString("email", "");
+        String password = prefs.getString("password", "");
+
+        editTextEmail.setText(email);
+        editTextPassw.setText(password);
         buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 String email = editTextEmail.getText().toString();
                 String password = editTextPassw.getText().toString();
                 if(email.isEmpty() || password.isEmpty()){
@@ -77,10 +81,19 @@ public class LoginActivity extends AppCompatActivity {
                                 Log.i("LoginActivity", "signInWithEmail:onComplete:" + task.isSuccessful());
                                 progressBar.setVisibility(View.GONE);
                                 if (task.isSuccessful()) {
+                                    //Si el usuario ha marcado el checkbox, guardamos el email y la contraseña
+                                    if(checkBox.isChecked()){
+                                        SharedPreferences.Editor editor = getSharedPreferences(FILE_NAME, MODE_PRIVATE).edit();
+                                        editor.putString("email", email);
+                                        editor.putString("password", password);
+                                        editor.apply();
+                                    }
+
                                     Toast.makeText(LoginActivity.this, "Login correcto",
                                             Toast.LENGTH_SHORT).show();
                                     //Si se ha logeado correctamente, abrimos la actividad principal
                                     Intent intent = new Intent(LoginActivity.this, es.upm.etsiinf.pmd_financeapp.MainActivity.class);
+                                    intent.putExtra("checkbox",true);
                                     startActivity(intent);
                                     finish();
                                 } else {

@@ -9,6 +9,7 @@ import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -70,6 +71,9 @@ public class MainActivity extends AppCompatActivity {
 //    private static final String PREFS_NAME = "MyPrefsFile";
 //    private static final String JOB_SCHEDULED_KEY = "jobScheduled";
 
+    private static final String FILE_NAME = "login";
+
+
 
     @RequiresApi(api = Build.VERSION_CODES.P)
     @Override
@@ -84,6 +88,9 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         }
+
+        SharedPreferences sharedPreferences = getSharedPreferences(FILE_NAME, MODE_PRIVATE);
+        String email = sharedPreferences.getString("email", null);
 
         /*
         //Call StockManager.updateStocks() for AAPL stock
@@ -108,6 +115,17 @@ public class MainActivity extends AppCompatActivity {
          imFilter = findViewById(R.id.main_btnFilter);
          imCalendar = findViewById(R.id.main_btnCalendar);
          txtBalance = findViewById(R.id.main_txt_balance);
+
+         //SIGN OUT
+         imCalendar.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View v) {
+                 FirebaseAuth.getInstance().signOut();
+                 Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                 startActivity(intent);
+                 finish();
+             }
+         });
 
         //Inicializacion de bottom navigation view
         bottomNavigationView = findViewById(R.id.main_btn_nav);

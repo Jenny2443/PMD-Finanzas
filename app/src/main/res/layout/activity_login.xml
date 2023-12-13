@@ -68,21 +68,7 @@
         android:layout_height="wrap_content"
         android:text="Iniciar sesión" />
 
-    <TextView
-        android:id="@+id/login_txt_o"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:gravity="center"
-        android:text="o" />
 
-    <Button
-        android:id="@+id/login_btn_registrar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:paddingTop="10dp"
-        android:text="Registrar" />
 
 
 </LinearLayout>
