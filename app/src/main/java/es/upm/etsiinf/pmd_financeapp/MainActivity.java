@@ -50,9 +50,9 @@ import es.upm.etsiinf.pmd_financeapp.db.DbTransacciones;
 public class MainActivity extends AppCompatActivity {
     Button btnAnadirGasto;
     Button btnAnadirIngreso;
-    ImageView imFilter;
-    ImageView imCalendar;
     TextView txtBalance;
+
+    ImageView logOut;
 
     FirebaseUser user;
     FirebaseAuth mAuth;
@@ -112,12 +112,10 @@ public class MainActivity extends AppCompatActivity {
         //Inicializacion de botones
          btnAnadirGasto = findViewById(R.id.main_btn_anadir_gasto);
          btnAnadirIngreso = findViewById(R.id.main_btn_anadir_ingreso);
-         imFilter = findViewById(R.id.main_btnFilter);
-         imCalendar = findViewById(R.id.main_btnCalendar);
          txtBalance = findViewById(R.id.main_txt_balance);
 
-         //SIGN OUT
-         imCalendar.setOnClickListener(new View.OnClickListener() {
+         logOut = findViewById(R.id.main_btn_logout);
+         logOut.setOnClickListener(new View.OnClickListener() {
              @Override
              public void onClick(View v) {
                  FirebaseAuth.getInstance().signOut();

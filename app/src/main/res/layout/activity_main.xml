@@ -17,6 +17,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+        <ImageView
+            android:id="@+id/main_btn_logout"
+            android:layout_width="38dp"
+            android:layout_height="36dp"
+            android:layout_gravity="end"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
+            android:src="@drawable/baseline_logout_24" />
+
         <com.github.mikephil.charting.charts.PieChart
             android:id="@+id/main_piechart"
             android:layout_width="332dp"
@@ -32,14 +41,6 @@
             android:layout_marginEnd="90dp"
             android:layout_marginBottom="200dp" />
 
-        <ImageView
-            android:id="@+id/main_btnFilter"
-            android:layout_width="56dp"
-            android:layout_height="58dp"
-            android:layout_marginLeft="30dp"
-            android:layout_marginTop="80dp"
-            android:translationY="-50dp"
-            app:srcCompat="@drawable/filter" />
 
         <Button
             android:id="@+id/main_btn_anadir_gasto"
@@ -63,17 +64,6 @@
             android:backgroundTint="#4CAF50"
             android:translationY="10dp"
             android:textSize="24sp" />
-
-
-        <ImageView
-            android:id="@+id/main_btnCalendar"
-            android:layout_width="56dp"
-            android:layout_height="58dp"
-            android:layout_gravity="right"
-            android:layout_marginTop="80dp"
-            android:layout_marginRight="30dp"
-            android:translationY="-50dp"
-            app:srcCompat="@drawable/calendar" />
 
         <TextView
             android:id="@+id/main_txt_balance"

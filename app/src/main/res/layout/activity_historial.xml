@@ -20,6 +20,9 @@
             android:layout_gravity="center"
             android:text="Historial"
             android:textSize="60dp" />
+
+
+
     </FrameLayout>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
@@ -31,6 +34,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:itemIconTint="@color/black"
         app:menu="@menu/bottom_navigation_menu"/>
+
+
 
     <ListView
         android:id="@+id/historial_listview"
@@ -49,6 +54,7 @@
         android:id="@+id/historial_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:text="HISTORIAL"
         android:textSize="40dp"
         app:layout_constraintBottom_toBottomOf="@+id/main_btn_nav"
@@ -56,5 +62,29 @@
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.023" />
+        app:layout_constraintVertical_bias="0.013" />
+
+    <ImageView
+        android:id="@+id/historial_btnFilter"
+        android:layout_width="50dp"
+        android:layout_height="48dp"
+        app:layout_constraintBottom_toTopOf="@+id/historial_listview"
+        app:layout_constraintEnd_toStartOf="@+id/historial_title"
+        app:layout_constraintHorizontal_bias="0.517"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.642"
+        app:srcCompat="@drawable/filter" />
+
+    <ImageView
+        android:id="@+id/historial_calendar"
+        android:layout_width="50dp"
+        android:layout_height="48dp"
+        app:layout_constraintBottom_toTopOf="@+id/historial_listview"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.719"
+        app:layout_constraintStart_toEndOf="@+id/historial_title"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.642"
+        app:srcCompat="@drawable/calendar" />
 </androidx.constraintlayout.widget.ConstraintLayout>
