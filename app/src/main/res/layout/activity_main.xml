@@ -15,25 +15,21 @@
         app:layout_constraintBottom_toTopOf="@+id/main_btn_nav"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"><![CDATA[
-
-        " />
-
-        ]]>
+        app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:id="@+id/imageView2"
+            android:id="@+id/toptoolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:src="@tools:sample/avatars" />
+            android:layout_height="119dp"
+            android:src="@drawable/fondo_toolbar" />
 
         <ImageView
             android:id="@+id/main_btn_logout"
             android:layout_width="38dp"
             android:layout_height="36dp"
             android:layout_gravity="end"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="20dp"
+            android:layout_marginTop="40dp"
+            android:layout_marginEnd="30dp"
             android:src="@drawable/baseline_logout_24" />
 
         <com.github.mikephil.charting.charts.PieChart

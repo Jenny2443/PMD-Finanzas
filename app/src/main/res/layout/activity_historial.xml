@@ -6,6 +6,15 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    <ImageView
+        android:id="@+id/toptoolbar"
+        android:layout_width="422dp"
+        android:layout_height="87dp"
+        android:src="@drawable/fondo_toolbar"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="-4dp" />
+
+
     <FrameLayout
         android:id="@+id/main_frameLayout"
         android:layout_width="0dp"
@@ -13,6 +22,7 @@
         app:layout_constraintBottom_toTopOf="@+id/main_btn_nav"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" >
+
         <TextView
             android:id="@+id/txt_home"
             android:layout_width="wrap_content"
@@ -36,11 +46,10 @@
         app:menu="@menu/bottom_navigation_menu"/>
 
 
-
     <ListView
         android:id="@+id/historial_listview"
-        android:layout_width="409dp"
-        android:layout_height="0dp"
+        android:layout_width="412dp"
+        android:layout_height="551dp"
         android:layout_marginStart="1dp"
         android:layout_marginEnd="1dp"
         android:paddingTop="10dp"
@@ -56,6 +65,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="HISTORIAL"
+        android:textColor="#000000"
         android:textSize="40dp"
         app:layout_constraintBottom_toBottomOf="@+id/main_btn_nav"
         app:layout_constraintEnd_toEndOf="parent"
