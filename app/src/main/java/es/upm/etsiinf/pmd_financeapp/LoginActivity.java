@@ -27,7 +27,8 @@ public class LoginActivity extends AppCompatActivity {
     ProgressBar progressBar;
 
     CheckBox checkBox;
-    private static final String FILE_NAME = "login";
+    public static final String FILE_NAME = "login";
+    public static final String REMEMBER_ME_KEY = "remember_me";
     @Override
     public void onStart(){
         super.onStart();
@@ -60,7 +61,7 @@ public class LoginActivity extends AppCompatActivity {
         String password = prefs.getString("password", "");
 
         editTextEmail.setText(email);
-        editTextPassw.setText(password);
+        //editTextPassw.setText(password);
         buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -82,15 +83,17 @@ public class LoginActivity extends AppCompatActivity {
                                 progressBar.setVisibility(View.GONE);
                                 if (task.isSuccessful()) {
                                     //Si el usuario ha marcado el checkbox, guardamos el email y la contraseña
+                                    boolean rememberMe = checkBox.isChecked();
                                     if(checkBox.isChecked()){
                                         SharedPreferences.Editor editor = getSharedPreferences(FILE_NAME, MODE_PRIVATE).edit();
+                                        editor.putBoolean(REMEMBER_ME_KEY, true);
                                         editor.putString("email", email);
-                                        editor.putString("password", password);
                                         editor.apply();
                                     }else{
                                         SharedPreferences.Editor editor = getSharedPreferences(FILE_NAME, MODE_PRIVATE).edit();
                                         editor.putString("email", "");
                                         editor.putString("password", "");
+                                        editor.putBoolean(REMEMBER_ME_KEY, false);
                                         editor.apply();
                                     }
 
@@ -98,9 +101,10 @@ public class LoginActivity extends AppCompatActivity {
                                             Toast.LENGTH_SHORT).show();
                                     //Si se ha logeado correctamente, abrimos la actividad principal
                                     Intent intent = new Intent(LoginActivity.this, es.upm.etsiinf.pmd_financeapp.MainActivity.class);
-                                    intent.putExtra("checkbox",true);
+                                    intent.putExtra("checkbox",rememberMe);
+                                    Log.i("LoginActivity", "rememberMe: " + rememberMe);
                                     startActivity(intent);
-                                    finish();
+                                    //finish();
                                 } else {
                                     // If sign in fails, display a message to the user.
                                     Toast.makeText(LoginActivity.this, "El login ha fallado",
