@@ -22,8 +22,8 @@ public class DownloadStockManager implements Runnable{
     public void run() {
         try {
             Log.println(Log.INFO, "Stocks", "Updating stock " + symbol);
-            Stock stock = StockManager.getStock(symbol);
-            if(StockManager.updateStock(stock)) {
+            Stock stock = StockManager.getStock(symbol, context);
+            if(StockManager.updateStock(stock, context)) {
                 Log.println(Log.INFO, "Stocks", "Stock updated");
             } else {
                 Log.println(Log.INFO, "Stocks", "Stock not updated");

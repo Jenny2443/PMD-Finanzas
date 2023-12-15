@@ -34,7 +34,7 @@ public class TestJobServiceStock extends JobService {
             @Override
             public void run() {
                 try {
-                    StockManager.updateStocks();
+                    StockManager.updateStocks(context);
                     //makeNotification();
                     //Ponemos que se vuelva a ejecutar el servicio
                     jobFinished(jobParameters, true);

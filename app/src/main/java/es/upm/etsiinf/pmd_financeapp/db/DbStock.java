@@ -17,7 +17,7 @@ public class DbStock extends DBHelperStock{
     }
 
     public long insertarStock(String ticker, String nombre, double precioCierre, double precioMax, double precioMin, LocalDateTime lastUpdate){
-        long id = 0;
+        long id = -1;
         try{
             DBHelperStock dbHelper = new DBHelperStock(context);
             //Creamos conexion
@@ -59,7 +59,7 @@ public class DbStock extends DBHelperStock{
         }
     }
 
-    public void actualizarStock(String ticker, String nombre, float precioCierre, float precioMax, float precioMin, Date lastUpdate){
+    public void actualizarStock(String ticker, String nombre, double precioCierre, double precioMax, double precioMin, LocalDateTime lastUpdate){
         try{
             DBHelperStock dbHelper = new DBHelperStock(context);
             //Creamos conexion

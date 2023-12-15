@@ -1,5 +1,7 @@
 package es.upm.etsiinf.pmd_financeapp;
 
+import android.content.Context;
+import android.database.Cursor;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -22,10 +24,12 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import es.upm.etsiinf.pmd_financeapp.db.DbStock;
 
 import io.polygon.kotlin.sdk.rest.PolygonRestClient;
 
 public class StockManager {
+
     private static final String API_KEY = "uAoBHhszznSW8IO1YhZhMhfcUfGuBE4p";
     private static List<Stock> stocks = new ArrayList<>();
 
@@ -33,20 +37,53 @@ public class StockManager {
         return API_KEY;
     }
 
-    public static void  addStock (Stock stock) {
-        stocks.add(stock);
+    public static long  addStock (Stock stock, Context context) {
+        DbStock dbStock = new DbStock(context);
+
+        String ticker = stock.getSymbol();
+        String nombre = stock.getName();
+        double precioCierre = stock.getPrice();
+        double precioMax = stock.getMaxPrice();
+        double precioMin = stock.getMinPrice();
+        LocalDateTime lastUpdate = stock.getLastUpdate();
+        return dbStock.insertarStock(ticker, nombre, precioCierre, precioMax, precioMin, lastUpdate);
     }
+
+
 
     public static void removeStock (Stock stock) {
         stocks.remove(stock);
     }
 
-    public static List<Stock> getStocks() {
+    public static List<Stock> getStocks(Context context) {
+        List<Stock> stocks = new ArrayList<>();
+        DbStock dbStock = new DbStock(context);
+        Cursor cursor = dbStock.obtenerTodasLosStocks();
+
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
+                // Recupera los datos del cursor y crea un objeto Stock
+                if (cursor.getColumnIndex("ticker") == -1 || cursor.getColumnIndex("nombre") == -1 || cursor.getColumnIndex("precioCierre") == -1 || cursor.getColumnIndex("precioMax") == -1 || cursor.getColumnIndex("precioMin") == -1 || cursor.getColumnIndex("lastUpdate") == -1) {
+                    continue;
+                }
+                String ticker = cursor.getString(cursor.getColumnIndex("ticker"));
+                String nombre = cursor.getString(cursor.getColumnIndex("nombre"));
+                double precioCierre = cursor.getDouble(cursor.getColumnIndex("precioCierre"));
+                double precioMax = cursor.getDouble(cursor.getColumnIndex("precioMax"));
+                double precioMin = cursor.getDouble(cursor.getColumnIndex("precioMin"));
+                LocalDateTime lastUpdate = LocalDateTime.parse(cursor.getString(cursor.getColumnIndex("lastUpdate")));
+
+                Stock stock = new Stock(ticker, nombre, precioCierre, precioMax, precioMin, lastUpdate);
+                stocks.add(stock);
+            } while (cursor.moveToNext());
+            cursor.close();
+        }
+
         return stocks;
     }
 
-    public static Stock getStock(String symbol) {
-        for (Stock stock: stocks) {
+    public static Stock getStock(String symbol, Context context) {
+        for (Stock stock: getStocks(context)) {
             if (stock.getSymbol().equals(symbol)) {
                 return stock;
             }
@@ -55,14 +92,14 @@ public class StockManager {
     }
 
 
-    public static void updateStocks() throws IOException{
+    public static void updateStocks(Context context) throws IOException{
         for (Stock stock: stocks) {
             Log.println(Log.INFO, "Stocks", "Updating stock " + stock.getSymbol());
-            updateStock(stock);
+            updateStock(stock, context);
         }
     }
 
-    public static boolean updateStock(Stock stock) throws IOException {
+    public static boolean updateStock(Stock stock, Context context) throws IOException {
         //Make the API connection and update the stock
         if (stock == null) {
             System.out.println("Stock is null");
@@ -111,6 +148,9 @@ public class StockManager {
 
             LocalDateTime localDateTime = desiredDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();            //Update lastUpdate
             stock.setLastUpdate(localDateTime);
+
+            DbStock dbStock = new DbStock(context);
+            dbStock.actualizarStock(stock.getSymbol(), stock.getName(), stock.getPrice(), stock.getMaxPrice(), stock.getMinPrice(), stock.getLastUpdate());
 
 
 

@@ -18,7 +18,9 @@ import android.widget.Toast;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
@@ -59,14 +61,15 @@ public class StockItemActivity extends AppCompatActivity {
         botonReturn = findViewById(R.id.buttom_retroceder_stock);
 
         if (StockManager.checkExistance(symbol)){
-            if (StockManager.getStock(symbol).getName() != null)
-                fullName.setText(StockManager.getStock(symbol).getName());
+            if (StockManager.getStock(symbol, this).getName() != null)
+                fullName.setText(StockManager.getStock(symbol, this).getName());
             //Switch favorite to true
             switchFavorite.setChecked(true);
-            stock = StockManager.getStock(symbol);
+            stock = StockManager.getStock(symbol, this);
         }else{
             stock = new Stock(symbol, null, 0, null);
-            StockManager.addStock(stock);
+            long id = StockManager.addStock(stock, this);
+            Log.i("StockItemActivity", "Stock insertado: symbol:" + stock.getSymbol() +  "con id: " + id);
         }
 
 
@@ -77,17 +80,18 @@ public class StockItemActivity extends AppCompatActivity {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        boolean error = StockManager.getStock(symbol).getPrice() == 0;
+        boolean error = StockManager.getStock(symbol, this).getPrice() == 0;
         if (error) {
             Toast.makeText(this, "No existe el símbolo", Toast.LENGTH_SHORT).show();
             openActivityStocks();
             return;
         }
 
-        price.setText(String.valueOf("Precio cierre: " + StockManager.getStock(symbol).getPrice()));
-        maxPrice.setText(String.valueOf("Precio máximo (24h): " + StockManager.getStock(symbol).getMaxPrice()));
-        minPrice.setText(String.valueOf("Precio mínimo (24h): " + StockManager.getStock(symbol).getMinPrice()));
-        LocalDateTime localDateTime = StockManager.getStock(symbol).getLastUpdate();
+        Stock stock2 = StockManager.getStock(symbol, this);
+        price.setText(String.valueOf("Precio cierre: " + stock2.getPrice()));
+        maxPrice.setText(String.valueOf("Precio máximo (24h): " + stock2.getMaxPrice()));
+        minPrice.setText(String.valueOf("Precio mínimo (24h): " + stock2.getMinPrice()));
+        LocalDateTime localDateTime = stock2.getLastUpdate();
 
         // Especificar el formato deseado (por ejemplo, "yyyy-MM-dd HH:mm:ss")
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
@@ -131,7 +135,7 @@ public class StockItemActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         // Get the stock
-        Stock stock = StockManager.getStock(title.getText().toString());
+        Stock stock = StockManager.getStock(title.getText().toString(), this);
         salir(stock);
 
 
@@ -152,20 +156,20 @@ public class StockItemActivity extends AppCompatActivity {
 
     }
     public void openActivityHistorial(){
-        salir(StockManager.getStock(title.getText().toString()));
+        salir(StockManager.getStock(title.getText().toString(), this));
         Intent intent = new Intent(this, HistorialActivity.class);
         startActivity(intent);
     }
 
     //Funcion para abrir la actividad de home
     public void openActivityHome(){
-        salir(StockManager.getStock(title.getText().toString()));
+        salir(StockManager.getStock(title.getText().toString(), this));
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
 
     public void openActivityStocks(){
-        salir(StockManager.getStock(title.getText().toString()));
+        salir(StockManager.getStock(title.getText().toString(), this));
         Intent intent = new Intent(this, StocksActivity.class);
         startActivity(intent);
     }

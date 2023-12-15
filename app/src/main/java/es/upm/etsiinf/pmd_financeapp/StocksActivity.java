@@ -43,7 +43,7 @@ public class StocksActivity extends AppCompatActivity {
         stocksListView = findViewById(R.id.stocks_list);
         emptyStocksList = findViewById(R.id.emptyListViewMessage);
 
-        ArrayList<Stock> stocks = (ArrayList<Stock>) StockManager.getStocks();
+        ArrayList<Stock> stocks = (ArrayList<Stock>) StockManager.getStocks(this);
         StocksAdapter stocksAdapter = new StocksAdapter(this, stocks);
 
         stocksListView.setAdapter(stocksAdapter);
