@@ -3,13 +3,17 @@ package es.upm.etsiinf.pmd_financeapp;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
 
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -191,7 +195,8 @@ public class AnnadirGasto extends AppCompatActivity {
             public void onClick(View v){
                 // TODO: GUARDAR GASTO en BBDD
                 //Crear notificacion
-                mostrarNotificacion("Gasto guardado");
+                //mostrarNotificacion("Gasto guardado");
+                makeNotification();
                 openActivityHome();
             }
         });
@@ -234,6 +239,13 @@ public class AnnadirGasto extends AppCompatActivity {
         });
 
 
+    }
+
+    private double obtenerNuevoBalance() {
+        DbTransacciones dbTransacciones = new DbTransacciones(this);
+        double ingresos = dbTransacciones.obtenerSumaIngresos();
+        double gastos = dbTransacciones.obtenerSumaGastos();
+        return ingresos - gastos;
     }
 
     // Tratar imagen subida
@@ -311,10 +323,53 @@ public class AnnadirGasto extends AppCompatActivity {
                 .setSmallIcon(R.drawable.ic_launcher_foreground)
                 .setContentTitle("App de Finanzas")
                 .setContentText(mensaje)
-                .setAutoCancel(true)
-                .addAction(R.drawable.ic_launcher_foreground, "Abrir app", null);
-
+                .setAutoCancel(true);
         notificationManager.notify(1, builder.build());
     }
+
+    private boolean isNotificationSent() {
+        // Obtener el estado de la notificación desde SharedPreferences
+        SharedPreferences prefs = getPreferences(Context.MODE_PRIVATE);
+        return prefs.getBoolean("notification_sent", false);
+    }
+
+    private void markNotificationAsSent() {
+        // Marcar que la notificación ha sido enviada en SharedPreferences
+        SharedPreferences prefs = getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putBoolean("notification_sent", true);
+        editor.apply();
+    }
+
+    private void makeNotification(){
+        String chanelID = "CHANNEL_ID";
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, chanelID);
+        builder.setSmallIcon(R.drawable.ic_launcher_foreground);
+        builder.setContentTitle("Gasto guardado");
+        builder.setContentText("Se ha guardado correctamente el gasto");
+        builder.setAutoCancel(true);
+        builder.setPriority(NotificationCompat.PRIORITY_DEFAULT);
+
+        Intent intent = new Intent(getApplicationContext(), HistorialActivity.class);
+        //intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, intent, PendingIntent.FLAG_MUTABLE);
+        //PendingIntent pendingIntent = PendingIntent.getActivity(this, 1, intent, PendingIntent.FLAG_CANCEL_CURRENT  | PendingIntent.FLAG_IMMUTABLE);
+        builder.setContentIntent(pendingIntent);
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            NotificationChannel notificationChannel = notificationManager.getNotificationChannel(chanelID);
+            if(notificationChannel == null){
+                int importance = NotificationManager.IMPORTANCE_HIGH;
+                notificationChannel = new NotificationChannel(chanelID, "NOTIFICATION_CHANNEL_NAME", importance);
+                notificationChannel.setLightColor(Color.GREEN);
+                notificationChannel.enableVibration(true);
+                notificationManager.createNotificationChannel(notificationChannel);
+            }
+        }
+        notificationManager.notify(0, builder.build());
+    }
+
 
 }

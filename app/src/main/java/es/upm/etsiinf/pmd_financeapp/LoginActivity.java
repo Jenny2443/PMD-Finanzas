@@ -26,9 +26,11 @@ public class LoginActivity extends AppCompatActivity {
     FirebaseAuth mAuth;
     ProgressBar progressBar;
 
-    CheckBox checkBox;
     public static final String FILE_NAME = "login";
     public static final String REMEMBER_ME_KEY = "remember_me";
+
+    public static final String SHARED_PREFS = "sharedPrefs";
+
     @Override
     public void onStart(){
         super.onStart();
@@ -51,8 +53,6 @@ public class LoginActivity extends AppCompatActivity {
 
         buttonLogin = findViewById(R.id.login_btn_login);
         progressBar = findViewById(R.id.login_progressBar);
-
-        checkBox = findViewById(R.id.login_checkBox);
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -82,27 +82,10 @@ public class LoginActivity extends AppCompatActivity {
                                 Log.i("LoginActivity", "signInWithEmail:onComplete:" + task.isSuccessful());
                                 progressBar.setVisibility(View.GONE);
                                 if (task.isSuccessful()) {
-                                    //Si el usuario ha marcado el checkbox, guardamos el email y la contraseña
-                                    boolean rememberMe = checkBox.isChecked();
-                                    if(checkBox.isChecked()){
-                                        SharedPreferences.Editor editor = getSharedPreferences(FILE_NAME, MODE_PRIVATE).edit();
-                                        editor.putBoolean(REMEMBER_ME_KEY, true);
-                                        editor.putString("email", email);
-                                        editor.apply();
-                                    }else{
-                                        SharedPreferences.Editor editor = getSharedPreferences(FILE_NAME, MODE_PRIVATE).edit();
-                                        editor.putString("email", "");
-                                        editor.putString("password", "");
-                                        editor.putBoolean(REMEMBER_ME_KEY, false);
-                                        editor.apply();
-                                    }
-
                                     Toast.makeText(LoginActivity.this, "Login correcto",
                                             Toast.LENGTH_SHORT).show();
                                     //Si se ha logeado correctamente, abrimos la actividad principal
                                     Intent intent = new Intent(LoginActivity.this, es.upm.etsiinf.pmd_financeapp.MainActivity.class);
-                                    intent.putExtra("checkbox",rememberMe);
-                                    Log.i("LoginActivity", "rememberMe: " + rememberMe);
                                     startActivity(intent);
                                     //finish();
                                 } else {

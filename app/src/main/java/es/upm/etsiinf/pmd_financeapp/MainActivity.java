@@ -86,8 +86,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         mAuth = FirebaseAuth.getInstance();
-        boolean checkRemember = getIntent().getBooleanExtra("checkbox", false);
         user = mAuth.getCurrentUser();
+
         if(user == null){
             Log.i("MainActivity", "onCreate: Redirigiendo a Login porq no ha checkeado remember me");
             Intent intent = new Intent(MainActivity.this, LoginActivity.class);
@@ -129,13 +129,13 @@ public class MainActivity extends AppCompatActivity {
         balance = ingresos + gasto;
         txtBalance.setText(String.format("Balance: %.2f €", balance));
 
-        if (balance < 5 && !isNotificationSent()) {
-            // Envía la notificación
-            makeNotification();
-
-            // Marca que la notificación ha sido enviada para que no se envíe de nuevo
-            markNotificationAsSent();
-        }
+//        if (balance < 5 && !isNotificationSent()) {
+//            // Envía la notificación
+//            makeNotification();
+//
+//            // Marca que la notificación ha sido enviada para que no se envíe de nuevo
+//            markNotificationAsSent();
+//        }
 
 
         //Inicializacion de boton de logout y su funcion
@@ -369,35 +369,35 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private void makeNotification(){
-        String chanelID = "CHANNEL_ID";
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, chanelID);
-        builder.setSmallIcon(R.drawable.ic_launcher_foreground);
-        builder.setContentTitle("Balance por debajo de 5€");
-        builder.setContentText("Tu balance está por debajo de los 5€, ingresa más dinero");
-        builder.setAutoCancel(true);
-        builder.setPriority(NotificationCompat.PRIORITY_DEFAULT);
-
-        Intent intent = new Intent(getApplicationContext(), HistorialActivity.class);
-        //intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, intent, PendingIntent.FLAG_MUTABLE);
-        //PendingIntent pendingIntent = PendingIntent.getActivity(this, 1, intent, PendingIntent.FLAG_CANCEL_CURRENT  | PendingIntent.FLAG_IMMUTABLE);
-        builder.setContentIntent(pendingIntent);
-        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
-            NotificationChannel notificationChannel = notificationManager.getNotificationChannel(chanelID);
-            if(notificationChannel == null){
-                int importance = NotificationManager.IMPORTANCE_HIGH;
-                notificationChannel = new NotificationChannel(chanelID, "NOTIFICATION_CHANNEL_NAME", importance);
-                notificationChannel.setLightColor(Color.GREEN);
-                notificationChannel.enableVibration(true);
-                notificationManager.createNotificationChannel(notificationChannel);
-            }
-        }
-        notificationManager.notify(0, builder.build());
-    }
+//    private void makeNotification(){
+//        String chanelID = "CHANNEL_ID";
+//        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, chanelID);
+//        builder.setSmallIcon(R.drawable.ic_launcher_foreground);
+//        builder.setContentTitle("Balance por debajo de 5€");
+//        builder.setContentText("Tu balance está por debajo de los 5€, ingresa más dinero");
+//        builder.setAutoCancel(true);
+//        builder.setPriority(NotificationCompat.PRIORITY_DEFAULT);
+//
+//        Intent intent = new Intent(getApplicationContext(), HistorialActivity.class);
+//        //intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//        PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, intent, PendingIntent.FLAG_MUTABLE);
+//        //PendingIntent pendingIntent = PendingIntent.getActivity(this, 1, intent, PendingIntent.FLAG_CANCEL_CURRENT  | PendingIntent.FLAG_IMMUTABLE);
+//        builder.setContentIntent(pendingIntent);
+//        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+//
+//        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+//            NotificationChannel notificationChannel = notificationManager.getNotificationChannel(chanelID);
+//            if(notificationChannel == null){
+//                int importance = NotificationManager.IMPORTANCE_HIGH;
+//                notificationChannel = new NotificationChannel(chanelID, "NOTIFICATION_CHANNEL_NAME", importance);
+//                notificationChannel.setLightColor(Color.GREEN);
+//                notificationChannel.enableVibration(true);
+//                notificationManager.createNotificationChannel(notificationChannel);
+//            }
+//        }
+//        notificationManager.notify(0, builder.build());
+//    }
 
     private boolean isNotificationSent() {
         // Obtener el estado de la notificación desde SharedPreferences
