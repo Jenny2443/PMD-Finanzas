@@ -163,4 +163,16 @@ public class DbTransacciones extends DBHelperTransacciones{
         return sumaGastos;
     }
 
+    // En la clase DbTransacciones
+
+    public Cursor obtenerTransaccionesPorCategoria(String categoria) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        // Define la consulta SQL para obtener las transacciones de una categoría
+        String query = "SELECT id AS _id, fecha, cantidad, categoria, imagen, notas FROM t_transacciones" + " WHERE " + "categoria = ?";
+
+        // Ejecuta la consulta con el valor de la categoría como argumento
+        return db.rawQuery(query, new String[]{categoria});
+    }
+
 }

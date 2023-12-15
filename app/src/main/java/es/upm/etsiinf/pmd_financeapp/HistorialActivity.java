@@ -1,7 +1,9 @@
 package es.upm.etsiinf.pmd_financeapp;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.drawable.BitmapDrawable;
@@ -31,6 +33,7 @@ public class HistorialActivity extends AppCompatActivity {
     public DbTransacciones dbTransacciones;
     public Cursor cursor;
     ListView listView;
+    ImageView btnFilter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +45,14 @@ public class HistorialActivity extends AppCompatActivity {
         tituloHistorial = findViewById(R.id.historial_title);
 
         listView = findViewById(R.id.historial_listview);
+        btnFilter = findViewById(R.id.historial_btnFilter);
+
+        btnFilter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mostrarDialogoCategorias();
+            }
+        });
 
 
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
@@ -175,6 +186,40 @@ public class HistorialActivity extends AppCompatActivity {
         // Llama a la función para obtener todas las transacciones y actualiza la interfaz de usuario
         // (Esta función debe contener la lógica para actualizar los datos que se muestran en tu lista, adaptador, etc.)
         dbTransacciones.obtenerTodasLasTransacciones();
+    }
+
+    private void mostrarDialogoCategorias() {
+        // Obtener las categorías disponibles (puedes obtenerlas de la base de datos)
+        String[] categorias = obtenerCategoriasDisponibles();
+
+        // Crear un diálogo con opciones de categorías
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Select Category");
+        builder.setItems(categorias, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // Filtrar las transacciones por la categoría seleccionada
+                String categoriaSeleccionada = categorias[which];
+                filtrarPorCategoria(categoriaSeleccionada);
+            }
+        });
+
+        // Mostrar el diálogo
+        builder.show();
+    }
+
+    private String[] obtenerCategoriasDisponibles() {
+        // Obtener las categorías disponibles (puedes obtenerlas de la base de datos)
+        return new String[]{"Casa", "Comida", "Ropa", "Salud", "Transporte", "Entetenimiento","Ahorros", "Depósitos", "Salario", "Ventas", "Activos", "Donaciones" };
+    }
+
+    private void filtrarPorCategoria(String categoria) {
+        // Obtener un nuevo cursor con las transacciones de la categoría seleccionada
+        Cursor nuevoCursor = dbTransacciones.obtenerTransaccionesPorCategoria(categoria);
+
+        // Actualizar el cursor del Adapter
+        SimpleCursorAdapter adapter = (SimpleCursorAdapter) listView.getAdapter();
+        adapter.changeCursor(nuevoCursor);
     }
 }
 
