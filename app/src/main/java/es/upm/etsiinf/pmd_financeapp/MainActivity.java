@@ -47,11 +47,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 
+import es.upm.etsiinf.pmd_financeapp.Util.StockJobUtil;
 import es.upm.etsiinf.pmd_financeapp.db.DBHelperStock;
 import es.upm.etsiinf.pmd_financeapp.db.DBHelperTransacciones;
 import es.upm.etsiinf.pmd_financeapp.db.DbTransacciones;
 
 public class MainActivity extends AppCompatActivity {
+    private static final String PREFS_NAME = "job_preferences";
+    private static final String JOB_SCHEDULED_KEY = "actualizar_API";
     Button btnAnadirGasto;
     Button btnAnadirIngreso;
     TextView txtBalance;
@@ -227,19 +230,19 @@ public class MainActivity extends AppCompatActivity {
 
         //StockJobUtil.scheduleJob(this);
 
-        // Verificar si el trabajo ya está programado
-//        SharedPreferences preferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-//        boolean jobScheduled = preferences.getBoolean(JOB_SCHEDULED_KEY, false);
+         //Verificar si el trabajo ya está programado
+        SharedPreferences preferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        boolean jobScheduled = preferences.getBoolean(JOB_SCHEDULED_KEY, false);
 
-//        if (!jobScheduled) {
-//            // Programar el trabajo utilizando JobScheduler
-//            StockJobUtil.scheduleJob(this);
-//
-//            // Marcar que el trabajo ya ha sido programado
-//            SharedPreferences.Editor editor = preferences.edit();
-//            editor.putBoolean(JOB_SCHEDULED_KEY, true);
-//            editor.apply();
-//        }
+        if (!jobScheduled) {
+            // Programar el trabajo utilizando JobScheduler
+            StockJobUtil.scheduleJob(this);
+
+            // Marcar que el trabajo ya ha sido programado
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putBoolean(JOB_SCHEDULED_KEY, true);
+            editor.apply();
+        }
     }
 
     private void crearPieChart() {
@@ -323,17 +326,4 @@ public class MainActivity extends AppCompatActivity {
 //        notificationManager.notify(0, builder.build());
 //    }
 
-    private boolean isNotificationSent() {
-        // Obtener el estado de la notificación desde SharedPreferences
-        SharedPreferences prefs = getPreferences(Context.MODE_PRIVATE);
-        return prefs.getBoolean("notification_sent", false);
-    }
-
-    private void markNotificationAsSent() {
-        // Marcar que la notificación ha sido enviada en SharedPreferences
-        SharedPreferences prefs = getPreferences(Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putBoolean("notification_sent", true);
-        editor.apply();
-    }
 }
