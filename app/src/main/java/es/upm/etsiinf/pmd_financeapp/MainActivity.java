@@ -215,7 +215,7 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(MainActivity.this, "Transaccion Base de datos creada correctamente " + dbHelperTransacciones.toString(), Toast.LENGTH_SHORT).show();
         }
 
-        StockJobUtil.scheduleJob(this);
+        //StockJobUtil.scheduleJob(this);
 
         // Verificar si el trabajo ya está programado
 //        SharedPreferences preferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
