@@ -43,11 +43,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 
+import es.upm.etsiinf.pmd_financeapp.Util.StockJobUtil;
 import es.upm.etsiinf.pmd_financeapp.db.DBHelperStock;
 import es.upm.etsiinf.pmd_financeapp.db.DBHelperTransacciones;
 import es.upm.etsiinf.pmd_financeapp.db.DbTransacciones;
 
 public class MainActivity extends AppCompatActivity {
+    private static final String PREFS_NAME = "prefs";
+    private static final String JOB_SCHEDULED_KEY = "actualizarAPIJob";
     Button btnAnadirGasto;
     Button btnAnadirIngreso;
     TextView txtBalance;
@@ -212,12 +215,12 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(MainActivity.this, "Transaccion Base de datos creada correctamente " + dbHelperTransacciones.toString(), Toast.LENGTH_SHORT).show();
         }
 
-        //StockJobUtil.scheduleJob(this);
+        StockJobUtil.scheduleJob(this);
 
         // Verificar si el trabajo ya está programado
 //        SharedPreferences preferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
 //        boolean jobScheduled = preferences.getBoolean(JOB_SCHEDULED_KEY, false);
-
+//
 //        if (!jobScheduled) {
 //            // Programar el trabajo utilizando JobScheduler
 //            StockJobUtil.scheduleJob(this);
@@ -331,15 +334,15 @@ public class MainActivity extends AppCompatActivity {
         pieChart.setDrawCenterText(true);
         pieChart.setCenterText("Gastos");
         pieChart.getLegend().setEnabled(true);
-//        Legend legend = pieChart.getLegend();
-//        legend.setVerticalAlignment(Legend.LegendVerticalAlignment.BOTTOM);
-//        legend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.CENTER);
-//        // Desplazar la leyenda hacia la izquierda a medida que se añaden más categorías
-//        if (countMap.size() > 1) {
-//            legend.setXEntrySpace(20f * (countMap.size() - 1));
-//        } else {
-//            legend.setXEntrySpace(20f);
-//        }
+        Legend legend = pieChart.getLegend();
+        legend.setVerticalAlignment(Legend.LegendVerticalAlignment.BOTTOM);
+        legend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.CENTER);
+        // Desplazar la leyenda hacia la izquierda a medida que se añaden más categorías
+        if (countMap.size() > 1) {
+            legend.setXEntrySpace(20f * (countMap.size() - 1));
+        } else {
+            legend.setXEntrySpace(20f);
+        }
         pieChart.invalidate();
     }
 
