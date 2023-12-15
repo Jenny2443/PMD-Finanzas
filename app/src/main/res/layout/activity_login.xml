@@ -43,6 +43,7 @@
             android:layout_height="wrap_content"
             android:hint="Contraseña"
             android:drawableLeft="@drawable/baseline_lock_24"
+            android:inputType="textPassword"
             android:drawablePadding="10dp"/>
     </com.google.android.material.textfield.TextInputLayout>
 

@@ -90,7 +90,7 @@ public class LoginActivity extends AppCompatActivity {
                                     //finish();
                                 } else {
                                     // If sign in fails, display a message to the user.
-                                    Toast.makeText(LoginActivity.this, "El login ha fallado",
+                                    Toast.makeText(LoginActivity.this, "Email/Contraseña incorrecta",
                                             Toast.LENGTH_SHORT).show();
                                 }
                             }
