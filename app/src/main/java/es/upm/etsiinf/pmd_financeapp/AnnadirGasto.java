@@ -49,8 +49,8 @@ public class AnnadirGasto extends AppCompatActivity {
     Calendar calendario = Calendar.getInstance();
     int anioActual = calendario.get(Calendar.YEAR);
     // Los meses se cuentan desde 0, por eso se suma 1
-    int mesActual = calendario.get(Calendar.MONTH) + 1;;
-    int diaActual = calendario.get(Calendar.DAY_OF_MONTH);;
+    int mesActual = calendario.get(Calendar.MONTH);
+    int diaActual = calendario.get(Calendar.DAY_OF_MONTH);
 
     // Declaración variables para mostrar calendario
     private DatePicker datePicker;

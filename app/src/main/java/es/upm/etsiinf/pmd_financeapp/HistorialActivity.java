@@ -2,6 +2,7 @@ package es.upm.etsiinf.pmd_financeapp;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -9,9 +10,11 @@ import android.database.Cursor;
 import android.graphics.drawable.BitmapDrawable;
 import android.media.Image;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
@@ -24,6 +27,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
+import java.util.Calendar;
+import java.util.Locale;
+
 import es.upm.etsiinf.pmd_financeapp.db.DbTransacciones;
 
 public class HistorialActivity extends AppCompatActivity {
@@ -33,7 +39,15 @@ public class HistorialActivity extends AppCompatActivity {
     public DbTransacciones dbTransacciones;
     public Cursor cursor;
     ListView listView;
-    ImageView btnFilter;
+    ImageView btnFilterCategoria;
+    ImageView btnFilterFecha;
+
+    Calendar calendario = Calendar.getInstance();
+    int anioActual = calendario.get(Calendar.YEAR);
+    // Los meses se cuentan desde 0, por eso se suma 1
+    int mesActual = calendario.get(Calendar.MONTH);;
+    int diaActual = calendario.get(Calendar.DAY_OF_MONTH);
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,12 +59,21 @@ public class HistorialActivity extends AppCompatActivity {
         tituloHistorial = findViewById(R.id.historial_title);
 
         listView = findViewById(R.id.historial_listview);
-        btnFilter = findViewById(R.id.historial_btnFilter);
+        btnFilterCategoria = findViewById(R.id.historial_btnFilter);
+        btnFilterFecha = findViewById(R.id.historial_calendar);
 
-        btnFilter.setOnClickListener(new View.OnClickListener() {
+;
+        btnFilterCategoria.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mostrarDialogoCategorias();
+            }
+        });
+
+        btnFilterFecha.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mostrarDatePickerDialog();
             }
         });
 
@@ -112,20 +135,23 @@ public class HistorialActivity extends AppCompatActivity {
                         int colFecha = cursor.getColumnIndex("fecha");
                         int colCantidad = cursor.getColumnIndex("cantidad");
                         int colCategoria = cursor.getColumnIndex("categoria");
-                        int identificadorTransaccion = cursor.getColumnIndex("_id");
+                        int colIdentificadorTransaccion = cursor.getColumnIndex("_id");
                         int colNotas = cursor.getColumnIndex("notas");
                         int colImg = cursor.getColumnIndex("imagen");
 
-                        if(colCategoria != -1 && colCantidad != -1 && colFecha != -1 && identificadorTransaccion != -1 && colNotas != -1 && colImg != -1) {
+                        if(colCategoria != -1 && colCantidad != -1 && colFecha != -1 && colIdentificadorTransaccion != -1 && colNotas != -1 && colImg != -1) {
                             String fecha = cursor.getString(colFecha);
                             double cantidad = cursor.getDouble(colCantidad);
                             String categoria = cursor.getString(colCategoria);
-                            identificadorTransaccion = cursor.getInt(identificadorTransaccion);
+                            int identificadorTransaccion = cursor.getInt(colIdentificadorTransaccion);
+                            Log.i("Historial", "identificadorTransaccion es: " + identificadorTransaccion);
                             String notas = cursor.getString(colNotas);
                             Toast.makeText(HistorialActivity.this, "Fecha: " + fecha + "\nCantidad: " + cantidad + "\nCategoria: " + categoria, Toast.LENGTH_SHORT).show();
 
+                            Log.i("Historial", "cantidad es: " + cantidad);
                             //Verificar si es gasto o ingreso
                             if (cantidad < 0) {
+                                Log.i("Historial", "Es gasto");
                                 Intent intent = new Intent(HistorialActivity.this, EditarGasto.class);
                                 intent.putExtra("fecha", fecha);
                                 intent.putExtra("cantidad", cantidad);
@@ -134,6 +160,7 @@ public class HistorialActivity extends AppCompatActivity {
                                 intent.putExtra("notas", notas);
                                 startActivity(intent);
                             } else {
+                                Log.i("Historial", "Es ingreso");
                                 Intent intent = new Intent(HistorialActivity.this, EditarIngreso.class);
                                 intent.putExtra("fecha", fecha);
                                 intent.putExtra("cantidad", cantidad);
@@ -160,6 +187,7 @@ public class HistorialActivity extends AppCompatActivity {
                 return false;
             }
         });
+
 
         // Establecer el adaptador en el ListView
         listView.setAdapter(adapter);
@@ -221,5 +249,35 @@ public class HistorialActivity extends AppCompatActivity {
         SimpleCursorAdapter adapter = (SimpleCursorAdapter) listView.getAdapter();
         adapter.changeCursor(nuevoCursor);
     }
+
+    private void mostrarDatePickerDialog() {
+        DatePickerDialog datePickerDialog = new DatePickerDialog(
+                this,
+                new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                        String fechaSeleccionada = dayOfMonth + "/" + (monthOfYear + 1) + "/" + year;
+                        // Filtra las transacciones por fecha
+                        filtrarPorFecha(fechaSeleccionada);
+                    }
+                },
+                anioActual, mesActual, diaActual
+        );
+
+        // Configura la fecha mínima y máxima (opcional)
+        //datePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
+        datePickerDialog.show();
+    }
+
+    private void filtrarPorFecha(String fecha) {
+        // Obtener un nuevo cursor con las transacciones en el rango de fechas seleccionado
+        Cursor nuevoCursor = dbTransacciones.obtenerTransaccionesPorFecha(fecha);
+
+        // Actualizar el cursor del Adapter
+        SimpleCursorAdapter adapter = (SimpleCursorAdapter) listView.getAdapter();
+        adapter.changeCursor(nuevoCursor);
+    }
+
+
 }
 

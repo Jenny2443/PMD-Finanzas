@@ -38,8 +38,8 @@ public class EditarIngreso extends AppCompatActivity {
     Calendar calendario = Calendar.getInstance();
     int anioActual = calendario.get(Calendar.YEAR);
     // Los meses se cuentan desde 0, por eso se suma 1
-    int mesActual = calendario.get(Calendar.MONTH) + 1;;
-    int diaActual = calendario.get(Calendar.DAY_OF_MONTH);;
+    int mesActual = calendario.get(Calendar.MONTH);
+    int diaActual = calendario.get(Calendar.DAY_OF_MONTH);
 
     // Declaración variables para mostrar calendario
     private DatePicker datePicker;
@@ -66,13 +66,11 @@ public class EditarIngreso extends AppCompatActivity {
     private FrameLayout guardado;
     private String datosCompartidos;
 
-    private ImageView AnIn_ok;
+    private ImageView EdIn_ok;
 
-    private ImageView AnIn_ctexto;
+    private ImageView EdIn_ctexto;
 
     public int identificadorTransaccion;
-    private ImageView EdIn_ok;
-    private ImageView EdIn_ctexto;
 
 
     @Override
@@ -92,6 +90,8 @@ public class EditarIngreso extends AppCompatActivity {
         // Iniciamos botones
         btnCancelar = findViewById(R.id.EdIn_btn_cancelar);
         btnGuardar = findViewById(R.id.EdIn_btn_guardar);
+
+        guardado = findViewById(R.id.EdIn_guardado);
 
         // Inicialización de la lista de categorías
         Spinner spinnerCat = findViewById(R.id.EdIn_categorias);
@@ -211,22 +211,21 @@ public class EditarIngreso extends AppCompatActivity {
                 //long id = dbTransacciones.insertarTransaccion(txt_fechaSeleccionada.getText().toString(), Double.parseDouble(txtCantidad.getText().toString()), categoriaSeleccionada,img, txtDescripcion.getText().toString());
 
                 //Actualizar en la bbdd
-                dbTransacciones.actualizarTransaccion(identificadorTransaccion, txt_fechaSeleccionada.getText().toString(), Double.parseDouble(txtCantidad.getText().toString()), categoriaSeleccionada, img, txtDescripcion.getText().toString());
-                Log.i("EditarIngreso", "Transaccion actualizada con id: " + identificadorTransaccion);
-                //Log.i("AnnadirIngreso", "Transaccion insertado con id: " + id);
+                dbTransacciones.actualizarTransaccion(identificadorTransaccion, txt_fechaSeleccionada.getText().toString(), Double.parseDouble(txtCantidad.getText().toString()), categoriaSeleccionada, img, txtDescripcion.getText().toString(),false);
+                Log.i("EditarIngreso", "Transaccion modificada");
                 mostrarGuardado();
             }
         });
 
-        //        EdIn_ok.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                // TODO: ACTUALIZAR GASTO en BBDD
-//                //Crear notificación
-//                mostrarNotificacion("Gasto actualizado");
-//                openActivityHome();
-//            }
-//        });
+                EdIn_ok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO: ACTUALIZAR GASTO en BBDD
+                //Crear notificación
+                //mostrarNotificacion("Gasto actualizado");
+                openActivityHome();
+            }
+        });
 
         EdIn_ctexto.setOnClickListener(new View.OnClickListener() {
             @Override

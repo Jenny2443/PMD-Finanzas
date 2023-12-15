@@ -7,7 +7,10 @@ import android.util.Log;
 import android.widget.ImageView;
 import android.database.sqlite.SQLiteDatabase;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 public class DbTransacciones extends DBHelperTransacciones{
     Context context;
@@ -67,16 +70,17 @@ public class DbTransacciones extends DBHelperTransacciones{
         }
     }
 
-    public void actualizarTransaccion(int id, String fecha, double cantidad, String categoria, ImageView imagen, String notas){
+    public void actualizarTransaccion(int id, String fecha, double cantidad, String categoria, ImageView imagen, String notas, boolean esGasto){
         try{
             DBHelperTransacciones dbHelper = new DBHelperTransacciones(context);
             //Creamos conexion
             SQLiteDatabase conn = dbHelper.getWritableDatabase();
 
+            double cantidadConSigno = esGasto ? -cantidad : cantidad;
             //Damos valores
             ContentValues values = new ContentValues();
             values.put("fecha", fecha.toString());
-            values.put("cantidad", cantidad);
+            values.put("cantidad", cantidadConSigno);
             values.put("categoria", categoria);
             if(imagen != null) {
                 values.put("imagen", imagen.toString());
@@ -174,5 +178,20 @@ public class DbTransacciones extends DBHelperTransacciones{
         // Ejecuta la consulta con el valor de la categoría como argumento
         return db.rawQuery(query, new String[]{categoria});
     }
+
+    public Cursor obtenerTransaccionesPorFecha(String fecha) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        // Realizar la consulta en la base de datos
+        String query = "SELECT id AS _id, fecha, cantidad, categoria, imagen, notas FROM t_transacciones" +
+                " WHERE fecha" + " >= ?";
+
+        String[] selectionArgs = {fecha};
+
+        return db.rawQuery(query, selectionArgs);
+    }
+
+
+
 
 }

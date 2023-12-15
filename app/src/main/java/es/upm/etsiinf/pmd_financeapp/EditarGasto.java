@@ -13,6 +13,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -42,8 +43,8 @@ public class EditarGasto extends AppCompatActivity {
     Calendar calendario = Calendar.getInstance();
     int anioActual = calendario.get(Calendar.YEAR);
     // Los meses se cuentan desde 0, por eso se suma 1
-    int mesActual = calendario.get(Calendar.MONTH) + 1;;
-    int diaActual = calendario.get(Calendar.DAY_OF_MONTH);;
+    int mesActual = calendario.get(Calendar.MONTH);
+    int diaActual = calendario.get(Calendar.DAY_OF_MONTH);
 
     // Declaración variables para mostrar calendario
     private DatePicker datePicker;
@@ -191,20 +192,21 @@ public class EditarGasto extends AppCompatActivity {
                         "€ en la categoría de " + catSeleccionada +
                         ". Notas: " + notas.getText().toString();
                 DbTransacciones dbTransacciones = new DbTransacciones(EditarGasto.this);
-                dbTransacciones.actualizarTransaccion(identificadorTransaccion, txt_fechaSeleccionada.getText().toString(), Double.parseDouble(EdGa_dinero.getText().toString()), catSeleccionada, img, notas.getText().toString());
+                dbTransacciones.actualizarTransaccion(identificadorTransaccion, txt_fechaSeleccionada.getText().toString(), Double.parseDouble(EdGa_dinero.getText().toString()), catSeleccionada, img, notas.getText().toString(),true);
+                Log.i("EditarGasto", "Transaccion modificada");
                 mostrarGuardado();
             }
         });
 
-//        EdGa_ok.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                // TODO: ACTUALIZAR GASTO en BBDD
-//                //Crear notificación
-//                mostrarNotificacion("Gasto actualizado");
-//                openActivityHome();
-//            }
-//        });
+        EdGa_ok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO: ACTUALIZAR GASTO en BBDD
+                //Crear notificación
+                //mostrarNotificacion("Gasto actualizado");
+                openActivityHome();
+            }
+        });
 
         EdGa_ctexto.setOnClickListener(new View.OnClickListener() {
             @Override
