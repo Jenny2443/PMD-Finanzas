@@ -26,7 +26,6 @@ public class LoginActivity extends AppCompatActivity {
     FirebaseAuth mAuth;
     ProgressBar progressBar;
 
-    CheckBox checkBox;
     private static final String FILE_NAME = "login";
     @Override
     public void onStart(){
@@ -50,9 +49,6 @@ public class LoginActivity extends AppCompatActivity {
 
         buttonLogin = findViewById(R.id.login_btn_login);
         progressBar = findViewById(R.id.login_progressBar);
-
-        checkBox = findViewById(R.id.login_checkBox);
-
         mAuth = FirebaseAuth.getInstance();
 
         SharedPreferences prefs = getSharedPreferences(FILE_NAME, MODE_PRIVATE);
@@ -81,19 +77,6 @@ public class LoginActivity extends AppCompatActivity {
                                 Log.i("LoginActivity", "signInWithEmail:onComplete:" + task.isSuccessful());
                                 progressBar.setVisibility(View.GONE);
                                 if (task.isSuccessful()) {
-                                    //Si el usuario ha marcado el checkbox, guardamos el email y la contraseña
-                                    if(checkBox.isChecked()){
-                                        SharedPreferences.Editor editor = getSharedPreferences(FILE_NAME, MODE_PRIVATE).edit();
-                                        editor.putString("email", email);
-                                        editor.putString("password", password);
-                                        editor.apply();
-                                    }else{
-                                        SharedPreferences.Editor editor = getSharedPreferences(FILE_NAME, MODE_PRIVATE).edit();
-                                        editor.putString("email", "");
-                                        editor.putString("password", "");
-                                        editor.apply();
-                                    }
-
                                     Toast.makeText(LoginActivity.this, "Login correcto",
                                             Toast.LENGTH_SHORT).show();
                                     //Si se ha logeado correctamente, abrimos la actividad principal

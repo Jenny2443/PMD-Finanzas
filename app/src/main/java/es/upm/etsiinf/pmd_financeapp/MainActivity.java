@@ -232,6 +232,29 @@ public class MainActivity extends AppCompatActivity {
 //        }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        bottomNavigationView.setSelectedItemId(R.id.menu_nav_action_home);
+        Toast.makeText(MainActivity.this, "onResume", Toast.LENGTH_SHORT).show();
+        // Actualizar el balance u otras partes de la interfaz de usuario aquí
+        double nuevoBalance = calcularNuevoBalance();
+        txtBalance.setText(String.format("Balance: %.2f €", nuevoBalance));
+
+        // Actualizar la gráfica u otras partes de la interfaz de usuario aquí
+        crearPieChart();
+    }
+
+    private double calcularNuevoBalance() {
+        //Obtenemos los ingresos y gastos de la bbdd
+        dbTransacciones = new DbTransacciones(this);
+        ingresos = dbTransacciones.obtenerSumaIngresos();
+        Log.i("MainActivity", "onResume: ingresos: " + ingresos);
+        gasto = dbTransacciones.obtenerSumaGastos();
+        Log.i("MainActivity", "onResume: gastos: " + gasto);
+        return ingresos + gasto;
+    }
+
 //    private void crearPieChart() {
 //        ArrayList<PieEntry> categorias = new ArrayList<>();
 //

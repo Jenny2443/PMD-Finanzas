@@ -138,8 +138,9 @@ public class HistorialActivity extends AppCompatActivity {
         startActivity(intent);
     }
     public void openActivityHome(){
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
+//        Intent intent = new Intent(this, MainActivity.class);
+//        startActivity(intent);
+        finish();
     }
 
     @Override
