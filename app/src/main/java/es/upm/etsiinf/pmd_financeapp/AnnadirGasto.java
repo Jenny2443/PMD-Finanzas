@@ -104,6 +104,7 @@ public class AnnadirGasto extends AppCompatActivity {
         spinnerCat.setAdapter(adapter);
 
         txt_fechaSeleccionada = findViewById(R.id.AnGa_fecha_seleccionada);
+        txt_fechaSeleccionada.setText(diaActual + "/" + (mesActual + 1) + "/" + anioActual);
 
         // Configuración de selección de categoría
         spinnerCat.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {

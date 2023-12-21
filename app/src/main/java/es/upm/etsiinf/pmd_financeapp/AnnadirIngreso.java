@@ -108,6 +108,7 @@ public class AnnadirIngreso extends AppCompatActivity {
 
         //Datos a recoger (fecha, categorio, cantidad, descripcion)
         txt_fechaSeleccionada = findViewById(R.id.AnIn_fecha_seleccionada);
+        txt_fechaSeleccionada.setText(diaActual + "/" + (mesActual + 1) + "/" + anioActual);
         txtCantidad = findViewById(R.id.AnIn_ent_cantidad);
         txtDescripcion = findViewById(R.id.AnIn_ent_notas);
 
