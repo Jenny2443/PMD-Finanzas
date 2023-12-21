@@ -303,7 +303,7 @@ public class AnnadirGasto extends AppCompatActivity {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, chanelID);
         builder.setSmallIcon(R.drawable.ic_launcher_foreground);
         builder.setContentTitle("App de finanzas");
-        builder.setContentText("Ingreso actualizado");
+        builder.setContentText("Gasto añadido");
         builder.setAutoCancel(true);
         builder.setPriority(NotificationCompat.PRIORITY_DEFAULT);
 

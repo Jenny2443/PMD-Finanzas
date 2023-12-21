@@ -1,10 +1,12 @@
 package es.upm.etsiinf.pmd_financeapp;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -71,7 +73,69 @@ public class HistorialActivity extends AppCompatActivity {
                 fromColumns,
                 toViews,
                 0
-        );
+        ){
+          @Override
+          public void bindView(View view, Context context, Cursor c){
+              super.bindView(view, context, c);
+
+              ImageView img = view.findViewById(R.id.historial_btn_delete);
+              @SuppressLint("Range") final int transaccionId = c.getInt(c.getColumnIndex("_id"));
+              img.setOnClickListener(new View.OnClickListener() {
+                  @Override
+                  public void onClick(View v) {
+                      Toast.makeText(HistorialActivity.this, "Borrar", Toast.LENGTH_SHORT).show();
+                      //int colId = c.getColumnIndex("_id");
+                      //int id = c.getInt(colId);
+                      dbTransacciones.borrarTransaccion(transaccionId);
+                      cursor = dbTransacciones.obtenerTodasLasTransacciones();
+                      ((SimpleCursorAdapter)listView.getAdapter()).changeCursor(cursor);
+                  }
+              });
+
+//              view.setOnClickListener(new View.OnClickListener() {
+//                  @Override
+//                  public void onClick(View v) {
+//                      Toast.makeText(HistorialActivity.this, "Editar", Toast.LENGTH_SHORT).show();
+//                      int colFecha = c.getColumnIndex("fecha");
+//                        int colCantidad = c.getColumnIndex("cantidad");
+//                        int colCategoria = c.getColumnIndex("categoria");
+//                        //int identificadorTransaccion = c.getColumnIndex("_id");
+//                        int colNotas = c.getColumnIndex("notas");
+//                        int colImg = c.getColumnIndex("imagen");
+//
+//                        if(colFecha != -1 && colCantidad != -1 && colCategoria != -1 && colNotas != -1 && colImg != -1) {
+//                            String fecha = c.getString(colFecha);
+//                            double cantidad = c.getDouble(colCantidad);
+//                            String categoria = c.getString(colCategoria);
+//                            //identificadorTransaccion = c.getInt(identificadorTransaccion);
+//                            String notas = c.getString(colNotas);
+//                            Toast.makeText(HistorialActivity.this, "Fecha: " + fecha + "\nCantidad: " + cantidad + "\nCategoria: " + categoria, Toast.LENGTH_SHORT).show();
+//
+//                            //Verificar si es gasto o ingreso
+//                            if (cantidad < 0) {
+//                                Log.i("HistorialActivity", "Es gasto");
+//                                Intent intent = new Intent(HistorialActivity.this, EditarGasto.class);
+//                                intent.putExtra("fecha", fecha);
+//                                intent.putExtra("cantidad", cantidad);
+//                                intent.putExtra("categoria", categoria);
+//                                intent.putExtra("id", transaccionId);
+//                                intent.putExtra("notas", notas);
+//                                startActivity(intent);
+//                            } else {
+//                                Log.i("HistorialActivity", "Es ingreso");
+//                                Intent intent = new Intent(HistorialActivity.this, EditarIngreso.class);
+//                                intent.putExtra("fecha", fecha);
+//                                intent.putExtra("cantidad", cantidad);
+//                                intent.putExtra("categoria", categoria);
+//                                intent.putExtra("id", transaccionId);
+//                                intent.putExtra("notas", notas);
+//                                startActivity(intent);
+//                            }
+//                        }
+//                  }
+//              });
+          }
+        };
         adapter.setViewBinder(new SimpleCursorAdapter.ViewBinder() {
             @SuppressLint("DefaultLocale")
             @Override
