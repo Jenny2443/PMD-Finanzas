@@ -3,9 +3,16 @@ package es.upm.etsiinf.pmd_financeapp;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -38,7 +45,7 @@ public class EditarIngreso extends AppCompatActivity {
     Calendar calendario = Calendar.getInstance();
     int anioActual = calendario.get(Calendar.YEAR);
     // Los meses se cuentan desde 0, por eso se suma 1
-    int mesActual = calendario.get(Calendar.MONTH) + 1;;
+    int mesActual = calendario.get(Calendar.MONTH);;
     int diaActual = calendario.get(Calendar.DAY_OF_MONTH);;
 
     // Declaración variables para mostrar calendario
@@ -88,10 +95,12 @@ public class EditarIngreso extends AppCompatActivity {
 
         EdIn_ok = findViewById(R.id.EdIn_im_ok);
         EdIn_ctexto = findViewById(R.id.EdIn_im_ctexto);
+        guardado = findViewById(R.id.EdIn_guardado);
 
         // Iniciamos botones
         btnCancelar = findViewById(R.id.EdIn_btn_cancelar);
         btnGuardar = findViewById(R.id.EdIn_btn_guardar);
+
 
         // Inicialización de la lista de categorías
         Spinner spinnerCat = findViewById(R.id.EdIn_categorias);
@@ -218,15 +227,16 @@ public class EditarIngreso extends AppCompatActivity {
             }
         });
 
-        //        EdIn_ok.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                // TODO: ACTUALIZAR GASTO en BBDD
-//                //Crear notificación
-//                mostrarNotificacion("Gasto actualizado");
-//                openActivityHome();
-//            }
-//        });
+        EdIn_ok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO: ACTUALIZAR GASTO en BBDD
+                //Crear notificación
+                makeNotification();
+                //openActivityHome();
+                openActivityHistorial();
+            }
+        });
 
         EdIn_ctexto.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -323,6 +333,36 @@ public class EditarIngreso extends AppCompatActivity {
 
         // Mostrar el selector de aplicaciones para compartir
         startActivity(Intent.createChooser(intent, "Compartir con"));
+    }
+
+        private void makeNotification(){
+        String chanelID = "CHANNEL_ID";
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, chanelID);
+        builder.setSmallIcon(R.drawable.ic_launcher_foreground);
+        builder.setContentTitle("App de finanzas");
+        builder.setContentText("Ingreso actualizado");
+        builder.setAutoCancel(true);
+        builder.setPriority(NotificationCompat.PRIORITY_DEFAULT);
+
+        Intent intent = new Intent(getApplicationContext(), HistorialActivity.class);
+        //intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, intent, PendingIntent.FLAG_MUTABLE);
+        //PendingIntent pendingIntent = PendingIntent.getActivity(this, 1, intent, PendingIntent.FLAG_CANCEL_CURRENT  | PendingIntent.FLAG_IMMUTABLE);
+        builder.setContentIntent(pendingIntent);
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            NotificationChannel notificationChannel = notificationManager.getNotificationChannel(chanelID);
+            if(notificationChannel == null){
+                int importance = NotificationManager.IMPORTANCE_HIGH;
+                notificationChannel = new NotificationChannel(chanelID, "NOTIFICATION_CHANNEL_NAME", importance);
+                notificationChannel.setLightColor(Color.GREEN);
+                notificationChannel.enableVibration(true);
+                notificationManager.createNotificationChannel(notificationChannel);
+            }
+        }
+        notificationManager.notify(0, builder.build());
     }
 
 

@@ -133,6 +133,18 @@ public class HistorialActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        bottomNavigationView.setSelectedItemId(R.id.menu_nav_action_history);
+        Toast.makeText(this, "onResume Historial", Toast.LENGTH_SHORT).show();
+
+        //Actualizar lista de transacciones
+        cursor = dbTransacciones.obtenerTodasLasTransacciones();
+        ((SimpleCursorAdapter)listView.getAdapter()).changeCursor(cursor);
+
+    }
+
     public void openActivityStocks(){
         Intent intent = new Intent(this, StocksActivity.class);
         startActivity(intent);
@@ -141,14 +153,6 @@ public class HistorialActivity extends AppCompatActivity {
 //        Intent intent = new Intent(this, MainActivity.class);
 //        startActivity(intent);
         finish();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        // Vuelve a cargar las transacciones cada vez que la actividad se reanuda
-        cargarTransacciones();
     }
 
     private void cargarTransacciones() {
