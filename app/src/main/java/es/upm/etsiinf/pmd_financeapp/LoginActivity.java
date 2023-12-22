@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -22,11 +23,11 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class LoginActivity extends AppCompatActivity {
     EditText editTextEmail, editTextPassw;
-    Button buttonLogin;
+    Button buttonLogin, buttonRegister;
     FirebaseAuth mAuth;
     ProgressBar progressBar;
 
-    private static final String FILE_NAME = "login";
+    //private static final String FILE_NAME = "login";
     @Override
     public void onStart(){
         super.onStart();
@@ -48,45 +49,80 @@ public class LoginActivity extends AppCompatActivity {
         editTextPassw = findViewById(R.id.login_txt_password);
 
         buttonLogin = findViewById(R.id.login_btn_login);
+        buttonRegister = findViewById(R.id.login_btn_register);
         progressBar = findViewById(R.id.login_progressBar);
         mAuth = FirebaseAuth.getInstance();
 
-        SharedPreferences prefs = getSharedPreferences(FILE_NAME, MODE_PRIVATE);
-        String email = prefs.getString("email", "");
-        String password = prefs.getString("password", "");
+        //SharedPreferences prefs = getSharedPreferences(FILE_NAME, MODE_PRIVATE);
+        //String email = prefs.getString("email", "");
+        //String password = prefs.getString("password", "");
+//
+//        editTextEmail.setText(email);
+//        editTextPassw.setText(password);
 
-        editTextEmail.setText(email);
-        editTextPassw.setText(password);
+        buttonRegister.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
         buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                String email = editTextEmail.getText().toString();
-                String password = editTextPassw.getText().toString();
-                if(email.isEmpty() || password.isEmpty()){
-                    Toast.makeText(LoginActivity.this, "Rellene todos los campos", Toast.LENGTH_SHORT).show();
+                progressBar.setVisibility(View.VISIBLE);
+                String email,password;
+                email = String.valueOf(editTextEmail.getText());
+                password = String.valueOf(editTextPassw.getText());
+                //String email = editTextEmail.getText().toString();
+                //String password = editTextPassw.getText().toString();
+                if(TextUtils.isEmpty(email)){
+                    Toast.makeText(LoginActivity.this, "Email is required", Toast.LENGTH_SHORT).show();
+                    //editTextEmail.setError("Email is required");
+                    return;
+                }
+                if(TextUtils.isEmpty(password)){
+                    Toast.makeText(LoginActivity.this, "Password is required", Toast.LENGTH_SHORT).show();
+                    //editTextPassw.setError("Password is required");
                     return;
                 }
 
-                progressBar.setVisibility(View.VISIBLE);
+//                mAuth.signInWithEmailAndPassword(email, password)
+//                        .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+//                            @Override
+//                            public void onComplete(@NonNull Task<AuthResult> task) {
+//                                Log.i("LoginActivity", "signInWithEmail:onComplete:" + task.isSuccessful());
+//                                progressBar.setVisibility(View.GONE);
+//                                if (task.isSuccessful()) {
+//                                    Toast.makeText(LoginActivity.this, "Login correcto",
+//                                            Toast.LENGTH_SHORT).show();
+//                                    //Si se ha logeado correctamente, abrimos la actividad principal
+//                                    Intent intent = new Intent(LoginActivity.this, es.upm.etsiinf.pmd_financeapp.MainActivity.class);
+//                                    intent.putExtra("checkbox",true);
+//                                    startActivity(intent);
+//                                    finish();
+//                                } else {
+//                                    // If sign in fails, display a message to the user.
+//                                    Toast.makeText(LoginActivity.this, "El login ha fallado",
+//                                            Toast.LENGTH_SHORT).show();
+//                                }
+//                            }
+//                        });
 
                 mAuth.signInWithEmailAndPassword(email, password)
                         .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
-                                Log.i("LoginActivity", "signInWithEmail:onComplete:" + task.isSuccessful());
                                 progressBar.setVisibility(View.GONE);
                                 if (task.isSuccessful()) {
-                                    Toast.makeText(LoginActivity.this, "Login correcto",
-                                            Toast.LENGTH_SHORT).show();
-                                    //Si se ha logeado correctamente, abrimos la actividad principal
-                                    Intent intent = new Intent(LoginActivity.this, es.upm.etsiinf.pmd_financeapp.MainActivity.class);
-                                    intent.putExtra("checkbox",true);
+                                    Toast.makeText(LoginActivity.this, "Login successful", Toast.LENGTH_SHORT).show();
+                                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                     startActivity(intent);
                                     finish();
                                 } else {
                                     // If sign in fails, display a message to the user.
-                                    Toast.makeText(LoginActivity.this, "El login ha fallado",
+                                    Toast.makeText(LoginActivity.this, "Authentication failed.",
                                             Toast.LENGTH_SHORT).show();
                                 }
                             }
