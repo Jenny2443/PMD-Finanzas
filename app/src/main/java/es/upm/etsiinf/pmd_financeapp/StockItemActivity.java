@@ -23,6 +23,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.List;
 
 import es.upm.etsiinf.pmd_financeapp.db.DbStock;
 
@@ -60,7 +61,7 @@ public class StockItemActivity extends AppCompatActivity {
         bottomNavigationView.setSelectedItemId(R.id.menu_nav_action_stocks);
         botonReturn = findViewById(R.id.buttom_retroceder_stock);
 
-        if (StockManager.checkExistance(symbol)){
+        if (StockManager.checkExistance(symbol, this)){
             if (StockManager.getStock(symbol, this).getName() != null)
                 fullName.setText(StockManager.getStock(symbol, this).getName());
             //Switch favorite to true
@@ -69,10 +70,13 @@ public class StockItemActivity extends AppCompatActivity {
         }else{
             stock = new Stock(symbol, null, 0, null);
             long id = StockManager.addStock(stock, this);
-            Log.i("StockItemActivity", "Stock insertado: symbol:" + stock.getSymbol() +  "con id: " + id);
+            Log.i("StockItemActivity", "Stock insertado: symbol: " + stock.getSymbol() +  " con id: " + id);
         }
 
-
+        List<Stock> stocks = StockManager.getStocks(this);
+        for (Stock s : stocks) {
+            Log.i("StockItemActivity", "Stock: " + s.getSymbol());
+        }
         Thread thread = new Thread(new DownloadStockManager(this, symbol) );
         thread.start();
         try {
@@ -145,7 +149,7 @@ public class StockItemActivity extends AppCompatActivity {
 
         if (!switchFavorite.isChecked()) {
             // If it is not, set the stock as not favorite
-            StockManager.removeStock(stock);
+            StockManager.removeStock(stock, this);
         }else {
             stock.setName(fullName.getText().toString());
             long id = dbStock.insertarStock(stock.getSymbol(), stock.getName(), stock.getPrice(), stock.getMaxPrice(), stock.getMinPrice(), stock.getLastUpdate());

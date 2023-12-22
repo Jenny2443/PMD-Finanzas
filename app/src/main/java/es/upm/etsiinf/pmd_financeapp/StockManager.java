@@ -51,7 +51,9 @@ public class StockManager {
 
 
 
-    public static void removeStock (Stock stock) {
+    public static void removeStock (Stock stock, Context context) {
+        DbStock dbStock = new DbStock(context);
+        dbStock.borrarStock(stock.getSymbol());
         stocks.remove(stock);
     }
 
@@ -63,10 +65,10 @@ public class StockManager {
         if (cursor != null && cursor.moveToFirst()) {
             do {
                 // Recupera los datos del cursor y crea un objeto Stock
-                if (cursor.getColumnIndex("ticker") == -1 || cursor.getColumnIndex("nombre") == -1 || cursor.getColumnIndex("precioCierre") == -1 || cursor.getColumnIndex("precioMax") == -1 || cursor.getColumnIndex("precioMin") == -1 || cursor.getColumnIndex("lastUpdate") == -1) {
+                if (cursor.getColumnIndex("_id") == -1 || cursor.getColumnIndex("nombre") == -1 || cursor.getColumnIndex("precioCierre") == -1 || cursor.getColumnIndex("precioMax") == -1 || cursor.getColumnIndex("precioMin") == -1 || cursor.getColumnIndex("lastUpdate") == -1) {
                     continue;
                 }
-                String ticker = cursor.getString(cursor.getColumnIndex("ticker"));
+                String ticker = cursor.getString(cursor.getColumnIndex("_id"));
                 String nombre = cursor.getString(cursor.getColumnIndex("nombre"));
                 double precioCierre = cursor.getDouble(cursor.getColumnIndex("precioCierre"));
                 double precioMax = cursor.getDouble(cursor.getColumnIndex("precioMax"));
@@ -198,7 +200,9 @@ public class StockManager {
 
     }
 
-    public static boolean checkExistance(String symbol){
+    public static boolean checkExistance(String symbol, Context context){
+
+        List<Stock> stocks = getStocks(context);
 
         for (Stock stock: stocks) {
             if (stock.getSymbol().equals(symbol)) {

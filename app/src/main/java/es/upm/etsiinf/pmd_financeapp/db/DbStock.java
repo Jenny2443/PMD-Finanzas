@@ -25,7 +25,7 @@ public class DbStock extends DBHelperStock{
 
             //Damos valores
             ContentValues values = new ContentValues();
-            values.put("ticker", ticker);
+            values.put("_id", ticker);
             values.put("nombre", nombre);
             values.put("precioCierre", precioCierre);
             values.put("precioMax", precioMax);
