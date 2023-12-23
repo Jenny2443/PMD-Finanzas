@@ -58,30 +58,24 @@ public class StockManager {
     }
 
     public static List<Stock> getStocks(Context context) {
-        List<Stock> stocks = new ArrayList<>();
+
         DbStock dbStock = new DbStock(context);
-        Cursor cursor = dbStock.obtenerTodasLosStocks();
+        List<Stock> stocks = dbStock.obtenerTodasLosStocks();
+        return stocks;
 
-        if (cursor != null && cursor.moveToFirst()) {
-            do {
-                // Recupera los datos del cursor y crea un objeto Stock
-                if (cursor.getColumnIndex("_id") == -1 || cursor.getColumnIndex("nombre") == -1 || cursor.getColumnIndex("precioCierre") == -1 || cursor.getColumnIndex("precioMax") == -1 || cursor.getColumnIndex("precioMin") == -1 || cursor.getColumnIndex("lastUpdate") == -1) {
-                    continue;
-                }
-                String ticker = cursor.getString(cursor.getColumnIndex("_id"));
-                String nombre = cursor.getString(cursor.getColumnIndex("nombre"));
-                double precioCierre = cursor.getDouble(cursor.getColumnIndex("precioCierre"));
-                double precioMax = cursor.getDouble(cursor.getColumnIndex("precioMax"));
-                double precioMin = cursor.getDouble(cursor.getColumnIndex("precioMin"));
-                LocalDateTime lastUpdate = LocalDateTime.parse(cursor.getString(cursor.getColumnIndex("lastUpdate")));
-
-                Stock stock = new Stock(ticker, nombre, precioCierre, precioMax, precioMin, lastUpdate);
-                stocks.add(stock);
-            } while (cursor.moveToNext());
-            cursor.close();
-        }
+        /*
+        List<Stock> stocks = new ArrayList<>();
+        Stock stock1 = new Stock("AAPL", "Apple Inc.", 150, 200, 100, null);
+        Stock stock2 = new Stock("GOOGL", "Alphabet Inc.", 150, 200, 100, null);
+        Stock stock3 = new Stock("AMZN", "Amazon.com, Inc.", 150, 200, 100, null);
+        stocks.add(stock1);
+        stocks.add(stock2);
+        stocks.add(stock3);
 
         return stocks;
+        */
+
+
     }
 
     public static Stock getStock(String symbol, Context context) {
@@ -101,12 +95,32 @@ public class StockManager {
         }
     }
 
+    public static void saveStock(Stock stock , Context context) {
+        /**
+         * This method saves the stock in the database
+         */
+        DbStock dbStock = new DbStock(context);
+        if (checkExistance(stock.getSymbol(), context)) {
+            dbStock.actualizarStock(stock.getSymbol(), stock.getName(), stock.getPrice(), stock.getMaxPrice(), stock.getMinPrice(), stock.getLastUpdate());
+        } else {
+            dbStock.insertarStock(stock.getSymbol(), stock.getName(), stock.getPrice(), stock.getMaxPrice(), stock.getMinPrice(), stock.getLastUpdate());
+        }
+    }
+
     public static boolean updateStock(Stock stock, Context context) throws IOException {
+        /**
+         * This method updates the stock by reference
+         * 1. Make the API connection
+         * 2. Update the stock by reference
+         */
         //Make the API connection and update the stock
         if (stock == null) {
             System.out.println("Stock is null");
             return false;
         }
+        Log.println(Log.INFO, "Stocks", "Updating stock " + stock);
+
+
         if (API_KEY == null || API_KEY.isEmpty()) {
             System.err.println("Make sure you set your polygon API key in the POLYGON_API_KEY environment variable!");
             System.exit(1);
@@ -151,10 +165,6 @@ public class StockManager {
             LocalDateTime localDateTime = desiredDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();            //Update lastUpdate
             stock.setLastUpdate(localDateTime);
 
-            DbStock dbStock = new DbStock(context);
-            dbStock.actualizarStock(stock.getSymbol(), stock.getName(), stock.getPrice(), stock.getMaxPrice(), stock.getMinPrice(), stock.getLastUpdate());
-
-
 
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -162,6 +172,16 @@ public class StockManager {
             throw new RuntimeException(e);
         }
 
+
+        /*
+        //BORRAR ESTO
+        stock.setPrice(100);
+        stock.setMaxPrice(200);
+        stock.setMinPrice(50);
+        stock.setLastUpdate(LocalDateTime.now());
+        */
+
+        Log.println(Log.INFO, "Stocks", "Stock updated: Stock: " + stock);
         return true;
 
 

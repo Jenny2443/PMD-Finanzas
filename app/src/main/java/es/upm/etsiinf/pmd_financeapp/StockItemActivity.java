@@ -43,7 +43,6 @@ public class StockItemActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Stock stock;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stock_item);
 
@@ -61,50 +60,38 @@ public class StockItemActivity extends AppCompatActivity {
         bottomNavigationView.setSelectedItemId(R.id.menu_nav_action_stocks);
         botonReturn = findViewById(R.id.buttom_retroceder_stock);
 
+        Stock stock;
         if (StockManager.checkExistance(symbol, this)){
-            if (StockManager.getStock(symbol, this).getName() != null)
-                fullName.setText(StockManager.getStock(symbol, this).getName());
-            //Switch favorite to true
+            // Si existe, obtener el stock de la base de datos
             switchFavorite.setChecked(true);
             stock = StockManager.getStock(symbol, this);
         }else{
+            // Si no, lo creamos
             stock = new Stock(symbol, null, 0, null);
-            long id = StockManager.addStock(stock, this);
-            Log.i("StockItemActivity", "Stock insertado: symbol: " + stock.getSymbol() +  " con id: " + id);
         }
 
-        List<Stock> stocks = StockManager.getStocks(this);
-        for (Stock s : stocks) {
-            Log.i("StockItemActivity", "Stock: " + s.getSymbol());
-        }
-        Thread thread = new Thread(new DownloadStockManager(this, symbol) );
+        Thread thread = new Thread(new DownloadStockManager(this, stock) );
         thread.start();
         try {
             thread.join();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        boolean error;
-        if (StockManager.getStock(symbol, this) == null) {
-            error = true;
-        } else if (StockManager.getStock(symbol, this).getPrice() == 0) {
-            error = true;
-        } else {
-            error = false;
-
-        }
+        boolean error = stock == null || stock.getPrice() == 0;
+        Log.println(Log.INFO, "Stocks", "Stock: " + stock);
         if (error) {
             Toast.makeText(this, "No existe el símbolo", Toast.LENGTH_SHORT).show();
-            openActivityStocks();
+            Intent intent = new Intent(this, StocksActivity.class);
+            startActivity(intent);
             return;
         }
 
-        Stock stock2 = StockManager.getStock(symbol, this);
-        price.setText(String.valueOf("Precio cierre: " + stock2.getPrice()));
-        maxPrice.setText(String.valueOf("Precio máximo (24h): " + stock2.getMaxPrice()));
-        minPrice.setText(String.valueOf("Precio mínimo (24h): " + stock2.getMinPrice()));
-        LocalDateTime localDateTime = stock2.getLastUpdate();
-
+        fullName.setText(stock.getName());
+        price.setText(String.valueOf("Precio cierre: " + stock.getPrice()));
+        maxPrice.setText(String.valueOf("Precio máximo (24h): " + stock.getMaxPrice()));
+        minPrice.setText(String.valueOf("Precio mínimo (24h): " + stock.getMinPrice()));
+        LocalDateTime localDateTime = stock.getLastUpdate();
+        if (localDateTime == null) localDateTime = LocalDateTime.now();
         // Especificar el formato deseado (por ejemplo, "yyyy-MM-dd HH:mm:ss")
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
@@ -121,12 +108,15 @@ public class StockItemActivity extends AppCompatActivity {
                 int id = item.getItemId();
                 if(id == R.id.menu_nav_action_home) {
                     Toast.makeText(StockItemActivity.this, "Home", Toast.LENGTH_SHORT).show();
+                    salir(stock);
                     openActivityHome();
                 }else if(id == R.id.menu_nav_action_stocks) {
                     Toast.makeText(StockItemActivity.this, "Stocks", Toast.LENGTH_SHORT).show();
+                    salir(stock);
                     openActivityStocks();
                 }else if(id == R.id.menu_nav_action_history) {
                     Toast.makeText(StockItemActivity.this, "Historial", Toast.LENGTH_SHORT).show();
+                    salir(stock);
                     openActivityHistorial();
                 }
                 return true;
@@ -148,27 +138,35 @@ public class StockItemActivity extends AppCompatActivity {
         super.onPause();
         // Get the stock
         Stock stock = StockManager.getStock(title.getText().toString(), this);
-        salir(stock);
+        //salir(stock);
 
 
     }
 
     private void salir(Stock stock) {
-
-        if (!switchFavorite.isChecked()) {
-            // If it is not, set the stock as not favorite
-            StockManager.removeStock(stock, this);
-        }else {
-            stock.setName(fullName.getText().toString());
-            long id = dbStock.insertarStock(stock.getSymbol(), stock.getName(), stock.getPrice(), stock.getMaxPrice(), stock.getMinPrice(), stock.getLastUpdate());
-            //dbStock.borrarStock(stock.getSymbol());
-            //Log.i("StockItemActivity", "Stock insertado: nombre:" + stock.getName() +  "con id: " + id);
-            Log.i("StockItemActivity", "Stock borrado: nombre:" + stock.getName());
+        // Si Stock está en favoritos
+        Log.println(Log.INFO, "Stocks", "[SALIR] Stock: " + stock);
+        if (StockManager.checkExistance(stock.getSymbol(), this)) {
+            if (switchFavorite.isChecked()) {
+                //Actualizar nombre
+                stock.setName(fullName.getText().toString());
+                //Guardar stock
+                StockManager.saveStock(stock, this);
+            } else {
+                //Borrar stock
+                StockManager.removeStock(stock, this);
+            }
+        }else{
+            if (switchFavorite.isChecked()) {
+                //Actualizar nombre
+                stock.setName(fullName.getText().toString());
+                //Guardar stock
+                StockManager.saveStock(stock, this);
+            }
         }
 
     }
     public void openActivityHistorial(){
-        salir(StockManager.getStock(title.getText().toString(), this));
         Intent intent = new Intent(this, HistorialActivity.class);
         startActivity(intent);
     }
@@ -181,7 +179,6 @@ public class StockItemActivity extends AppCompatActivity {
     }
 
     public void openActivityStocks(){
-        salir(StockManager.getStock(title.getText().toString(), this));
         Intent intent = new Intent(this, StocksActivity.class);
         startActivity(intent);
     }
