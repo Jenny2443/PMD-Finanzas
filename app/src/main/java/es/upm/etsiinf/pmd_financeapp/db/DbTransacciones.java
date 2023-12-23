@@ -172,4 +172,17 @@ public class DbTransacciones extends DBHelperTransacciones{
         // Ejecuta la consulta con el valor de la categoría como argumento
         return db.rawQuery(query, new String[]{categoria});
     }
+
+    public Cursor obtenerTransaccionesPorRangoFechas(String fechaInicio, String fechaFinal) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        // Consulta SQL para obtener las transacciones en el rango de fechas
+        String query = "SELECT * FROM nombre_de_la_tabla WHERE fecha BETWEEN ? AND ?";
+
+        // Parámetros de la consulta
+        String[] params = {fechaInicio, fechaFinal};
+
+        // Ejecutar la consulta
+        return db.rawQuery(query, params);
+    }
 }

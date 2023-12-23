@@ -2,6 +2,7 @@ package es.upm.etsiinf.pmd_financeapp;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -12,6 +13,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
@@ -23,6 +25,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
+
+import java.util.Calendar;
 
 import es.upm.etsiinf.pmd_financeapp.db.DbTransacciones;
 
@@ -45,8 +49,6 @@ public class HistorialActivity extends AppCompatActivity {
 
         tituloHistorial = findViewById(R.id.historial_title);
         filter = findViewById(R.id.historial_btnFilter);
-        calendar = findViewById(R.id.historial_calendar);
-
         filter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -249,14 +251,7 @@ public class HistorialActivity extends AppCompatActivity {
         // Crear un diálogo con opciones de categorías
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Selecciona la categoría");
-//        builder.setItems(categorias, new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//                // Filtrar las transacciones por la categoría seleccionada
-//                String categoriaSeleccionada = categorias[which];
-//                filtrarPorCategoria(categoriaSeleccionada);
-//            }
-//        });
+//
         builder.setItems(opciones, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
