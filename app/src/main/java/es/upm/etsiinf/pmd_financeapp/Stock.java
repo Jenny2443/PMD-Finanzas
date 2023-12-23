@@ -1,7 +1,6 @@
 package es.upm.etsiinf.pmd_financeapp;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 
 public class Stock {
     private String symbol;
@@ -31,21 +30,22 @@ public class Stock {
     }
 
     public double getPrice() {
-        return price;
+
+        return  price;
     }
 
     public void setPrice(double price) { this.price = price;}
 
-    public double getMaxPrice() {
-        return maxPrice;
+    public float getMaxPrice() {
+        return (float) maxPrice;
     }
 
     public void setMaxPrice(double maxPrice) {
         this.maxPrice = maxPrice;
     }
 
-    public double getMinPrice() {
-        return minPrice;
+    public float getMinPrice() {
+        return (float) minPrice;
     }
 
     public void setMinPrice(double minPrice) {
@@ -66,6 +66,14 @@ public class Stock {
         this.symbol = symbol;
         this.name = name;
         this.price = price;
+        this.lastUpdate = lastUpdate;
+    }
+    public Stock(String symbol, String name, double price, double maxPrice, double minPrice, LocalDateTime lastUpdate) {
+        this.symbol = symbol;
+        this.name = name;
+        this.price = price;
+        this.maxPrice = maxPrice;
+        this.minPrice = minPrice;
         this.lastUpdate = lastUpdate;
     }
     @Override

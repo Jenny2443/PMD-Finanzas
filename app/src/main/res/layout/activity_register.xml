@@ -11,12 +11,12 @@
     tools:context=".LoginActivity">
 
     <TextView
-        android:id="@+id/txt_login"
+        android:id="@+id/txt_register"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"
         android:gravity="center"
-        android:text="INICIAR SESIÓN"
+        android:text="REGISTRARSE"
         android:textSize="25sp"
         android:textStyle="bold" />
 
@@ -25,7 +25,7 @@
         android:layout_height="wrap_content">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/login_txt_email"
+            android:id="@+id/register_txt_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Email"
@@ -38,7 +38,7 @@
         android:layout_height="wrap_content">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/login_txt_password"
+            android:id="@+id/register_txt_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Contraseña"
@@ -48,25 +48,25 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <ProgressBar
-        android:id="@+id/login_progressBar"
+        android:id="@+id/register_progressBar"
         android:visibility="gone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         />
 
     <Button
-        android:id="@+id/login_btn_login"
+        android:id="@+id/register_btn_register"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
-        android:text="Iniciar sesión" />
+        android:text="REGISTRARSE" />
 
     <Button
-        android:id="@+id/login_btn_register"
+        android:id="@+id/register_btn_login"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
-        android:text="Registrarse" />
+        android:text="INICIAR SESIÓN" />
 
 
 

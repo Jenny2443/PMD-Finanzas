@@ -19,6 +19,8 @@ import com.google.android.material.navigation.NavigationBarView;
 
 import java.util.ArrayList;
 
+import es.upm.etsiinf.pmd_financeapp.db.DbStock;
+
 public class StocksActivity extends AppCompatActivity {
     public BottomNavigationView bottomNavigationView;
     public TextView tituloStocks;
@@ -43,7 +45,7 @@ public class StocksActivity extends AppCompatActivity {
         stocksListView = findViewById(R.id.stocks_list);
         emptyStocksList = findViewById(R.id.emptyListViewMessage);
 
-        ArrayList<Stock> stocks = (ArrayList<Stock>) StockManager.getStocks();
+        ArrayList<Stock> stocks = (ArrayList<Stock>) StockManager.getStocks(this);
         StocksAdapter stocksAdapter = new StocksAdapter(this, stocks);
 
         stocksListView.setAdapter(stocksAdapter);

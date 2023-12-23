@@ -1,5 +1,7 @@
 package es.upm.etsiinf.pmd_financeapp;
 
+import android.content.Context;
+import android.database.Cursor;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -22,10 +24,12 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import es.upm.etsiinf.pmd_financeapp.db.DbStock;
 
 import io.polygon.kotlin.sdk.rest.PolygonRestClient;
 
 public class StockManager {
+
     private static final String API_KEY = "uAoBHhszznSW8IO1YhZhMhfcUfGuBE4p";
     private static List<Stock> stocks = new ArrayList<>();
 
@@ -33,20 +37,49 @@ public class StockManager {
         return API_KEY;
     }
 
-    public static void  addStock (Stock stock) {
-        stocks.add(stock);
+    public static long  addStock (Stock stock, Context context) {
+        DbStock dbStock = new DbStock(context);
+
+        String ticker = stock.getSymbol();
+        String nombre = stock.getName();
+        double precioCierre = stock.getPrice();
+        double precioMax = stock.getMaxPrice();
+        double precioMin = stock.getMinPrice();
+        LocalDateTime lastUpdate = stock.getLastUpdate();
+        return dbStock.insertarStock(ticker, nombre, precioCierre, precioMax, precioMin, lastUpdate);
     }
 
-    public static void removeStock (Stock stock) {
+
+
+    public static void removeStock (Stock stock, Context context) {
+        DbStock dbStock = new DbStock(context);
+        dbStock.borrarStock(stock.getSymbol());
         stocks.remove(stock);
     }
 
-    public static List<Stock> getStocks() {
+    public static List<Stock> getStocks(Context context) {
+
+        DbStock dbStock = new DbStock(context);
+        List<Stock> stocks = dbStock.obtenerTodasLosStocks();
         return stocks;
+
+        /*
+        List<Stock> stocks = new ArrayList<>();
+        Stock stock1 = new Stock("AAPL", "Apple Inc.", 150, 200, 100, null);
+        Stock stock2 = new Stock("GOOGL", "Alphabet Inc.", 150, 200, 100, null);
+        Stock stock3 = new Stock("AMZN", "Amazon.com, Inc.", 150, 200, 100, null);
+        stocks.add(stock1);
+        stocks.add(stock2);
+        stocks.add(stock3);
+
+        return stocks;
+        */
+
+
     }
 
-    public static Stock getStock(String symbol) {
-        for (Stock stock: stocks) {
+    public static Stock getStock(String symbol, Context context) {
+        for (Stock stock: getStocks(context)) {
             if (stock.getSymbol().equals(symbol)) {
                 return stock;
             }
@@ -55,19 +88,39 @@ public class StockManager {
     }
 
 
-    public static void updateStocks() throws IOException{
+    public static void updateStocks(Context context) throws IOException{
         for (Stock stock: stocks) {
             Log.println(Log.INFO, "Stocks", "Updating stock " + stock.getSymbol());
-            updateStock(stock);
+            updateStock(stock, context);
         }
     }
 
-    public static boolean updateStock(Stock stock) throws IOException {
+    public static void saveStock(Stock stock , Context context) {
+        /**
+         * This method saves the stock in the database
+         */
+        DbStock dbStock = new DbStock(context);
+        if (checkExistance(stock.getSymbol(), context)) {
+            dbStock.actualizarStock(stock.getSymbol(), stock.getName(), stock.getPrice(), stock.getMaxPrice(), stock.getMinPrice(), stock.getLastUpdate());
+        } else {
+            dbStock.insertarStock(stock.getSymbol(), stock.getName(), stock.getPrice(), stock.getMaxPrice(), stock.getMinPrice(), stock.getLastUpdate());
+        }
+    }
+
+    public static boolean updateStock(Stock stock, Context context) throws IOException {
+        /**
+         * This method updates the stock by reference
+         * 1. Make the API connection
+         * 2. Update the stock by reference
+         */
         //Make the API connection and update the stock
         if (stock == null) {
             System.out.println("Stock is null");
             return false;
         }
+        Log.println(Log.INFO, "Stocks", "Updating stock " + stock);
+
+
         if (API_KEY == null || API_KEY.isEmpty()) {
             System.err.println("Make sure you set your polygon API key in the POLYGON_API_KEY environment variable!");
             System.exit(1);
@@ -113,13 +166,22 @@ public class StockManager {
             stock.setLastUpdate(localDateTime);
 
 
-
         } catch (IOException e) {
             throw new RuntimeException(e);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
 
+
+        /*
+        //BORRAR ESTO
+        stock.setPrice(100);
+        stock.setMaxPrice(200);
+        stock.setMinPrice(50);
+        stock.setLastUpdate(LocalDateTime.now());
+        */
+
+        Log.println(Log.INFO, "Stocks", "Stock updated: Stock: " + stock);
         return true;
 
 
@@ -158,7 +220,9 @@ public class StockManager {
 
     }
 
-    public static boolean checkExistance(String symbol){
+    public static boolean checkExistance(String symbol, Context context){
+
+        List<Stock> stocks = getStocks(context);
 
         for (Stock stock: stocks) {
             if (stock.getSymbol().equals(symbol)) {

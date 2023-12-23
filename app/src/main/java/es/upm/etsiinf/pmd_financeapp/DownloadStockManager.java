@@ -10,20 +10,18 @@ import java.io.IOException;
 
 public class DownloadStockManager implements Runnable{
 
-    private String symbol;
+    private Stock stock;
     private Context context;
 
 
-    public DownloadStockManager(Context context, String symbol) {
+    public DownloadStockManager(Context context, Stock stock) {
         this.context = context;
-        this.symbol = symbol;
+        this.stock = stock;
     }
     @Override
     public void run() {
         try {
-            Log.println(Log.INFO, "Stocks", "Updating stock " + symbol);
-            Stock stock = StockManager.getStock(symbol);
-            if(StockManager.updateStock(stock)) {
+            if(StockManager.updateStock(stock, context)) {
                 Log.println(Log.INFO, "Stocks", "Stock updated");
             } else {
                 Log.println(Log.INFO, "Stocks", "Stock not updated");

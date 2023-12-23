@@ -43,11 +43,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 
+import es.upm.etsiinf.pmd_financeapp.Util.StockJobUtil;
 import es.upm.etsiinf.pmd_financeapp.db.DBHelperStock;
 import es.upm.etsiinf.pmd_financeapp.db.DBHelperTransacciones;
 import es.upm.etsiinf.pmd_financeapp.db.DbTransacciones;
 
 public class MainActivity extends AppCompatActivity {
+    private static final String PREFS_NAME = "prefs";
+    private static final String JOB_SCHEDULED_KEY = "actualizarAPIJob";
     Button btnAnadirGasto;
     Button btnAnadirIngreso;
     TextView txtBalance;
@@ -217,7 +220,7 @@ public class MainActivity extends AppCompatActivity {
         // Verificar si el trabajo ya está programado
 //        SharedPreferences preferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
 //        boolean jobScheduled = preferences.getBoolean(JOB_SCHEDULED_KEY, false);
-
+//
 //        if (!jobScheduled) {
 //            // Programar el trabajo utilizando JobScheduler
 //            StockJobUtil.scheduleJob(this);
@@ -227,6 +230,29 @@ public class MainActivity extends AppCompatActivity {
 //            editor.putBoolean(JOB_SCHEDULED_KEY, true);
 //            editor.apply();
 //        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        bottomNavigationView.setSelectedItemId(R.id.menu_nav_action_home);
+        Toast.makeText(MainActivity.this, "onResume", Toast.LENGTH_SHORT).show();
+        // Actualizar el balance u otras partes de la interfaz de usuario aquí
+        double nuevoBalance = calcularNuevoBalance();
+        txtBalance.setText(String.format("Balance: %.2f €", nuevoBalance));
+
+        // Actualizar la gráfica u otras partes de la interfaz de usuario aquí
+        crearPieChart();
+    }
+
+    private double calcularNuevoBalance() {
+        //Obtenemos los ingresos y gastos de la bbdd
+        dbTransacciones = new DbTransacciones(this);
+        ingresos = dbTransacciones.obtenerSumaIngresos();
+        Log.i("MainActivity", "onResume: ingresos: " + ingresos);
+        gasto = dbTransacciones.obtenerSumaGastos();
+        Log.i("MainActivity", "onResume: gastos: " + gasto);
+        return ingresos + gasto;
     }
 
 //    private void crearPieChart() {
@@ -331,15 +357,15 @@ public class MainActivity extends AppCompatActivity {
         pieChart.setDrawCenterText(true);
         pieChart.setCenterText("Gastos");
         pieChart.getLegend().setEnabled(true);
-//        Legend legend = pieChart.getLegend();
-//        legend.setVerticalAlignment(Legend.LegendVerticalAlignment.BOTTOM);
-//        legend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.CENTER);
-//        // Desplazar la leyenda hacia la izquierda a medida que se añaden más categorías
-//        if (countMap.size() > 1) {
-//            legend.setXEntrySpace(20f * (countMap.size() - 1));
-//        } else {
-//            legend.setXEntrySpace(20f);
-//        }
+        Legend legend = pieChart.getLegend();
+        legend.setVerticalAlignment(Legend.LegendVerticalAlignment.BOTTOM);
+        legend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.CENTER);
+        // Desplazar la leyenda hacia la izquierda a medida que se añaden más categorías
+        if (countMap.size() > 1) {
+            legend.setXEntrySpace(20f * (countMap.size() - 1));
+        } else {
+            legend.setXEntrySpace(20f);
+        }
         pieChart.invalidate();
     }
 

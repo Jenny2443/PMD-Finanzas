@@ -157,7 +157,7 @@
     </FrameLayout>
 
     <FrameLayout
-        android:id="@+id/guardado"
+        android:id="@+id/EdIn_guardado"
         android:layout_width="342dp"
         android:layout_height="498dp"
         android:background="#00FFFFFF"

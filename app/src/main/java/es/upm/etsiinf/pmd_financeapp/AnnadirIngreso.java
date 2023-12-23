@@ -3,9 +3,16 @@ package es.upm.etsiinf.pmd_financeapp;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -41,7 +48,7 @@ public class AnnadirIngreso extends AppCompatActivity {
     Calendar calendario = Calendar.getInstance();
     int anioActual = calendario.get(Calendar.YEAR);
     // Los meses se cuentan desde 0, por eso se suma 1
-    int mesActual = calendario.get(Calendar.MONTH) + 1;;
+    int mesActual = calendario.get(Calendar.MONTH);;
     int diaActual = calendario.get(Calendar.DAY_OF_MONTH);;
 
     // Declaración variables para mostrar calendario
@@ -101,6 +108,7 @@ public class AnnadirIngreso extends AppCompatActivity {
 
         //Datos a recoger (fecha, categorio, cantidad, descripcion)
         txt_fechaSeleccionada = findViewById(R.id.AnIn_fecha_seleccionada);
+        txt_fechaSeleccionada.setText(diaActual + "/" + (mesActual + 1) + "/" + anioActual);
         txtCantidad = findViewById(R.id.AnIn_ent_cantidad);
         txtDescripcion = findViewById(R.id.AnIn_ent_notas);
 
@@ -227,6 +235,7 @@ public class AnnadirIngreso extends AppCompatActivity {
             @Override
             public void onClick(View v){
                 openActivityHome();
+                makeNotification();
             }
         });
 
@@ -266,8 +275,9 @@ public class AnnadirIngreso extends AppCompatActivity {
     //Funcion para abrir la actividad de home
 
     public void openActivityHome(){
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
+//        Intent intent = new Intent(this, MainActivity.class);
+//        startActivity(intent);
+        finish();
     }
 
     //Funcion para abrir la actividad de historial
@@ -297,6 +307,37 @@ public class AnnadirIngreso extends AppCompatActivity {
 
         // Mostrar el selector de aplicaciones para compartir
         startActivity(Intent.createChooser(intent, "Compartir con"));
+    }
+
+    // Método para mostrar una notificación
+    private void makeNotification(){
+        String chanelID = "CHANNEL_ID";
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, chanelID);
+        builder.setSmallIcon(R.drawable.ic_launcher_foreground);
+        builder.setContentTitle("App de finanzas");
+        builder.setContentText("Ingreso añadido");
+        builder.setAutoCancel(true);
+        builder.setPriority(NotificationCompat.PRIORITY_DEFAULT);
+
+        Intent intent = new Intent(getApplicationContext(), HistorialActivity.class);
+        //intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, intent, PendingIntent.FLAG_MUTABLE);
+        //PendingIntent pendingIntent = PendingIntent.getActivity(this, 1, intent, PendingIntent.FLAG_CANCEL_CURRENT  | PendingIntent.FLAG_IMMUTABLE);
+        builder.setContentIntent(pendingIntent);
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            NotificationChannel notificationChannel = notificationManager.getNotificationChannel(chanelID);
+            if(notificationChannel == null){
+                int importance = NotificationManager.IMPORTANCE_HIGH;
+                notificationChannel = new NotificationChannel(chanelID, "NOTIFICATION_CHANNEL_NAME", importance);
+                notificationChannel.setLightColor(Color.GREEN);
+                notificationChannel.enableVibration(true);
+                notificationManager.createNotificationChannel(notificationChannel);
+            }
+        }
+        notificationManager.notify(0, builder.build());
     }
 
 

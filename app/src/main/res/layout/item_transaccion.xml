@@ -1,5 +1,6 @@
 <!-- item_transaccion.xml -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="40dp"
     android:orientation="horizontal"
@@ -12,7 +13,7 @@
 
     <TextView
         android:id="@+id/textCategoria"
-        android:layout_width="0dp"
+        android:layout_width="35dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:gravity="center_vertical"
@@ -27,15 +28,26 @@
         android:layout_weight="1"
         android:gravity="center_vertical"
         android:text="Cantidad"
+        android:paddingStart="10dp"
         android:translationX="15dp"
         android:translationY="10dp" />
 
     <TextView
         android:id="@+id/textFecha"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_weight="1"
         android:gravity="center"
-        android:paddingEnd="20dp"
+        android:paddingStart="15dp"
         android:text="Fecha"
         android:translationY="10dp" />
+
+    <ImageView
+        android:id="@+id/historial_btn_delete"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center|end"
+        android:layout_weight="1"
+        app:srcCompat="@drawable/baseline_delete_24" />
+
 </LinearLayout>
