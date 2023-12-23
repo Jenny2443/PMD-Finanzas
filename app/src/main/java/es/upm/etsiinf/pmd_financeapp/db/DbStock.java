@@ -18,6 +18,8 @@ public class DbStock extends DBHelperStock{
 
     public long insertarStock(String ticker, String nombre, double precioCierre, double precioMax, double precioMin, LocalDateTime lastUpdate){
         long id = -1;
+
+
         try{
             DBHelperStock dbHelper = new DBHelperStock(context);
             //Creamos conexion
@@ -30,7 +32,8 @@ public class DbStock extends DBHelperStock{
             values.put("precioCierre", precioCierre);
             values.put("precioMax", precioMax);
             values.put("precioMin", precioMin);
-            values.put("lastUpdate", lastUpdate.toString());
+            if (lastUpdate == null) values.put("lastUpdate", "null");
+            else values.put("lastUpdate", lastUpdate.toString());
 
             //Insertamos
             id = conn.insert("t_fav_stocks", null, values);

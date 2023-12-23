@@ -30,6 +30,7 @@ public class Stock {
     }
 
     public double getPrice() {
+
         return  price;
     }
 
