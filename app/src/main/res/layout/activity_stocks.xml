@@ -23,6 +23,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+        <ImageView
+            android:id="@+id/toptoolbar"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:src="@drawable/fondo_toolbar" />
+
         <ListView
             android:id="@+id/stocks_list"
             android:layout_width="match_parent"
@@ -46,6 +52,7 @@
             android:layout_gravity="center|top"
             android:layout_marginTop="20dp"
             android:text="STOCKS"
+            android:textColor="@color/black"
             android:textSize="40sp" />
 
         <SearchView
