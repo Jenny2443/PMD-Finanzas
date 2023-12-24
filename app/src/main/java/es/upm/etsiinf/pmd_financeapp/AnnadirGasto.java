@@ -10,14 +10,18 @@ import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.MenuItem;
 import android.view.View;
@@ -35,7 +39,13 @@ import android.widget.Toast;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.Calendar;
+import java.util.Date;
 
 import es.upm.etsiinf.pmd_financeapp.db.DbTransacciones;
 
@@ -73,6 +83,8 @@ public class AnnadirGasto extends AppCompatActivity {
 
     private ImageView AnGa_ok;
     private ImageView AnGa_ctexto;
+    private ImageView AnGa_cimagen;
+    private Uri imgUri;
 
     private String datosCompartidos;
 
@@ -88,6 +100,7 @@ public class AnnadirGasto extends AppCompatActivity {
 
         subirImg = findViewById(R.id.AnGa_btn_cargar_im);
         img = findViewById(R.id.AnGa_imSubida);
+        imgUri = null;
 
         // Iniciamos botones
         btnCancelar = findViewById(R.id.AnGa_btn_cancelar);
@@ -96,6 +109,7 @@ public class AnnadirGasto extends AppCompatActivity {
         guardado = findViewById(R.id.guardado);
         AnGa_ok = findViewById(R.id.AnGa_im_ok);
         AnGa_ctexto = findViewById(R.id.AnGa_im_ctexto);
+        AnGa_cimagen = findViewById(R.id.AnGa_im_cimagen);
         AnGa_dinero = findViewById(R.id.AnGa_ent_cantidad);
         notas = findViewById(R.id.AnGa_ent_notas);
 
@@ -182,6 +196,7 @@ public class AnnadirGasto extends AppCompatActivity {
                                     " he tenido un gasto de " + AnGa_dinero.getText().toString() +
                                     "€ en la categoría de " + catSeleccionada +
                                     ". Notas: " + notas.getText().toString();
+
                 DbTransacciones dbTransacciones = new DbTransacciones(AnnadirGasto.this);
                 dbTransacciones.insertarTransaccion(
                         txt_fechaSeleccionada.getText().toString(),
@@ -207,6 +222,13 @@ public class AnnadirGasto extends AppCompatActivity {
             @Override
             public void onClick(View v){
                 compartirDatos();
+            }
+        });
+
+        AnGa_cimagen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                compartirImagen();
             }
         });
 
@@ -284,9 +306,11 @@ public class AnnadirGasto extends AppCompatActivity {
                 Bundle extras = data.getExtras();
                 Bitmap imageBitmap = (Bitmap) extras.get("data");
                 img.setImageBitmap(imageBitmap);
+                imgUri = bitmapToUri(this, imageBitmap);
             } else if (requestCode == REQUEST_IMAGE_PICK) {
                 Uri selectedImageUri = data.getData();
                 img.setImageURI(selectedImageUri);
+                imgUri = selectedImageUri;
             }
         }
     }
@@ -332,6 +356,52 @@ public class AnnadirGasto extends AppCompatActivity {
         // Mostrar el selector de aplicaciones para compartir
         startActivity(Intent.createChooser(intent, "Compartir con"));
     }
+
+    public void compartirImagen() {
+        // Crear un Intent con la acción ACTION_SEND
+        Intent intent = new Intent(Intent.ACTION_SEND);
+
+        // Establecer el tipo de contenido
+        intent.setType("image/png");
+
+        // Establecer la imagen que se compartirá
+
+        intent.putExtra(Intent.EXTRA_STREAM, imgUri);
+
+        // Mostrar el selector de aplicaciones para compartir
+        startActivity(Intent.createChooser(intent, "Compartir con"));
+    }
+
+    public static Uri bitmapToUri(Context context, Bitmap bitmap) {
+        // Guardar el bitmap en un archivo
+        File file = saveBitmapToFile(context, bitmap);
+
+        // Obtener la Uri del archivo
+        if (file != null) {
+            return Uri.fromFile(file);
+        } else {
+            return null;
+        }
+    }
+
+    private static File saveBitmapToFile(Context context, Bitmap bitmap) {
+        File filesDir = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File imageFile = new File(filesDir, "image_" + System.currentTimeMillis() + ".png");
+
+        OutputStream os;
+        try {
+            os = new FileOutputStream(imageFile);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, os);
+            os.flush();
+            os.close();
+            return imageFile;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+
     // Método para mostrar una notificación
     private void makeNotification(){
         String chanelID = "CHANNEL_ID";
