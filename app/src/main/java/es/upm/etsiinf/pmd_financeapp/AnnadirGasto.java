@@ -18,6 +18,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.media.MediaScannerConnection;
+import android.graphics.drawable.Icon;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -401,6 +402,8 @@ public class AnnadirGasto extends AppCompatActivity {
         builder.setContentText("Gasto añadido");
         builder.setAutoCancel(true);
         builder.setPriority(NotificationCompat.PRIORITY_DEFAULT);
+        //Creo q no hace falta poner estilo porque
+        //builder.setStyle(new NotificationCompat.BigTextStyle().bigText("Gasto añadido"));
 
         Intent intent = new Intent(getApplicationContext(), HistorialActivity.class);
         //intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -409,6 +412,8 @@ public class AnnadirGasto extends AppCompatActivity {
         //PendingIntent pendingIntent = PendingIntent.getActivity(this, 1, intent, PendingIntent.FLAG_CANCEL_CURRENT  | PendingIntent.FLAG_IMMUTABLE);
         builder.setContentIntent(pendingIntent);
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
             NotificationChannel notificationChannel = notificationManager.getNotificationChannel(chanelID);
