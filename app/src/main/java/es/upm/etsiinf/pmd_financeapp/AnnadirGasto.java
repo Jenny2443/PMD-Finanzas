@@ -60,8 +60,8 @@ public class AnnadirGasto extends AppCompatActivity {
     Calendar calendario = Calendar.getInstance();
     int anioActual = calendario.get(Calendar.YEAR);
     // Los meses se cuentan desde 0, por eso se suma 1
-    int mesActual = calendario.get(Calendar.MONTH);;
-    int diaActual = calendario.get(Calendar.DAY_OF_MONTH);;
+    int mesActual = calendario.get(Calendar.MONTH);
+    int diaActual = calendario.get(Calendar.DAY_OF_MONTH);
 
     // Declaración variables para mostrar calendario
     private DatePicker datePicker;
@@ -306,7 +306,10 @@ public class AnnadirGasto extends AppCompatActivity {
                 Bundle extras = data.getExtras();
                 Bitmap imageBitmap = (Bitmap) extras.get("data");
                 img.setImageBitmap(imageBitmap);
-                imgUri = bitmapToUri(this, imageBitmap);
+                // Guarda el Bitmap en un archivo
+                File file = guardarBitmapEnArchivo(imageBitmap);
+                // Obtén la Uri del archivo
+                imgUri = Uri.fromFile(file);
             } else if (requestCode == REQUEST_IMAGE_PICK) {
                 Uri selectedImageUri = data.getData();
                 img.setImageURI(selectedImageUri);
@@ -372,25 +375,12 @@ public class AnnadirGasto extends AppCompatActivity {
         startActivity(Intent.createChooser(intent, "Compartir con"));
     }
 
-    public static Uri bitmapToUri(Context context, Bitmap bitmap) {
-        // Guardar el bitmap en un archivo
-        File file = saveBitmapToFile(context, bitmap);
-
-        // Obtener la Uri del archivo
-        if (file != null) {
-            return Uri.fromFile(file);
-        } else {
-            return null;
-        }
-    }
-
-    private static File saveBitmapToFile(Context context, Bitmap bitmap) {
-        File filesDir = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+    private File guardarBitmapEnArchivo(Bitmap bitmap) {
+        File filesDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File imageFile = new File(filesDir, "image_" + System.currentTimeMillis() + ".png");
 
-        OutputStream os;
         try {
-            os = new FileOutputStream(imageFile);
+            OutputStream os = new FileOutputStream(imageFile);
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, os);
             os.flush();
             os.close();

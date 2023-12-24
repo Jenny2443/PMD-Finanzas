@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
+import androidx.core.content.FileProvider;
 
 import android.app.AlertDialog;
 import android.app.NotificationChannel;
@@ -17,6 +18,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 
@@ -36,7 +38,14 @@ import android.widget.Toast;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 import es.upm.etsiinf.pmd_financeapp.db.DbTransacciones;
 
@@ -51,8 +60,8 @@ public class AnnadirIngreso extends AppCompatActivity {
     Calendar calendario = Calendar.getInstance();
     int anioActual = calendario.get(Calendar.YEAR);
     // Los meses se cuentan desde 0, por eso se suma 1
-    int mesActual = calendario.get(Calendar.MONTH);;
-    int diaActual = calendario.get(Calendar.DAY_OF_MONTH);;
+    int mesActual = calendario.get(Calendar.MONTH);
+    int diaActual = calendario.get(Calendar.DAY_OF_MONTH);
 
     // Declaración variables para mostrar calendario
     private DatePicker datePicker;
@@ -68,6 +77,7 @@ public class AnnadirIngreso extends AppCompatActivity {
 
     private Button subirImg;
     private ImageView img;
+    private Uri imgUri;
 
     private TextView txt_fechaSeleccionada;
 
@@ -82,6 +92,7 @@ public class AnnadirIngreso extends AppCompatActivity {
     private ImageView AnIn_ok;
 
     private ImageView AnIn_ctexto;
+    private ImageView AnIn_cimagen;
 
 
     @Override
@@ -92,6 +103,7 @@ public class AnnadirIngreso extends AppCompatActivity {
 
         subirImg = findViewById(R.id.AnIn_btn_cargar_im);
         img = findViewById(R.id.AnIn_imSubida);
+        imgUri = null;
 
         dbTransacciones = new DbTransacciones(this);
 
@@ -103,6 +115,7 @@ public class AnnadirIngreso extends AppCompatActivity {
         guardado = findViewById(R.id.guardado);
         AnIn_ok = findViewById(R.id.AnIn_im_ok);
         AnIn_ctexto = findViewById(R.id.AnIn_im_ctexto);
+        AnIn_cimagen = findViewById(R.id.AnIn_im_cimagen);
 
         // Inicialización de la lista de categorías
         Spinner spinnerCat = findViewById(R.id.AnIn_categorias);
@@ -250,6 +263,13 @@ public class AnnadirIngreso extends AppCompatActivity {
             }
         });
 
+        AnIn_cimagen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                compartirImagen();
+            }
+        });
+
 
     }
 
@@ -276,6 +296,14 @@ public class AnnadirIngreso extends AppCompatActivity {
     private void dispatchTakePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            File photoFile = crearArchivoImagen();
+
+            // Verifica si se pudo crear el archivo
+            if (photoFile != null) {
+                imgUri = FileProvider.getUriForFile(this, "es.upm.etsiinf.pmd_financeapp.fileprovider", photoFile);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, imgUri);
+                //startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+            }
             startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
         }
     }
@@ -297,6 +325,7 @@ public class AnnadirIngreso extends AppCompatActivity {
             } else if (requestCode == REQUEST_IMAGE_PICK) {
                 Uri selectedImageUri = data.getData();
                 img.setImageURI(selectedImageUri);
+                imgUri = selectedImageUri;
             }
         }
     }
@@ -343,6 +372,51 @@ public class AnnadirIngreso extends AppCompatActivity {
         // Mostrar el selector de aplicaciones para compartir
         startActivity(Intent.createChooser(intent, "Compartir con"));
     }
+
+    public void compartirImagen() {
+        // Crear un Intent con la acción ACTION_SEND
+        Intent intent = new Intent(Intent.ACTION_SEND);
+
+        // Establecer el tipo de contenido
+        intent.setType("image/png");
+
+        // Establecer la imagen que se compartirá
+
+        intent.putExtra(Intent.EXTRA_STREAM, imgUri);
+
+        // Mostrar el selector de aplicaciones para compartir
+        startActivity(Intent.createChooser(intent, "Compartir con"));
+    }
+
+    /*private File guardarBitmapEnArchivo(Bitmap bitmap) {
+        File filesDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File imageFile = new File(filesDir, "image_" + System.currentTimeMillis() + ".png");
+
+        try {
+            OutputStream os = new FileOutputStream(imageFile);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, os);
+            os.flush();
+            os.close();
+            return imageFile;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }*/
+    private File crearArchivoImagen() {
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
+        String nombreArchivo = "JPEG_" + timeStamp + "_";
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+
+        try {
+            File imageFile = File.createTempFile(nombreArchivo, ".jpg", storageDir);
+            return imageFile;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
 
     // Método para mostrar una notificación
     private void makeNotification(){
