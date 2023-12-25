@@ -23,11 +23,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <ImageView
-            android:id="@+id/toptoolbar"
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/top_toolbar"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:src="@drawable/fondo_toolbar" />
+            android:layout_height="80dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/fondo_toolbar"
+            android:minHeight="?attr/actionBarSize"
+            android:theme="?attr/actionBarTheme" />
 
         <ListView
             android:id="@+id/stocks_list"
@@ -50,7 +53,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center|top"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="25dp"
             android:text="STOCKS"
             android:textColor="@color/black"
             android:textSize="40sp" />
@@ -60,7 +63,7 @@
             android:layout_width="match_parent"
             android:layout_height="42dp"
             android:layout_gravity="center|top"
-            android:layout_marginTop="80dp"
+            android:layout_marginTop="90dp"
             android:queryHint="Busca una acción por Ticker" />
 
     </FrameLayout>

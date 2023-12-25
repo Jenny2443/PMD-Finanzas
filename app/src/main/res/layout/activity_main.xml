@@ -17,18 +17,21 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <ImageView
-            android:id="@+id/toptoolbar"
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/top_toolbar"
             android:layout_width="match_parent"
-            android:layout_height="119dp"
-            android:src="@drawable/fondo_toolbar" />
+            android:layout_height="80dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/fondo_toolbar"
+            android:minHeight="?attr/actionBarSize"
+            android:theme="?attr/actionBarTheme" />
 
         <ImageView
             android:id="@+id/main_btn_logout"
             android:layout_width="38dp"
             android:layout_height="36dp"
             android:layout_gravity="end"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="100dp"
             android:layout_marginEnd="30dp"
             android:src="@drawable/baseline_logout_24" />
 
@@ -76,10 +79,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center|top"
-            android:layout_marginTop="160dp"
+            android:layout_marginTop="180dp"
             android:text="Balance: 0€"
             android:textColor="#000000"
-            android:textSize="40sp"
+            android:textSize="34sp"
             android:translationY="-45dp" />
 
         <TextView
@@ -87,11 +90,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center|top"
-            android:layout_marginTop="80dp"
-            android:text="Home"
+            android:layout_marginTop="25dp"
+            android:text="HOME"
             android:textColor="#000000"
-            android:textSize="50dp"
-            android:translationY="-55dp" />
+            android:textSize="40dp" />
 
     </FrameLayout>
 
@@ -104,6 +106,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:menu="@menu/bottom_navigation_menu"
-         />
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

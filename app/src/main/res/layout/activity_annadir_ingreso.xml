@@ -14,11 +14,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <ImageView
-            android:id="@+id/toptoolbar"
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/top_toolbar"
             android:layout_width="match_parent"
-            android:layout_height="119dp"
-            android:src="@drawable/fondo_toolbar" />
+            android:layout_height="80dp"
+            android:background="@drawable/fondo_toolbar"
+            android:minHeight="?attr/actionBarSize"
+            android:layout_marginTop="10dp"
+            android:theme="?attr/actionBarTheme" />
 
         <ImageView
             android:id="@+id/AnIn_imSubida"
@@ -35,7 +38,6 @@
             android:layout_marginBottom="30dp"
             android:background="#74C7FF00"
             android:backgroundTint="#CDDC39"
-            android:onClick="selectImageFromGallery"
             android:text="Cargar imagen"
             android:textAlignment="center"
             android:textSize="20sp" />
@@ -111,10 +113,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center|top"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="25dp"
             android:text="AÑADIR INGRESO"
             android:textColor="#000000"
-            android:textSize="34sp" />
+            android:textSize="40sp" />
 
         <EditText
             android:id="@+id/AnIn_ent_notas"
@@ -194,8 +196,7 @@
             android:layout_gravity="bottom|center"
             android:layout_marginBottom="10dp"
             android:clickable="true"
-            android:foreground="@drawable/btn_ok"
-            android:onClick="openActivityHome" />
+            android:foreground="@drawable/btn_ok" />
 
         <ImageView
             android:id="@+id/AnIn_im_cimagen"
@@ -204,8 +205,7 @@
             android:layout_gravity="bottom|center"
             android:layout_marginBottom="90dp"
             android:clickable="true"
-            android:foreground="@drawable/btn_cimagen"
-            android:onClick="openActivityHome" />
+            android:foreground="@drawable/btn_cimagen" />
 
         <ImageView
             android:id="@+id/AnIn_im_ctexto"
@@ -214,8 +214,7 @@
             android:layout_gravity="bottom|center"
             android:layout_marginBottom="170dp"
             android:clickable="true"
-            android:foreground="@drawable/btn_ctexto"
-            android:onClick="openActivityHome" />
+            android:foreground="@drawable/btn_ctexto" />
     </FrameLayout>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
