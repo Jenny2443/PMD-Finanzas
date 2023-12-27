@@ -3,9 +3,17 @@ package es.upm.etsiinf.pmd_financeapp;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.os.Build;
+
+
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -13,6 +21,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
@@ -50,7 +59,9 @@ import java.util.Locale;
 import es.upm.etsiinf.pmd_financeapp.db.DbTransacciones;
 
 public class AnnadirIngreso extends AppCompatActivity {
+    private static final int CAMERA_PERM_CODE = 101;
 
+    private static final int CAMERA_REQUEST_CODE = 102;
     public BottomNavigationView bottomNavigationView;
 
     // categorias que selecciona al crear un ingreso
@@ -93,12 +104,22 @@ public class AnnadirIngreso extends AppCompatActivity {
 
     private ImageView AnIn_ctexto;
     private ImageView AnIn_cimagen;
+    private static final int CAMERA_PERMISSION_REQUEST_CODE = 100;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_annadir_ingreso);
+
+//        // Verificar y solicitar permisos de la cámara antes de iniciar la captura de imágenes
+//        if (checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+//            //dispatchTakePictureIntent();
+//        } else {
+//            // Si no se han otorgado los permisos, solicitarlos
+//            requestPermissions(new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION_REQUEST_CODE);
+//        }
+        Log.i("AnnadirIngreso", "Permisos para la cámara concedidos");
 
 
         subirImg = findViewById(R.id.AnIn_btn_cargar_im);
@@ -206,7 +227,6 @@ public class AnnadirIngreso extends AppCompatActivity {
                 // TODO: GUARDAR GASTO
                 DbTransacciones dbTransacciones = new DbTransacciones(AnnadirIngreso.this);
 
-                //TODO: FALLA
                 Log.i("AnnadirIngreso", "Fecha: " + txt_fechaSeleccionada.getText().toString());
                 Log.i("AnnadirIngreso", "Cantidad: " + txtCantidad.getText().toString());
                 Log.i("AnnadirIngreso", "Categoría: " + categoriaSeleccionada);
@@ -282,7 +302,8 @@ public class AnnadirIngreso extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 switch (which) {
                     case 0:
-                        dispatchTakePictureIntent();
+                        //dispatchTakePictureIntent();
+                        askCameraPermission();
                         break;
                     case 1:
                         pickImageFromGallery();
@@ -293,20 +314,96 @@ public class AnnadirIngreso extends AppCompatActivity {
         builder.show();
     }
 
-    private void dispatchTakePictureIntent() {
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-            File photoFile = crearArchivoImagen();
+//    @SuppressLint("QueryPermissionsNeeded")
+//    private void dispatchTakePictureIntent() {
+//        Log.i("AnnadirIngreso", "dispatchTakePictureIntent()");
+//        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+//            File photoFile = crearArchivoImagen();
+//
+//            // Verifica si se pudo crear el archivo
+//            if (photoFile != null) {
+//                Log.i("AnnadirIngreso", "photoFile != null");
+//                imgUri = FileProvider.getUriForFile(this, "es.upm.etsiinf.pmd_financeapp.fileprovider", photoFile);
+//                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, imgUri);
+//                try {
+//                    Log.i("AnnadirIngreso", "Antes de startActivityForResult");
+//                    startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+//                    Log.i("AnnadirIngreso", "Después de startActivityForResult");
+//                } catch (Exception e) {
+//                    Log.e("AnnadirIngreso", "Error al iniciar la actividad de la cámara: " + e.getMessage());
+//                }
+//                //startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+//            }
+//            //startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+//        }
+//    }
 
-            // Verifica si se pudo crear el archivo
-            if (photoFile != null) {
-                imgUri = FileProvider.getUriForFile(this, "es.upm.etsiinf.pmd_financeapp.fileprovider", photoFile);
-                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, imgUri);
-                //startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-            }
-            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+    @SuppressLint("QueryPermissionsNeeded")
+//    private void dispatchTakePictureIntent() {
+//        Log.i("AnnadirIngreso", "dispatchTakePictureIntent()");
+//        Intent takePictureIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+//        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+//            File photoFile = crearArchivoImagen();
+//
+//            // Verifica si se pudo crear el archivo
+//            if (photoFile != null) {
+//                Log.i("AnnadirIngreso", "photoFile != null");
+//                imgUri = FileProvider.getUriForFile(this, "es.upm.etsiinf.pmd_financeapp.fileprovider", photoFile);
+//                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, imgUri);
+//
+//                try {
+//                    Log.i("AnnadirIngreso", "Antes de startActivityForResult");
+//                    startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+//                    Log.i("AnnadirIngreso", "Después de startActivityForResult");
+//                } catch (Exception e) {
+//                    Log.e("AnnadirIngreso", "Error al iniciar la actividad de la cámara: " + e.getMessage());
+//                }
+//            } else {
+//                Log.e("AnnadirIngreso", "photoFile es null");
+//            }
+//        } else {
+//            Log.e("AnnadirIngreso", "No se encontró actividad de cámara");
+//        }
+//    }
+
+//    private void dispatchTakePictureIntent() {
+//        Log.i("AnnadirIngreso", "dispatchTakePictureIntent()");
+//        Intent pickImageIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+//        if (pickImageIntent.resolveActivity(getPackageManager()) != null) {
+//            try {
+//                startActivityForResult(pickImageIntent, REQUEST_IMAGE_CAPTURE);
+//            } catch (Exception e) {
+//                Log.e("AnnadirIngreso", "Error al iniciar la actividad de la galería: " + e.getMessage());
+//            }
+//        }
+//    }
+
+    private void askCameraPermission() {
+        if(ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.CAMERA}, CAMERA_PERM_CODE);
+        }else{
+            openCamera();
         }
     }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if(requestCode == CAMERA_PERM_CODE){
+            if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                openCamera();
+            }else{
+                Toast.makeText(this, "Se necesita permiso para usar la camara", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    private void openCamera() {
+        Intent camera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(camera, CAMERA_REQUEST_CODE);
+    }
+
+
 
     private void pickImageFromGallery() {
         Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -315,19 +412,29 @@ public class AnnadirIngreso extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+        //super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == RESULT_OK) {
-            if (requestCode == REQUEST_IMAGE_CAPTURE) {
-                Bundle extras = data.getExtras();
-                Bitmap imageBitmap = (Bitmap) extras.get("data");
-                img.setImageBitmap(imageBitmap);
+            if (requestCode == CAMERA_REQUEST_CODE) {
+                Bitmap image = (Bitmap) data.getExtras().get("data");
+                //img.setImageBitmap(imageBitmap);
+                img.setImageBitmap(image);
             } else if (requestCode == REQUEST_IMAGE_PICK) {
                 Uri selectedImageUri = data.getData();
                 img.setImageURI(selectedImageUri);
                 imgUri = selectedImageUri;
             }
         }
+//        }
+//        if (requestCode == CAMERA_REQUEST_CODE) {
+//            Bitmap image = (Bitmap) data.getExtras().get("data");
+//            img.setImageBitmap(image);
+//            imgUri = data.getData();
+//        } else if (resultCode == REQUEST_IMAGE_PICK) {
+//            Uri selectedImageUri = data.getData();
+//            img.setImageURI(selectedImageUri);
+//            imgUri = selectedImageUri;
+//        }
     }
 
     //Funcion para abrir la actividad de stocks
@@ -448,6 +555,5 @@ public class AnnadirIngreso extends AppCompatActivity {
         }
         notificationManager.notify(0, builder.build());
     }
-
 
 }
