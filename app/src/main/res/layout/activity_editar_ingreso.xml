@@ -6,22 +6,40 @@
     android:layout_height="match_parent"
     tools:context=".EditarIngreso">
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/top_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:background="@drawable/fondo_toolbar"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/main_frameLayout">
+
+        <TextView
+            android:id="@+id/AnGa_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:paddingTop="48dp"
+            android:text="EDITAR INGRESO"
+            android:textColor="#000000"
+            android:textSize="35dp" />
+
+
+    </androidx.appcompat.widget.Toolbar>
+
     <FrameLayout
-        android:layout_width="421dp"
-        android:layout_height="657dp"
+        android:id="@+id/main_frameLayout"
+        android:layout_width="match_parent"
+        android:layout_height="600dp"
         app:layout_constraintBottom_toTopOf="@+id/main_btn_nav"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="@+id/top_toolbar">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/top_toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="80dp"
-            android:background="@drawable/fondo_toolbar"
-            android:minHeight="?attr/actionBarSize"
-            android:layout_marginTop="10dp"
-            android:theme="?attr/actionBarTheme" />
 
         <ImageView
             android:id="@+id/EdIn_imSubida"
@@ -91,7 +109,7 @@
             android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center|top"
-            android:layout_marginTop="120dp"
+            android:layout_marginTop="100dp"
             android:layout_marginRight="100dp"
             android:ems="10"
             android:hint="0"
@@ -103,20 +121,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center|top"
-            android:layout_marginTop="120dp"
+            android:layout_marginTop="100dp"
             android:layout_marginRight="50dp"
             android:text="€"
             android:textSize="34sp" />
-
-        <TextView
-            android:id="@+id/EdIn_txt_ingreso"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center|top"
-            android:layout_marginTop="25dp"
-            android:text="EDITAR INGRESO"
-            android:textColor="#000000"
-            android:textSize="40sp" />
 
         <EditText
             android:id="@+id/EdIn_ent_notas"

@@ -48,7 +48,7 @@ public class StockItemActivity extends AppCompatActivity {
 
         //Get the symbol of the stock from the intent
         String symbol = getIntent().getStringExtra("symbol");
-        title = findViewById(R.id.stocks_item_title);
+        title = findViewById(R.id.stocks_title);
         title.setText(symbol);
         fullName = findViewById(R.id.full_stock_name);
         price = findViewById(R.id.stock_item_price);

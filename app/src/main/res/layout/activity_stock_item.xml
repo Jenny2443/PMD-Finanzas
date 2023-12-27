@@ -6,26 +6,48 @@
     android:layout_height="match_parent"
     tools:context=".StockItemActivity">
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/top_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:background="@drawable/fondo_toolbar"
+        android:theme="?attr/actionBarTheme"
+        app:layout_constraintBottom_toTopOf="@+id/main_frameLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/stocks_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:paddingTop="48dp"
+            android:text="STOCKS"
+            android:textColor="#000000"
+            android:textSize="38dp" />
+
+    </androidx.appcompat.widget.Toolbar>
+
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/top_toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="80dp"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/fondo_toolbar"
-            android:minHeight="?attr/actionBarSize"
-            android:theme="?attr/actionBarTheme" />
-
+        android:layout_height="match_parent"
+        >
         <ImageView
             android:id="@+id/buttom_retroceder_stock"
-            android:layout_width="54dp"
-            android:layout_height="47dp"
-            android:layout_marginTop="100dp"
-            android:layout_marginLeft="20dp"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:layout_gravity="start"
+            android:paddingEnd="20dp"
+            android:layout_marginStart="20dp"
+            android:paddingBottom="5dp"
             app:srcCompat="@android:drawable/ic_menu_revert" />
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/main_frameLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
         <Switch
             android:id="@+id/switch_stock_favorite"
@@ -79,26 +101,6 @@
             android:inputType="text" />
     </FrameLayout>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="0dp">
-
-        <TextView
-            android:id="@+id/stocks_item_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="STOCKS"
-            android:textColor="@color/black"
-            android:textSize="40dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.036" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/main_btn_nav"
