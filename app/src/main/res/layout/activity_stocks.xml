@@ -6,36 +6,49 @@
     android:layout_height="match_parent"
     tools:context=".StocksActivity">
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/main_btn_nav"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:itemIconTint="@color/black"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/top_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:background="@drawable/fondo_toolbar"
+        android:theme="?attr/actionBarTheme"
+        app:layout_constraintBottom_toTopOf="@+id/main_frameLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:menu="@menu/bottom_navigation_menu" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/stocks_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:paddingTop="48dp"
+            android:text="STOCKS"
+            android:textColor="#000000"
+            android:textSize="38dp" />
+
+    </androidx.appcompat.widget.Toolbar>
 
     <FrameLayout
+        android:id="@+id/main_frameLayout"
         android:layout_width="match_parent"
         android:layout_height="648dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/top_toolbar"
+        <SearchView
+            android:id="@+id/search_stocks"
             android:layout_width="match_parent"
-            android:layout_height="80dp"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/fondo_toolbar"
-            android:minHeight="?attr/actionBarSize"
-            android:theme="?attr/actionBarTheme" />
+            android:layout_height="42dp"
+            android:layout_gravity="center|top"
+            android:layout_marginTop="50dp"
+            android:queryHint="Busca una acción por Ticker" />
 
         <ListView
             android:id="@+id/stocks_list"
             android:layout_width="match_parent"
-            android:layout_height="515dp"
+            android:layout_height="546dp"
             android:layout_gravity="bottom|center" />
 
         <TextView
@@ -48,24 +61,17 @@
             android:textColor="@android:color/black"
             android:textSize="16sp" />
 
-        <TextView
-            android:id="@+id/stocks_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center|top"
-            android:layout_marginTop="25dp"
-            android:text="STOCKS"
-            android:textColor="@color/black"
-            android:textSize="40sp" />
-
-        <SearchView
-            android:id="@+id/search_stocks"
-            android:layout_width="match_parent"
-            android:layout_height="42dp"
-            android:layout_gravity="center|top"
-            android:layout_marginTop="90dp"
-            android:queryHint="Busca una acción por Ticker" />
 
     </FrameLayout>
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/main_btn_nav"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:itemIconTint="@color/black"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:menu="@menu/bottom_navigation_menu" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
