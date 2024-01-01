@@ -165,7 +165,7 @@
     </FrameLayout>
 
     <FrameLayout
-        android:id="@+id/guardado"
+        android:id="@+id/inguardado"
         android:layout_width="342dp"
         android:layout_height="498dp"
         android:background="#00FFFFFF"
@@ -231,8 +231,58 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:menu="@menu/bottom_navigation_menu" >
+        app:menu="@menu/bottom_navigation_menu">
 
     </com.google.android.material.bottomnavigation.BottomNavigationView>
+
+    <FrameLayout
+        android:id="@+id/inguardado2"
+        android:layout_width="342dp"
+        android:layout_height="498dp"
+        android:background="#00FFFFFF"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/AnIn_fondo_guardado2"
+            android:layout_width="296dp"
+            android:layout_height="380dp"
+            android:layout_gravity="bottom|center"
+            android:foreground="@drawable/fondo_guardado" />
+
+        <TextView
+            android:id="@+id/AnIn_txt_guardado2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|top"
+            android:layout_marginTop="150dp"
+            android:fontFamily="sans-serif"
+            android:text="Gasto guardado correctamente"
+            android:textAlignment="center"
+            android:textColor="#000000"
+            android:textSize="34sp"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/AnIn_im_ok2"
+            android:layout_width="243dp"
+            android:layout_height="130dp"
+            android:layout_gravity="bottom|center"
+            android:layout_marginBottom="10dp"
+            android:clickable="true"
+            android:src="@drawable/btn_ok" />
+
+        <ImageView
+            android:id="@+id/AnIn_im_ctexto2"
+            android:layout_width="243dp"
+            android:layout_height="130dp"
+            android:layout_gravity="bottom|center"
+            android:layout_marginBottom="100dp"
+            android:clickable="true"
+            android:foreground="@drawable/btn_ctexto" />
+    </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

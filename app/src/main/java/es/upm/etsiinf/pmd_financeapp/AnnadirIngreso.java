@@ -98,12 +98,16 @@ public class AnnadirIngreso extends AppCompatActivity {
     private EditText txtDescripcion;
     private String categoriaSeleccionada;
     private FrameLayout guardado;
+    private FrameLayout guardado2;
     private String datosCompartidos;
 
     private ImageView AnIn_ok;
+    private ImageView AnIn_ok2;
 
     private ImageView AnIn_ctexto;
+    private ImageView AnIn_ctexto2;
     private ImageView AnIn_cimagen;
+    private boolean galeria;
     private static final int CAMERA_PERMISSION_REQUEST_CODE = 100;
 
 
@@ -125,6 +129,7 @@ public class AnnadirIngreso extends AppCompatActivity {
         subirImg = findViewById(R.id.AnIn_btn_cargar_im);
         img = findViewById(R.id.AnIn_imSubida);
         imgUri = null;
+        galeria = false;
 
         dbTransacciones = new DbTransacciones(this);
 
@@ -133,9 +138,12 @@ public class AnnadirIngreso extends AppCompatActivity {
         btnCancelar = findViewById(R.id.AnIn_btn_cancelar);
         btnGuardar = findViewById(R.id.AnIn_btn_guardar);
 
-        guardado = findViewById(R.id.guardado);
+        guardado = findViewById(R.id.inguardado);
+        guardado2 = findViewById(R.id.inguardado2);
         AnIn_ok = findViewById(R.id.AnIn_im_ok);
+        AnIn_ok2 = findViewById(R.id.AnIn_im_ok2);
         AnIn_ctexto = findViewById(R.id.AnIn_im_ctexto);
+        AnIn_ctexto2 = findViewById(R.id.AnIn_im_ctexto2);
         AnIn_cimagen = findViewById(R.id.AnIn_im_cimagen);
 
         // Inicialización de la lista de categorías
@@ -221,20 +229,27 @@ public class AnnadirIngreso extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 datosCompartidos = "En la fecha " + txt_fechaSeleccionada.getText().toString() +
-                                    " he tenido un ingreso de " + txtCantidad.getText().toString() +
-                                    "€ en la categoría de " + categoriaSeleccionada +
-                                    ". Notas: " + txtDescripcion.getText().toString();
+                        " he tenido un ingreso de " + txtCantidad.getText().toString() +
+                        "€ en la categoría de " + categoriaSeleccionada +
+                        ". Notas: " + txtDescripcion.getText().toString();
                 // TODO: GUARDAR GASTO
                 DbTransacciones dbTransacciones = new DbTransacciones(AnnadirIngreso.this);
 
-                Log.i("AnnadirIngreso", "Fecha: " + txt_fechaSeleccionada.getText().toString());
+                /*Log.i("AnnadirIngreso", "Fecha: " + txt_fechaSeleccionada.getText().toString());
                 Log.i("AnnadirIngreso", "Cantidad: " + txtCantidad.getText().toString());
                 Log.i("AnnadirIngreso", "Categoría: " + categoriaSeleccionada);
-                Log.i("AnnadirIngreso", "Notas: " + txtDescripcion.getText().toString());
+                Log.i("AnnadirIngreso", "Notas: " + txtDescripcion.getText().toString());*/
 
-                long id = dbTransacciones.insertarTransaccion(txt_fechaSeleccionada.getText().toString(), Double.parseDouble(txtCantidad.getText().toString()), categoriaSeleccionada,img, txtDescripcion.getText().toString(),false);
-                Log.i("AnnadirIngreso", "Transaccion insertado con id: " + id);
-                mostrarGuardado();
+                /*long id = */dbTransacciones.insertarTransaccion(
+                        txt_fechaSeleccionada.getText().toString(),
+                        Double.parseDouble(txtCantidad.getText().toString()),
+                        categoriaSeleccionada,img, txtDescripcion.getText().toString(),false);
+                //Log.i("AnnadirIngreso", "Transaccion insertado con id: " + id);
+                if(galeria){
+                    mostrarGuardado();
+                } else {
+                    mostrarGuardado2();
+                }
             }
         });
 
@@ -276,7 +291,22 @@ public class AnnadirIngreso extends AppCompatActivity {
             }
         });
 
+        AnIn_ok2.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                openActivityHome();
+                makeNotification();
+            }
+        });
+
         AnIn_ctexto.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                compartirDatos();
+            }
+        });
+
+        AnIn_ctexto2.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
                 compartirDatos();
@@ -302,8 +332,8 @@ public class AnnadirIngreso extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 switch (which) {
                     case 0:
-                        //dispatchTakePictureIntent();
-                        askCameraPermission();
+                        dispatchTakePictureIntent();
+                        //askCameraPermission();
                         break;
                     case 1:
                         pickImageFromGallery();
@@ -389,10 +419,11 @@ public class AnnadirIngreso extends AppCompatActivity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if(requestCode == CAMERA_PERM_CODE){
-            if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == CAMERA_PERM_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 openCamera();
-            }else{
+            } else {
                 Toast.makeText(this, "Se necesita permiso para usar la camara", Toast.LENGTH_SHORT).show();
             }
         }
@@ -404,6 +435,12 @@ public class AnnadirIngreso extends AppCompatActivity {
     }
 
 
+    private void dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+        }
+    }
 
     private void pickImageFromGallery() {
         Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -412,14 +449,16 @@ public class AnnadirIngreso extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        //super.onActivityResult(requestCode, resultCode, data);
+        super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == RESULT_OK) {
-            if (requestCode == CAMERA_REQUEST_CODE) {
-                Bitmap image = (Bitmap) data.getExtras().get("data");
-                //img.setImageBitmap(imageBitmap);
-                img.setImageBitmap(image);
+            if (requestCode == REQUEST_IMAGE_CAPTURE) {
+                galeria = false;
+                Bundle extras = data.getExtras();
+                Bitmap imageBitmap = (Bitmap) extras.get("data");
+                img.setImageBitmap(imageBitmap);
             } else if (requestCode == REQUEST_IMAGE_PICK) {
+                galeria = true;
                 Uri selectedImageUri = data.getData();
                 img.setImageURI(selectedImageUri);
                 imgUri = selectedImageUri;
@@ -463,6 +502,15 @@ public class AnnadirIngreso extends AppCompatActivity {
             guardado.setVisibility(View.GONE);
         } else {
             guardado.setVisibility(View.VISIBLE);
+        }
+    }
+
+    public void mostrarGuardado2() {
+        // Cambiar la visibilidad del FrameLayout
+        if (guardado2.getVisibility() == View.VISIBLE) {
+            guardado2.setVisibility(View.GONE);
+        } else {
+            guardado2.setVisibility(View.VISIBLE);
         }
     }
 

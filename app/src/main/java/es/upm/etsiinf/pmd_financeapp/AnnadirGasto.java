@@ -1,28 +1,22 @@
 package es.upm.etsiinf.pmd_financeapp;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
+import androidx.core.content.FileProvider;
 
 import android.app.AlertDialog;
-import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.content.ContentResolver;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.media.MediaScannerConnection;
-import android.graphics.drawable.Icon;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.MenuItem;
 import android.view.View;
@@ -41,12 +35,9 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.util.Calendar;
-import java.util.Date;
 
 import es.upm.etsiinf.pmd_financeapp.db.DbTransacciones;
 
@@ -81,9 +72,12 @@ public class AnnadirGasto extends AppCompatActivity {
     private ImageView img;
 
     private FrameLayout guardado;
+    private FrameLayout guardado2;
 
     private ImageView AnGa_ok;
+    private ImageView AnGa_ok2;
     private ImageView AnGa_ctexto;
+    private ImageView AnGa_ctexto2;
     private ImageView AnGa_cimagen;
     private Uri imgUri;
 
@@ -93,6 +87,7 @@ public class AnnadirGasto extends AppCompatActivity {
     private EditText notas;
 
     private String catSeleccionada;
+    private boolean galeria;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,14 +97,18 @@ public class AnnadirGasto extends AppCompatActivity {
         subirImg = findViewById(R.id.AnGa_btn_cargar_im);
         img = findViewById(R.id.AnGa_imSubida);
         imgUri = null;
+        galeria = false;
 
         // Iniciamos botones
         btnCancelar = findViewById(R.id.AnGa_btn_cancelar);
         btnGuardar = findViewById(R.id.AnGa_btn_guardar);
 
         guardado = findViewById(R.id.guardado);
+        guardado2 = findViewById(R.id.guardado2);
         AnGa_ok = findViewById(R.id.AnGa_im_ok);
+        AnGa_ok2 = findViewById(R.id.AnGa_im_ok2);
         AnGa_ctexto = findViewById(R.id.AnGa_im_ctexto);
+        AnGa_ctexto2 = findViewById(R.id.AnGa_im_ctexto2);
         AnGa_cimagen = findViewById(R.id.AnGa_im_cimagen);
         AnGa_dinero = findViewById(R.id.AnGa_ent_cantidad);
         notas = findViewById(R.id.AnGa_ent_notas);
@@ -205,7 +204,11 @@ public class AnnadirGasto extends AppCompatActivity {
                         catSeleccionada,img,
                         notas.getText().toString(),true
                 );
-                mostrarGuardado();
+                if(galeria){
+                    mostrarGuardado();
+                } else {
+                    mostrarGuardado2();
+                }
             }
         });
 
@@ -219,7 +222,24 @@ public class AnnadirGasto extends AppCompatActivity {
             }
         });
 
+        AnGa_ok2.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                // TODO: GUARDAR GASTO en BBDD
+                //Crear notificacion
+                makeNotification();
+                openActivityHome();
+            }
+        });
+
         AnGa_ctexto.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                compartirDatos();
+            }
+        });
+
+        AnGa_ctexto2.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
                 compartirDatos();
@@ -304,14 +324,12 @@ public class AnnadirGasto extends AppCompatActivity {
 
         if (resultCode == RESULT_OK) {
             if (requestCode == REQUEST_IMAGE_CAPTURE) {
+                galeria = false;
                 Bundle extras = data.getExtras();
                 Bitmap imageBitmap = (Bitmap) extras.get("data");
                 img.setImageBitmap(imageBitmap);
-                // Guarda el Bitmap en un archivo
-                File file = guardarBitmapEnArchivo(imageBitmap);
-                // Obtén la Uri del archivo
-                imgUri = Uri.fromFile(file);
             } else if (requestCode == REQUEST_IMAGE_PICK) {
+                galeria = true;
                 Uri selectedImageUri = data.getData();
                 img.setImageURI(selectedImageUri);
                 imgUri = selectedImageUri;
@@ -347,6 +365,15 @@ public class AnnadirGasto extends AppCompatActivity {
         }
     }
 
+    public void mostrarGuardado2() {
+        // Cambiar la visibilidad del FrameLayout
+        if (guardado2.getVisibility() == View.VISIBLE) {
+            guardado2.setVisibility(View.GONE);
+        } else {
+            guardado2.setVisibility(View.VISIBLE);
+        }
+    }
+
     public void compartirDatos() {
         // Crear un Intent con la acción ACTION_SEND
         Intent intent = new Intent(Intent.ACTION_SEND);
@@ -375,22 +402,35 @@ public class AnnadirGasto extends AppCompatActivity {
         // Mostrar el selector de aplicaciones para compartir
         startActivity(Intent.createChooser(intent, "Compartir con"));
     }
+/*
+    public static Uri guardarBitmapEnArchivo(Context context, Bitmap bitmap) {
+        // Guardar el Bitmap en un archivo temporal
+        File imageFile = saveBitmapToTempFile(context, bitmap);
 
-    private File guardarBitmapEnArchivo(Bitmap bitmap) {
-        File filesDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        File imageFile = new File(filesDir, "image_" + System.currentTimeMillis() + ".png");
+        // Obtener la URI utilizando FileProvider
+        return FileProvider.getUriForFile(
+                context,
+                context.getApplicationContext().getPackageName() + ".provider",
+                imageFile
+        );
+    }
 
-        try {
-            OutputStream os = new FileOutputStream(imageFile);
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, os);
-            os.flush();
-            os.close();
-            return imageFile;
+    private static File saveBitmapToTempFile(Context context, Bitmap bitmap) {
+        File cachePath = new File(context.getCacheDir(), "images");
+        cachePath.mkdirs(); // crea la carpeta si no existe
+
+        // Guardar el Bitmap en un archivo temporal
+        File imageFile = new File(cachePath, "image_to_share.png");
+
+        try (FileOutputStream stream = new FileOutputStream(imageFile)) {
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+            stream.flush();
         } catch (IOException e) {
             e.printStackTrace();
-            return null;
         }
-    }
+
+        return imageFile;
+    } */
 
 
     // Método para mostrar una notificación

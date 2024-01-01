@@ -1,12 +1,10 @@
 package es.upm.etsiinf.pmd_financeapp;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
 
 import android.app.AlertDialog;
-import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -94,7 +92,7 @@ public class EditarGasto extends AppCompatActivity {
         btnCancelar = findViewById(R.id.EdGa_btn_cancelar);
         btnGuardar = findViewById(R.id.EdGa_btn_guardar);
 
-        guardado = findViewById(R.id.guardado);
+        guardado = findViewById(R.id.guardado2);
         EdGa_ok = findViewById(R.id.EdGa_im_ok);
         EdGa_ctexto = findViewById(R.id.EdGa_im_ctexto);
         EdGa_dinero = findViewById(R.id.EdGa_ent_cantidad);
