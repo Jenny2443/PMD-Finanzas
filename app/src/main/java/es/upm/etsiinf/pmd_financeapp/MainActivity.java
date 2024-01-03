@@ -411,4 +411,22 @@ public class MainActivity extends AppCompatActivity {
 //        }
 //        notificationManager.notify(0, builder.build());
 //    }
+
+    protected void onDestroy() {
+        super.onDestroy();
+        FirebaseAuth.getInstance().signOut();
+        Log.println(Log.INFO, "Stocks", "[MAINACTIVITY] onDestroy");
+        //RecordarUsuarioManager.salir(this);
+        /*
+        SharedPreferences sharedPreferences = getSharedPreferences("login", MODE_PRIVATE);
+        Log.println(Log.INFO, "Stocks", "[MAINACTIVITY] onDestroy");
+        boolean recordarUsuario = sharedPreferences.getBoolean("recordar_usuario", false);
+        Log.println(Log.INFO, "RecordarUsuarioManager", "Recordar usuario: " + recordarUsuario);
+        if (!recordarUsuario) {
+            Log.println(Log.INFO, "RecordarUsuarioManager", "Logout");
+            FirebaseAuth.getInstance().signOut();
+        }
+        */
+
+    }
 }

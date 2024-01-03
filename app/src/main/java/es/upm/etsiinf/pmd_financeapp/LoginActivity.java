@@ -3,6 +3,7 @@ package es.upm.etsiinf.pmd_financeapp;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -24,6 +25,8 @@ import com.google.firebase.auth.FirebaseUser;
 public class LoginActivity extends AppCompatActivity {
     EditText editTextEmail, editTextPassw;
     Button buttonLogin, buttonRegister;
+
+    CheckBox checkBoxRemember;
     FirebaseAuth mAuth;
     ProgressBar progressBar;
 
@@ -47,18 +50,15 @@ public class LoginActivity extends AppCompatActivity {
 
         editTextEmail = findViewById(R.id.login_txt_email);
         editTextPassw = findViewById(R.id.login_txt_password);
+        checkBoxRemember = findViewById(R.id.checkBox);
 
         buttonLogin = findViewById(R.id.login_btn_login);
         buttonRegister = findViewById(R.id.login_btn_register);
         progressBar = findViewById(R.id.login_progressBar);
+
         mAuth = FirebaseAuth.getInstance();
 
-        //SharedPreferences prefs = getSharedPreferences(FILE_NAME, MODE_PRIVATE);
-        //String email = prefs.getString("email", "");
-        //String password = prefs.getString("password", "");
-//
-//        editTextEmail.setText(email);
-//        editTextPassw.setText(password);
+
 
         buttonRegister.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -117,6 +117,13 @@ public class LoginActivity extends AppCompatActivity {
                                 progressBar.setVisibility(View.GONE);
                                 if (task.isSuccessful()) {
                                     Toast.makeText(LoginActivity.this, "Login successful", Toast.LENGTH_SHORT).show();
+
+                                    boolean recordarUsuario = checkBoxRemember.isChecked();
+                                    SharedPreferences preferences = getSharedPreferences("login", Context.MODE_PRIVATE);
+                                    SharedPreferences.Editor editor = preferences.edit();
+                                    editor.putBoolean("recordar_usuario", recordarUsuario);
+                                    editor.apply();
+
                                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                     startActivity(intent);
                                     finish();
@@ -130,4 +137,5 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
+
 }

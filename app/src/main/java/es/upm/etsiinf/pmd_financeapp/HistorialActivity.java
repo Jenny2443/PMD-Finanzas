@@ -283,5 +283,10 @@ public class HistorialActivity extends AppCompatActivity {
         SimpleCursorAdapter adapter = (SimpleCursorAdapter) listView.getAdapter();
         adapter.changeCursor(nuevoCursor);
     }
+
+    protected void onDestroy() {
+        super.onDestroy();
+        RecordarUsuarioManager.salir(this);
+    }
 }
 

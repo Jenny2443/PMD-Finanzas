@@ -367,4 +367,8 @@ public class EditarGasto extends AppCompatActivity {
         }
         notificationManager.notify(0, builder.build());
     }
+    protected void onDestroy() {
+        super.onDestroy();
+        RecordarUsuarioManager.salir(this);
+    }
 }

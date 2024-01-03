@@ -468,4 +468,9 @@ public class AnnadirGasto extends AppCompatActivity {
         notificationManager.notify(0, builder.build());
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        RecordarUsuarioManager.salir(this);
+    }
 }

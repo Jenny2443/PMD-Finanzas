@@ -182,4 +182,9 @@ public class StockItemActivity extends AppCompatActivity {
         Intent intent = new Intent(this, StocksActivity.class);
         startActivity(intent);
     }
+
+    protected void onDestroy() {
+        super.onDestroy();
+        RecordarUsuarioManager.salir(this);
+    }
 }

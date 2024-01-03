@@ -127,5 +127,10 @@ public class StocksActivity extends AppCompatActivity {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
+
+    protected void onDestroy() {
+        super.onDestroy();
+        RecordarUsuarioManager.salir(this);
+    }
 }
 
