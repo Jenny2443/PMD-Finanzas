@@ -215,7 +215,6 @@ public class AnnadirGasto extends AppCompatActivity {
         AnGa_ok.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                // TODO: GUARDAR GASTO en BBDD
                 //Crear notificacion
                 makeNotification();
                 openActivityHome();
@@ -225,7 +224,6 @@ public class AnnadirGasto extends AppCompatActivity {
         AnGa_ok2.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                // TODO: GUARDAR GASTO en BBDD
                 //Crear notificacion
                 makeNotification();
                 openActivityHome();
@@ -263,13 +261,10 @@ public class AnnadirGasto extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 int id = item.getItemId();
                 if(id == R.id.menu_nav_action_home) {
-                    Toast.makeText(AnnadirGasto.this, "Home", Toast.LENGTH_SHORT).show();
                     openActivityHome();
                 }else if(id == R.id.menu_nav_action_stocks) {
-                    Toast.makeText(AnnadirGasto.this, "Stocks", Toast.LENGTH_SHORT).show();
                     openActivityStocks();
                 }else if(id == R.id.menu_nav_action_history) {
-                    Toast.makeText(AnnadirGasto.this, "Historial", Toast.LENGTH_SHORT).show();
                     openActivityHistorial();
                 }
                 return true;
@@ -402,36 +397,6 @@ public class AnnadirGasto extends AppCompatActivity {
         // Mostrar el selector de aplicaciones para compartir
         startActivity(Intent.createChooser(intent, "Compartir con"));
     }
-/*
-    public static Uri guardarBitmapEnArchivo(Context context, Bitmap bitmap) {
-        // Guardar el Bitmap en un archivo temporal
-        File imageFile = saveBitmapToTempFile(context, bitmap);
-
-        // Obtener la URI utilizando FileProvider
-        return FileProvider.getUriForFile(
-                context,
-                context.getApplicationContext().getPackageName() + ".provider",
-                imageFile
-        );
-    }
-
-    private static File saveBitmapToTempFile(Context context, Bitmap bitmap) {
-        File cachePath = new File(context.getCacheDir(), "images");
-        cachePath.mkdirs(); // crea la carpeta si no existe
-
-        // Guardar el Bitmap en un archivo temporal
-        File imageFile = new File(cachePath, "image_to_share.png");
-
-        try (FileOutputStream stream = new FileOutputStream(imageFile)) {
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-            stream.flush();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return imageFile;
-    } */
-
 
     // Método para mostrar una notificación
     private void makeNotification(){
@@ -442,14 +407,9 @@ public class AnnadirGasto extends AppCompatActivity {
         builder.setContentText("Gasto añadido");
         builder.setAutoCancel(true);
         builder.setPriority(NotificationCompat.PRIORITY_DEFAULT);
-        //Creo q no hace falta poner estilo porque
-        //builder.setStyle(new NotificationCompat.BigTextStyle().bigText("Gasto añadido"));
-
         Intent intent = new Intent(getApplicationContext(), HistorialActivity.class);
-        //intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, intent, PendingIntent.FLAG_MUTABLE);
-        //PendingIntent pendingIntent = PendingIntent.getActivity(this, 1, intent, PendingIntent.FLAG_CANCEL_CURRENT  | PendingIntent.FLAG_IMMUTABLE);
         builder.setContentIntent(pendingIntent);
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
@@ -466,11 +426,5 @@ public class AnnadirGasto extends AppCompatActivity {
             }
         }
         notificationManager.notify(0, builder.build());
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        RecordarUsuarioManager.salir(this);
     }
 }

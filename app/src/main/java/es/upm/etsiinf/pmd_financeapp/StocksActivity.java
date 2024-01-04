@@ -69,7 +69,6 @@ public class StocksActivity extends AppCompatActivity {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 // Este método se llama cuando se presiona Enter o se envía la búsqueda
-                Log.d("MainActivity", "Query submitted: " + query);
                 //Create a intent to open the StockItemActivity
                 Intent intent = new Intent(StocksActivity.this, StockItemActivity.class);
                 //Add the symbol of the stock to the intent
@@ -95,12 +94,9 @@ public class StocksActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 int id = item.getItemId();
                 if(id == R.id.menu_nav_action_home) {
-                    Toast.makeText(StocksActivity.this, "Home", Toast.LENGTH_SHORT).show();
                     openActivityHome();
                 }else if(id == R.id.menu_nav_action_stocks) {
-                    Toast.makeText(StocksActivity.this, "Stocks", Toast.LENGTH_SHORT).show();
                 }else if(id == R.id.menu_nav_action_history) {
-                    Toast.makeText(StocksActivity.this, "Historial", Toast.LENGTH_SHORT).show();
                     openActivityHistorial();
                 }
                 return true;
@@ -126,11 +122,6 @@ public class StocksActivity extends AppCompatActivity {
     public void openActivityHome(){
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
-    }
-
-    protected void onDestroy() {
-        super.onDestroy();
-        RecordarUsuarioManager.salir(this);
     }
 }
 

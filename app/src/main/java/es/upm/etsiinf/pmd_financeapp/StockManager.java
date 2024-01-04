@@ -63,18 +63,6 @@ public class StockManager {
         List<Stock> stocks = dbStock.obtenerTodasLosStocks();
         return stocks;
 
-        /*
-        List<Stock> stocks = new ArrayList<>();
-        Stock stock1 = new Stock("AAPL", "Apple Inc.", 150, 200, 100, null);
-        Stock stock2 = new Stock("GOOGL", "Alphabet Inc.", 150, 200, 100, null);
-        Stock stock3 = new Stock("AMZN", "Amazon.com, Inc.", 150, 200, 100, null);
-        stocks.add(stock1);
-        stocks.add(stock2);
-        stocks.add(stock3);
-
-        return stocks;
-        */
-
 
     }
 
@@ -90,7 +78,6 @@ public class StockManager {
 
     public static void updateStocks(Context context) throws IOException{
         for (Stock stock: stocks) {
-            Log.println(Log.INFO, "Stocks", "Updating stock " + stock.getSymbol());
             updateStock(stock, context);
         }
     }
@@ -172,16 +159,6 @@ public class StockManager {
             throw new RuntimeException(e);
         }
 
-
-        /*
-        //BORRAR ESTO
-        stock.setPrice(100);
-        stock.setMaxPrice(200);
-        stock.setMinPrice(50);
-        stock.setLastUpdate(LocalDateTime.now());
-        */
-
-        Log.println(Log.INFO, "Stocks", "Stock updated: Stock: " + stock);
         return true;
 
 

@@ -78,9 +78,7 @@ public class StockItemActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         boolean error = stock == null || stock.getPrice() == 0;
-        Log.println(Log.INFO, "Stocks", "Stock: " + stock);
         if (error) {
-            Toast.makeText(this, "No existe el símbolo", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(this, StocksActivity.class);
             startActivity(intent);
             return;
@@ -98,8 +96,6 @@ public class StockItemActivity extends AppCompatActivity {
         // Convertir LocalDateTime a String
         String formattedDateTime = localDateTime.format(formatter);
         lastUpdate.setText(String.valueOf("Última actualización: " + formattedDateTime));
-        Log.println(Log.INFO, "Stocks", "Stocks updated");
-        Log.println(Log.INFO, "Stocks", "New price: " + stock.getPrice());
 
 
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
@@ -107,15 +103,12 @@ public class StockItemActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 int id = item.getItemId();
                 if(id == R.id.menu_nav_action_home) {
-                    Toast.makeText(StockItemActivity.this, "Home", Toast.LENGTH_SHORT).show();
                     salir(stock);
                     openActivityHome();
                 }else if(id == R.id.menu_nav_action_stocks) {
-                    Toast.makeText(StockItemActivity.this, "Stocks", Toast.LENGTH_SHORT).show();
                     salir(stock);
                     openActivityStocks();
                 }else if(id == R.id.menu_nav_action_history) {
-                    Toast.makeText(StockItemActivity.this, "Historial", Toast.LENGTH_SHORT).show();
                     salir(stock);
                     openActivityHistorial();
                 }
@@ -145,7 +138,6 @@ public class StockItemActivity extends AppCompatActivity {
 
     private void salir(Stock stock) {
         // Si Stock está en favoritos
-        Log.println(Log.INFO, "Stocks", "[SALIR] Stock: " + stock);
         if (StockManager.checkExistance(stock.getSymbol(), this)) {
             if (switchFavorite.isChecked()) {
                 //Actualizar nombre
@@ -181,10 +173,5 @@ public class StockItemActivity extends AppCompatActivity {
     public void openActivityStocks(){
         Intent intent = new Intent(this, StocksActivity.class);
         startActivity(intent);
-    }
-
-    protected void onDestroy() {
-        super.onDestroy();
-        RecordarUsuarioManager.salir(this);
     }
 }

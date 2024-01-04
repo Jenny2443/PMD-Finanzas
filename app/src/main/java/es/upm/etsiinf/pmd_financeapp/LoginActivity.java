@@ -26,8 +26,8 @@ public class LoginActivity extends AppCompatActivity {
     EditText editTextEmail, editTextPassw;
     Button buttonLogin, buttonRegister;
 
-    CheckBox checkBoxRemember;
     FirebaseAuth mAuth;
+    FirebaseUser user;
     ProgressBar progressBar;
 
     //private static final String FILE_NAME = "login";
@@ -37,7 +37,7 @@ public class LoginActivity extends AppCompatActivity {
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if(currentUser != null){
             //Si ya esta logeado, abrimos la actividad principal
-            Intent intent = new Intent(LoginActivity.this, es.upm.etsiinf.pmd_financeapp.MainActivity.class);
+            Intent intent = new Intent(LoginActivity.this,MainActivity.class);
             startActivity(intent);
             finish();
         }
@@ -50,8 +50,6 @@ public class LoginActivity extends AppCompatActivity {
 
         editTextEmail = findViewById(R.id.login_txt_email);
         editTextPassw = findViewById(R.id.login_txt_password);
-        checkBoxRemember = findViewById(R.id.checkBox);
-
         buttonLogin = findViewById(R.id.login_btn_login);
         buttonRegister = findViewById(R.id.login_btn_register);
         progressBar = findViewById(R.id.login_progressBar);
@@ -78,37 +76,17 @@ public class LoginActivity extends AppCompatActivity {
                 //String email = editTextEmail.getText().toString();
                 //String password = editTextPassw.getText().toString();
                 if(TextUtils.isEmpty(email)){
-                    Toast.makeText(LoginActivity.this, "Email is required", Toast.LENGTH_SHORT).show();
+                    progressBar.setVisibility(View.GONE);
+                    Toast.makeText(LoginActivity.this, "Es necesario introducir un email", Toast.LENGTH_SHORT).show();
                     //editTextEmail.setError("Email is required");
                     return;
                 }
                 if(TextUtils.isEmpty(password)){
-                    Toast.makeText(LoginActivity.this, "Password is required", Toast.LENGTH_SHORT).show();
+                    progressBar.setVisibility(View.GONE);
+                    Toast.makeText(LoginActivity.this, "Es necesario introducir una contraseña", Toast.LENGTH_SHORT).show();
                     //editTextPassw.setError("Password is required");
                     return;
                 }
-
-//                mAuth.signInWithEmailAndPassword(email, password)
-//                        .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-//                            @Override
-//                            public void onComplete(@NonNull Task<AuthResult> task) {
-//                                Log.i("LoginActivity", "signInWithEmail:onComplete:" + task.isSuccessful());
-//                                progressBar.setVisibility(View.GONE);
-//                                if (task.isSuccessful()) {
-//                                    Toast.makeText(LoginActivity.this, "Login correcto",
-//                                            Toast.LENGTH_SHORT).show();
-//                                    //Si se ha logeado correctamente, abrimos la actividad principal
-//                                    Intent intent = new Intent(LoginActivity.this, es.upm.etsiinf.pmd_financeapp.MainActivity.class);
-//                                    intent.putExtra("checkbox",true);
-//                                    startActivity(intent);
-//                                    finish();
-//                                } else {
-//                                    // If sign in fails, display a message to the user.
-//                                    Toast.makeText(LoginActivity.this, "El login ha fallado",
-//                                            Toast.LENGTH_SHORT).show();
-//                                }
-//                            }
-//                        });
 
                 mAuth.signInWithEmailAndPassword(email, password)
                         .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -116,20 +94,13 @@ public class LoginActivity extends AppCompatActivity {
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 progressBar.setVisibility(View.GONE);
                                 if (task.isSuccessful()) {
-                                    Toast.makeText(LoginActivity.this, "Login successful", Toast.LENGTH_SHORT).show();
-
-                                    boolean recordarUsuario = checkBoxRemember.isChecked();
-                                    SharedPreferences preferences = getSharedPreferences("login", Context.MODE_PRIVATE);
-                                    SharedPreferences.Editor editor = preferences.edit();
-                                    editor.putBoolean("recordar_usuario", recordarUsuario);
-                                    editor.apply();
-
+                                    Toast.makeText(LoginActivity.this, "Inicio de sesión correcto", Toast.LENGTH_SHORT).show();
                                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                     startActivity(intent);
                                     finish();
                                 } else {
-                                    // If sign in fails, display a message to the user.
-                                    Toast.makeText(LoginActivity.this, "Authentication failed.",
+                                    // Si falla el login, mostramos un mensaje al usuario
+                                    Toast.makeText(LoginActivity.this, "El inicio de sesión ha fallado. Inténtelo de nuevo",
                                             Toast.LENGTH_SHORT).show();
                                 }
                             }

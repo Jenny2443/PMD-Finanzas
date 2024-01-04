@@ -204,7 +204,6 @@ public class EditarGasto extends AppCompatActivity {
         EdGa_ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO: ACTUALIZAR GASTO en BBDD
                 //Crear notificación
                 makeNotification();
                 openActivityHistorial();
@@ -226,13 +225,10 @@ public class EditarGasto extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 int id = item.getItemId();
                 if(id == R.id.menu_nav_action_home) {
-                    Toast.makeText(EditarGasto.this, "Home", Toast.LENGTH_SHORT).show();
                     openActivityHome();
                 } else if(id == R.id.menu_nav_action_stocks) {
-                    Toast.makeText(EditarGasto.this, "Stocks", Toast.LENGTH_SHORT).show();
                     openActivityStocks();
                 } else if(id == R.id.menu_nav_action_history) {
-                    Toast.makeText(EditarGasto.this, "Historial", Toast.LENGTH_SHORT).show();
                     openActivityHistorial();
                 }
                 return true;
@@ -309,8 +305,6 @@ public class EditarGasto extends AppCompatActivity {
 
     //Funcion para abrir la actividad de historial
     public void openActivityHistorial(){
-//        Intent intent = new Intent(this, HistorialActivity.class);
-//        startActivity(intent);
         finish();
     }
 
@@ -348,10 +342,8 @@ public class EditarGasto extends AppCompatActivity {
         builder.setPriority(NotificationCompat.PRIORITY_DEFAULT);
 
         Intent intent = new Intent(getApplicationContext(), HistorialActivity.class);
-        //intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, intent, PendingIntent.FLAG_MUTABLE);
-        //PendingIntent pendingIntent = PendingIntent.getActivity(this, 1, intent, PendingIntent.FLAG_CANCEL_CURRENT  | PendingIntent.FLAG_IMMUTABLE);
         builder.setContentIntent(pendingIntent);
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
@@ -366,9 +358,5 @@ public class EditarGasto extends AppCompatActivity {
             }
         }
         notificationManager.notify(0, builder.build());
-    }
-    protected void onDestroy() {
-        super.onDestroy();
-        RecordarUsuarioManager.salir(this);
     }
 }

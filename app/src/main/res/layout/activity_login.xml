@@ -54,13 +54,6 @@
         android:layout_height="wrap_content"
         />
 
-    <CheckBox
-        android:id="@+id/checkBox"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Mantener sesión iniciada"
-        tools:layout_marginTop="15dp" />
-
     <Button
         android:id="@+id/login_btn_login"
         android:layout_width="match_parent"

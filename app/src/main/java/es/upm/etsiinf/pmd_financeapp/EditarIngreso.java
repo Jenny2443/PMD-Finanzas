@@ -213,20 +213,9 @@ public class EditarIngreso extends AppCompatActivity {
                         " he tenido un ingreso de " + txtCantidad.getText().toString() +
                         "€ en la categoría de " + categoriaSeleccionada +
                         ". Notas: " + txtDescripcion.getText().toString();
-                // TODO: GUARDAR GASTO
                 DbTransacciones dbTransacciones = new DbTransacciones(EditarIngreso.this);
-
-                Log.i("AnnadirIngreso", "Fecha: " + txt_fechaSeleccionada.getText().toString());
-                Log.i("AnnadirIngreso", "Cantidad: " + txtCantidad.getText().toString());
-                Log.i("AnnadirIngreso", "Categoría: " + categoriaSeleccionada);
-                Log.i("AnnadirIngreso", "Notas: " + txtDescripcion.getText().toString());
-
-                //long id = dbTransacciones.insertarTransaccion(txt_fechaSeleccionada.getText().toString(), Double.parseDouble(txtCantidad.getText().toString()), categoriaSeleccionada,img, txtDescripcion.getText().toString());
-
                 //Actualizar en la bbdd
                 dbTransacciones.actualizarTransaccion(identificadorTransaccion, txt_fechaSeleccionada.getText().toString(), Double.parseDouble(txtCantidad.getText().toString()), categoriaSeleccionada, img, txtDescripcion.getText().toString());
-                Log.i("EditarIngreso", "Transaccion actualizada con id: " + identificadorTransaccion);
-                //Log.i("AnnadirIngreso", "Transaccion insertado con id: " + id);
                 mostrarGuardado();
             }
         });
@@ -234,10 +223,8 @@ public class EditarIngreso extends AppCompatActivity {
         EdIn_ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO: ACTUALIZAR GASTO en BBDD
                 //Crear notificación
                 makeNotification();
-                //openActivityHome();
                 openActivityHistorial();
             }
         });
@@ -380,10 +367,8 @@ public class EditarIngreso extends AppCompatActivity {
         builder.setPriority(NotificationCompat.PRIORITY_DEFAULT);
 
         Intent intent = new Intent(getApplicationContext(), HistorialActivity.class);
-        //intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, intent, PendingIntent.FLAG_MUTABLE);
-        //PendingIntent pendingIntent = PendingIntent.getActivity(this, 1, intent, PendingIntent.FLAG_CANCEL_CURRENT  | PendingIntent.FLAG_IMMUTABLE);
         builder.setContentIntent(pendingIntent);
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
@@ -398,10 +383,6 @@ public class EditarIngreso extends AppCompatActivity {
             }
         }
         notificationManager.notify(0, builder.build());
-    }
-    protected void onDestroy() {
-        super.onDestroy();
-        RecordarUsuarioManager.salir(this);
     }
 
 }

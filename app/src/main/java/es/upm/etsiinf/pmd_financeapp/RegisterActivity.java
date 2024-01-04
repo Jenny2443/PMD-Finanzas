@@ -62,13 +62,15 @@ public class RegisterActivity extends AppCompatActivity {
                 password = String.valueOf(editTextPassword.getText());
 
                 if(TextUtils.isEmpty(email)){
-                    Toast.makeText(RegisterActivity.this, "Email is required", Toast.LENGTH_SHORT).show();
+                    progressBar.setVisibility(View.GONE);
+                    Toast.makeText(RegisterActivity.this, "Es necesario introducir un email", Toast.LENGTH_SHORT).show();
                     //editTextEmail.setError("Email is required");
                     return;
                 }
 
                 if(TextUtils.isEmpty(password)){
-                    Toast.makeText(RegisterActivity.this, "Password is required", Toast.LENGTH_SHORT).show();
+                    progressBar.setVisibility(View.GONE);
+                    Toast.makeText(RegisterActivity.this, "Es necesario establecer una contraseña", Toast.LENGTH_SHORT).show();
                     //editTextPassword.setError("Password is required");
                     return;
                 }

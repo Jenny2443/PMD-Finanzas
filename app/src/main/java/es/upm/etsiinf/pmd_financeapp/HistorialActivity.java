@@ -63,13 +63,10 @@ public class HistorialActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 int id = item.getItemId();
                 if(id == R.id.menu_nav_action_home) {
-                    Toast.makeText(HistorialActivity.this, "Home", Toast.LENGTH_SHORT).show();
                     openActivityHome();
                 }else if(id == R.id.menu_nav_action_stocks) {
-                    Toast.makeText(HistorialActivity.this, "Stocks", Toast.LENGTH_SHORT).show();
                     openActivityStocks();
                 }else if(id == R.id.menu_nav_action_history) {
-                    Toast.makeText(HistorialActivity.this, "Historial", Toast.LENGTH_SHORT).show();
                 }
                 return true;
             }
@@ -98,57 +95,11 @@ public class HistorialActivity extends AppCompatActivity {
               img.setOnClickListener(new View.OnClickListener() {
                   @Override
                   public void onClick(View v) {
-                      Toast.makeText(HistorialActivity.this, "Borrar", Toast.LENGTH_SHORT).show();
-                      //int colId = c.getColumnIndex("_id");
-                      //int id = c.getInt(colId);
                       dbTransacciones.borrarTransaccion(transaccionId);
                       cursor = dbTransacciones.obtenerTodasLasTransacciones();
                       ((SimpleCursorAdapter)listView.getAdapter()).changeCursor(cursor);
                   }
               });
-
-//              view.setOnClickListener(new View.OnClickListener() {
-//                  @Override
-//                  public void onClick(View v) {
-//                      Toast.makeText(HistorialActivity.this, "Editar", Toast.LENGTH_SHORT).show();
-//                      int colFecha = c.getColumnIndex("fecha");
-//                        int colCantidad = c.getColumnIndex("cantidad");
-//                        int colCategoria = c.getColumnIndex("categoria");
-//                        //int identificadorTransaccion = c.getColumnIndex("_id");
-//                        int colNotas = c.getColumnIndex("notas");
-//                        int colImg = c.getColumnIndex("imagen");
-//
-//                        if(colFecha != -1 && colCantidad != -1 && colCategoria != -1 && colNotas != -1 && colImg != -1) {
-//                            String fecha = c.getString(colFecha);
-//                            double cantidad = c.getDouble(colCantidad);
-//                            String categoria = c.getString(colCategoria);
-//                            //identificadorTransaccion = c.getInt(identificadorTransaccion);
-//                            String notas = c.getString(colNotas);
-//                            Toast.makeText(HistorialActivity.this, "Fecha: " + fecha + "\nCantidad: " + cantidad + "\nCategoria: " + categoria, Toast.LENGTH_SHORT).show();
-//
-//                            //Verificar si es gasto o ingreso
-//                            if (cantidad < 0) {
-//                                Log.i("HistorialActivity", "Es gasto");
-//                                Intent intent = new Intent(HistorialActivity.this, EditarGasto.class);
-//                                intent.putExtra("fecha", fecha);
-//                                intent.putExtra("cantidad", cantidad);
-//                                intent.putExtra("categoria", categoria);
-//                                intent.putExtra("id", transaccionId);
-//                                intent.putExtra("notas", notas);
-//                                startActivity(intent);
-//                            } else {
-//                                Log.i("HistorialActivity", "Es ingreso");
-//                                Intent intent = new Intent(HistorialActivity.this, EditarIngreso.class);
-//                                intent.putExtra("fecha", fecha);
-//                                intent.putExtra("cantidad", cantidad);
-//                                intent.putExtra("categoria", categoria);
-//                                intent.putExtra("id", transaccionId);
-//                                intent.putExtra("notas", notas);
-//                                startActivity(intent);
-//                            }
-//                        }
-//                  }
-//              });
           }
         };
         adapter.setViewBinder(new SimpleCursorAdapter.ViewBinder() {
@@ -185,8 +136,6 @@ public class HistorialActivity extends AppCompatActivity {
                     String categoria = c.getString(colCategoria);
                     identificadorTransaccion = c.getInt(identificadorTransaccion);
                     String notas = c.getString(colNotas);
-                    Toast.makeText(HistorialActivity.this, "Fecha: " + fecha + "\nCantidad: " + cantidad + "\nCategoria: " + categoria, Toast.LENGTH_SHORT).show();
-
                         //Verificar si es gasto o ingreso
                         if (cantidad < 0) {
                             Intent intent = new Intent(HistorialActivity.this, EditarGasto.class);
@@ -229,14 +178,11 @@ public class HistorialActivity extends AppCompatActivity {
         startActivity(intent);
     }
     public void openActivityHome(){
-//        Intent intent = new Intent(this, MainActivity.class);
-//        startActivity(intent);
         finish();
     }
 
     private void cargarTransacciones() {
         // Llama a la función para obtener todas las transacciones y actualiza la interfaz de usuario
-        // (Esta función debe contener la lógica para actualizar los datos que se muestran en tu lista, adaptador, etc.)
         dbTransacciones.obtenerTodasLasTransacciones();
     }
 
@@ -251,7 +197,7 @@ public class HistorialActivity extends AppCompatActivity {
         // Crear un diálogo con opciones de categorías
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Selecciona la categoría");
-//
+
         builder.setItems(opciones, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -282,11 +228,6 @@ public class HistorialActivity extends AppCompatActivity {
         // Actualizar el cursor del Adapter
         SimpleCursorAdapter adapter = (SimpleCursorAdapter) listView.getAdapter();
         adapter.changeCursor(nuevoCursor);
-    }
-
-    protected void onDestroy() {
-        super.onDestroy();
-        RecordarUsuarioManager.salir(this);
     }
 }
 

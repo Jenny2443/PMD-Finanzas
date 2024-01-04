@@ -10,7 +10,7 @@ public class DBHelperStock extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 1;
     //Nombre de BBDD
     private static final String DATABASE_NOMBRE = "finance_app_fav_stocks.db";
-    //Tabla contactos
+    //Tabla de stocks favoritos
     private static final String TABLA_STOCKS = "t_fav_stocks";
     public DBHelperStock(Context context) {
         super(context, DATABASE_NOMBRE, null, DATABASE_VERSION);
@@ -18,7 +18,6 @@ public class DBHelperStock extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        //Crear query de crear tabla
         db.execSQL("CREATE TABLE " + TABLA_STOCKS + " (" +
                 "ticker TEXT PRIMARY KEY, " +
                 "nombre TEXT, " +
