@@ -165,8 +165,6 @@ public class HistorialActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         bottomNavigationView.setSelectedItemId(R.id.menu_nav_action_history);
-        Toast.makeText(this, "onResume Historial", Toast.LENGTH_SHORT).show();
-
         //Actualizar lista de transacciones
         cursor = dbTransacciones.obtenerTodasLasTransacciones();
         ((SimpleCursorAdapter)listView.getAdapter()).changeCursor(cursor);
